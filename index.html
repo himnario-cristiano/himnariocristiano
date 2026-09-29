@@ -780,12 +780,59 @@
             transform: scale(1.02);
         }
 
-        @media (max-width: 480px) {
-            .vinyl-wrapper { width: 65px; height: 65px; }
-            .title-current { font-size: calc(15px * var(--text-scale)); }
+        /* --- AJUSTES PARA MÓVILES Y TABLETS --- */
+        @media (max-width: 768px) {
+            /* Reduce el relleno del contenedor del reproductor para ganar espacio */
+            .now-playing { 
+                padding: 10px 12px; 
+            }
             
+            /* Reduce el tamaño del disco */
+            .vinyl-wrapper { 
+                width: 50px; 
+                height: 50px; 
+            }
+            
+            /* Reduce los espacios entre la carátula, texto y progreso */
+            .top-row { 
+                margin-bottom: 8px; 
+                gap: 10px; 
+            }
+            
+            .progress-container { 
+                margin-bottom: 6px; 
+            }
+            
+            /* Ajusta la posición de los botones de la esquina superior */
+            .top-right-actions { 
+                top: 5px; 
+                right: 10px; 
+            }
+            .font-size-panel { 
+                right: 10px; 
+                top: 35px; 
+            }
+            
+            /* Hace más compactos los botones de reproducción */
+            .controls { 
+                gap: 15px; 
+            }
+            .btn-play { 
+                width: 38px; 
+                height: 38px; 
+            }
+            .btn-play svg { 
+                width: 18px; 
+                height: 18px; 
+            }
+
+            /* Ajustes de tamaño de texto en el reproductor */
+            .title-current { font-size: calc(14px * var(--text-scale)); }
+            .artist-current { font-size: calc(11px * var(--text-scale)); }
+
+            /* Ajustes para la barra de búsqueda y filtros en móviles */
             .playlist-header { 
-                padding: 15px 10px 10px 10px; 
+                padding: 10px; 
                 flex-wrap: wrap; 
             }
             .search-container {
@@ -799,20 +846,13 @@
                 order: 2;
                 max-width: none;
             }
-            .fav-filter-btn {
-                order: 3;
-            }
-
+            .fav-filter-btn { order: 3; }
             .playlist-items-container { padding: 0 10px 10px 10px; }
             
-            .top-right-actions { top: 5px; right: 10px; } 
-            .font-size-panel { right: 10px; top: 40px; } 
-
             .action-btn svg { width: 18px; height: 18px; }
+            button.action-btn.more-options-btn { display: flex; }
             
-            button.action-btn.more-options-btn {
-                display: flex; 
-            }
+            /* Menú de opciones de cada canción */
             .song-actions-wrapper {
                 display: none;
                 position: absolute;
@@ -826,13 +866,16 @@
                 border: 1px solid #3e3e3e;
                 z-index: 100;
             }
-            
             .song-actions-wrapper.show {
                 display: flex;
                 flex-direction: row;
                 gap: 2px;
                 animation: slideInRight 0.2s ease;
             }
+            
+            /* Ocultar texto en banner de instalación para no empujar botones */
+            .btn-install span { display: none; }
+            .install-banner-text { font-size: 13px; }
         }
         
         @keyframes slideInRight {
