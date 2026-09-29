@@ -49,6 +49,23 @@
             display: flex; 
             justify-content: center; 
             align-items: center;
+
+            /* Bloqueo de selección y menú prolongado (Móviles y PC) */
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Permitir selección y escritura solo en inputs y textareas */
+        input, textarea {
+            -webkit-user-select: auto;
+            -khtml-user-select: auto;
+            -moz-user-select: auto;
+            -ms-user-select: auto;
+            user-select: auto;
         }
 
         .player-container { 
@@ -425,7 +442,6 @@
             width: 100%;
             flex: 1;
             overflow-y: auto;
-            /* Relleno modificado a 100px abajo para asegurar visibilidad en pantallas más grandes */
             padding: 0 20px 10px 20px;
             display: flex;
             flex-direction: column;
@@ -783,18 +799,15 @@
 
         /* --- AJUSTES PARA MÓVILES Y TABLETS --- */
         @media (max-width: 768px) {
-            /* Reduce el relleno del contenedor del reproductor para ganar espacio */
             .now-playing { 
                 padding: 10px 12px; 
             }
             
-            /* Reduce el tamaño del disco */
             .vinyl-wrapper { 
                 width: 50px; 
                 height: 50px; 
             }
             
-            /* Reduce los espacios entre la carátula, texto y progreso */
             .top-row { 
                 margin-bottom: 8px; 
                 gap: 10px; 
@@ -804,7 +817,6 @@
                 margin-bottom: 6px; 
             }
             
-            /* Ajusta la posición de los botones de la esquina superior */
             .top-right-actions { 
                 top: 5px; 
                 right: 10px; 
@@ -814,7 +826,6 @@
                 top: 35px; 
             }
             
-            /* Hace más compactos los botones de reproducción */
             .controls { 
                 gap: 15px; 
             }
@@ -827,11 +838,9 @@
                 height: 18px; 
             }
 
-            /* Ajustes de tamaño de texto en el reproductor */
             .title-current { font-size: calc(14px * var(--text-scale)); }
             .artist-current { font-size: calc(11px * var(--text-scale)); }
 
-            /* Ajustes para la barra de búsqueda y filtros en móviles */
             .playlist-header { 
                 padding: 10px; 
                 flex-wrap: wrap; 
@@ -849,13 +858,11 @@
             }
             .fav-filter-btn { order: 3; }
             
-            /* Relleno modificado a 120px abajo para librar controles de navegación nativos del móvil */
             .playlist-items-container { padding: 0 10px 50px 10px !important; }
             
             .action-btn svg { width: 18px; height: 18px; }
             button.action-btn.more-options-btn { display: flex; }
             
-            /* Menú de opciones de cada canción */
             .song-actions-wrapper {
                 display: none;
                 position: absolute;
@@ -876,7 +883,6 @@
                 animation: slideInRight 0.2s ease;
             }
             
-            /* Ocultar texto en banner de instalación para no empujar botones */
             .btn-install span { display: none; }
             .install-banner-text { font-size: 13px; }
         }
@@ -1135,6 +1141,32 @@
     <script src="songs.js"></script>
     
     <script>
+        // --- PROTECCIONES ANTICLIC, SELECCION E INSPECCION ---
+        document.addEventListener('contextmenu', event => event.preventDefault());
+
+        document.addEventListener('keydown', function(e) {
+            // F12
+            if (e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+Shift+I
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+Shift+J
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
+                e.preventDefault();
+                return false;
+            }
+            // Ctrl+U (Ver código fuente)
+            if (e.ctrlKey && e.keyCode === 85) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
         // --- LÓGICA DEL BOTÓN ESCOBA (LIMPIEZA) ---
         const clearBtn = document.getElementById('clearBtn');
         const clearModal = document.getElementById('clearModal');
@@ -1601,12 +1633,18 @@
         searchInput.addEventListener("input", renderPlaylist);
         themeFilter.addEventListener("change", renderPlaylist);
 
+        // --- FUNCIÓN DE NORMALIZACIÓN PARA BÚSQUEDA SIN TILDES ---
+        function normalizeStr(str) {
+            if(!str) return "";
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+        }
+
         function getFilteredIndices() {
-            const query = searchInput.value.toLowerCase();
+            const query = normalizeStr(searchInput.value);
             const selectedTheme = themeFilter.value;
             let indices = [];
             songs.forEach((song, i) => {
-                const matchSearch = song.title.toLowerCase().includes(query) || song.artist.toLowerCase().includes(query);
+                const matchSearch = normalizeStr(song.title).includes(query) || normalizeStr(song.artist).includes(query);
                 const matchTheme = selectedTheme === 'all' || (song.temas && song.temas.includes(selectedTheme));
                 const isFav = localStorage.getItem('fav_' + song.src) === 'true';
                 if (matchSearch && matchTheme) {
