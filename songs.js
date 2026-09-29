@@ -1826,7 +1826,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/6cfenii8lmquko4d26v3i/244-Mi-Vida-Di-Por-Ti-16_9-B-Major.pdf?rlkey=h7bli2qo9b009nm5k7zd9hsux&st=navj0glo&dl=0",
                 src: "https://www.dropbox.com/scl/fi/8rjccp8c54cfc0xvr5y9p/152.-Mi-Vida-Di-Por-Ti.mp3?rlkey=qenfmu6db3cmntpxczt1i0mmf&st=ytmh07dy&dl=0",
                 references: [
 
@@ -1838,7 +1838,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/dzy5pkrztgn1f8nxs3hs4/Hay-Un-Precioso-Manantial-Completo-HG.pdf?rlkey=9qei0fdq7fx3b7ahgf7ja4yve&st=nuhwgkey&dl=0",
                 src: "https://www.dropbox.com/scl/fi/cm92d3npbpd9uwwcrxsms/153.-Hay-Un-Precioso-Manantial.mp3?rlkey=3pskts5249zb7o9l2jpep3tst&st=7tuqrju1&dl=0",
                 references: [
 
@@ -1850,7 +1850,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/i4glf3b33kgyx17k9hmcw/154.-Si-Salvo-Soy.pdf?rlkey=x1ga6edmfiuusbzcpa2yr8h02&st=ohnkdrhe&dl=0",
                 src: "https://www.dropbox.com/scl/fi/269w0pp3hzoqkocg0n8m6/154.-Si-Salvo-Soy.mp3?rlkey=msm0xz8xit1v6j13b1rrqtl9m&st=d5l5x8pt&dl=0",
                 references: [
 
@@ -1862,7 +1862,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/hzz6ph3h0yjubpkvh93cu/155.-El-Se-or-As-Me-Hablo.pdf?rlkey=qy2rt0tvwwtfp3gcic78xo4sc&st=awfh4xw2&dl=0",
                 src: "https://www.dropbox.com/scl/fi/089413h95766hq4i0rehr/155.-El-Se-or-Asi-Me-Habl.mp3?rlkey=h9wdyhs6o924ffpyqoc9zl3ig&st=hw7u8es7&dl=0",
                 references: [
 
@@ -1874,7 +1874,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/4rorjkcs6nmjqvc5z3br5/156.-D-a-Tan-Grande.pdf?rlkey=nxj9j6nyygpxmvh3kdby06oyf&st=xcfwt0ej&dl=0",
                 src: "https://www.dropbox.com/scl/fi/xe9tsiwcr929n4tfdy5nj/156.-Dia-Tan-Grande.mp3?rlkey=9plolcscwjd769ioy46ukizmt&st=ttozlfus&dl=0",
                 references: [
 
@@ -1886,7 +1886,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/k7pf97bbnju5vedboylil/245-Digno-Es-El-Cordero-16_9.pdf?rlkey=6u83n6ou934eorfw1ddie8ojh&st=pr0qzwvp&dl=0",
                 src: "https://www.dropbox.com/scl/fi/ujmit16wumkez5vrfk18n/157.-Digno-Es-El-Cordero.mp3?rlkey=75ezw0svlj54fv8ng4td98t1t&st=1oxuiqac&dl=0",
                 references: [
 
@@ -1898,7 +1898,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/8pdi8lgwvtflm4svtf0ml/7-Bendice-Alma-M-a-16_9.pdf?rlkey=669ohu4d5kzgnj16552x92eqa&st=eujiyg75&dl=0",
                 src: "https://www.dropbox.com/scl/fi/kafy1fp6xurmojnusmd7c/158.-Bendice-Alma-M-a.mp3?rlkey=clvfnmyhsknv7t7ztyopzay97&st=17bhqejh&dl=0",
                 references: [
 
@@ -1910,7 +1910,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/bcepf59hy8yyi1odvzqnu/159.-Gloria-Gloria-Aleluya.pdf?rlkey=xxjoxrwcu4tbmd6ty7vpmd4sc&st=vjhoh9fg&dl=0",
                 src: "https://www.dropbox.com/scl/fi/utx0au47xmxdtqv27tqom/159.-Gloria-Gloria-Aleluya.mp3?rlkey=badtmhp1dof0s7wdwkj110rgn&st=xz99s307&dl=0",
                 references: [
 
@@ -1922,7 +1922,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/yoqj2e53r0qkzez4n3nit/160.-POR-UNA-SENDA-ANCHA.pdf?rlkey=rmzrd9jvnvqf5g0amvy9ofxn9&st=qbb412im&dl=0",
                 src: "https://www.dropbox.com/scl/fi/0fahdf5jx24l6s6szqwnv/160.-Por-Una-Senda-Ancha.mp3?rlkey=qyhctp3erl0bbsoiozwpcuzm5&st=2h3jsr48&dl=0",
                 references: [
 
@@ -1934,7 +1934,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/2aig7tchwfag7dmpkct46/161.-Si-En-Verdad-Eres-Salvo.pdf?rlkey=n2dkkm50e63jkw2wayo8t2u1l&st=sphyvqrq&dl=0",
                 src: "https://www.dropbox.com/scl/fi/o10untwdattx0uvq1ek4z/161.-Si-En-Verdad-Eres-Salvo.mp3?rlkey=zvziopykzuoc1y7c2ksxrv6y9&st=h9b6qnjm&dl=0",
                 references: [
 
