@@ -425,7 +425,8 @@
             width: 100%;
             flex: 1;
             overflow-y: auto;
-            padding: 0 20px 15px 20px;
+            /* Relleno modificado a 100px abajo para asegurar visibilidad en pantallas más grandes */
+            padding: 0 20px 100px 20px;
             display: flex;
             flex-direction: column;
         }
@@ -847,7 +848,9 @@
                 max-width: none;
             }
             .fav-filter-btn { order: 3; }
-            .playlist-items-container { padding: 0 10px 10px 10px; }
+            
+            /* Relleno modificado a 120px abajo para librar controles de navegación nativos del móvil */
+            .playlist-items-container { padding: 0 10px 120px 10px !important; }
             
             .action-btn svg { width: 18px; height: 18px; }
             button.action-btn.more-options-btn { display: flex; }
