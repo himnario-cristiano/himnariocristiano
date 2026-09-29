@@ -35,26 +35,19 @@
         body { 
             background-color: #121212; 
             width: 100vw; 
-            
-            /* Mantiene 100vh como respaldo para navegadores muy antiguos */
-            height: 100vh; 
-            
-            /* Solución principal: Altura dinámica que se adapta si aparecen/desaparecen barras */
-            height: 100dvh; 
-            
-            /* Evita que la barra de gestos inferior tape el contenido */
+            height: 100vh; /* Mantiene 100vh como respaldo */
+            height: 100dvh; /* Altura dinámica adaptable a barras */
             padding-bottom: env(safe-area-inset-bottom);
-            
             overflow: hidden; 
             display: flex; 
             justify-content: center; 
             align-items: center;
 
-            /* Mejorar la nitidez de las fuentes en todos los dispositivos */
+            /* Mejorar la nitidez de las fuentes */
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
 
-            /* Bloqueo de selección y menú prolongado (Móviles y PC) */
+            /* Bloqueo de selección */
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             -khtml-user-select: none;
@@ -106,7 +99,7 @@
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
         }
 
-        /* BARRA SUTIL DE PROGRESO (Solo se usará en el Visor PDF) */
+        /* BARRA SUTIL DE PROGRESO (Visor PDF) */
         .navbar-progress-bar {
             position: absolute;
             bottom: -1px;
@@ -188,14 +181,7 @@
             transition: background 0.2s;
         }
         .fs-row button:hover { background: #f7d694; color: #000; }
-        #szDisplay{
-            color: #fff;
-            font-size: 14px;
-            font-weight: 600;
-            min-width: 45px;
-            text-align: center;
-        }
-        #fsDisplay{
+        #szDisplay, #fsDisplay {
             color: #fff;
             font-size: 14px;
             font-weight: 600;
@@ -503,6 +489,11 @@
             transition: font-size 0.2s;
         }
 
+        .primary-actions {
+            display: flex;
+            align-items: center;
+        }
+
         .song-actions-wrapper {
             display: flex;
             align-items: center;
@@ -540,326 +531,147 @@
         ::-webkit-scrollbar-thumb { background: #4f4f4f; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #f7d694; }
 
+        /* Modales */
         .modal-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0; left: 0; width: 100vw; height: 100vh;
             background: rgba(0, 0, 0, 0.75);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 1000; opacity: 0; pointer-events: none;
             transition: opacity 0.3s ease;
         }
-        .modal-overlay.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .modal-overlay.show { opacity: 1; pointer-events: auto; }
+        
         .modal-content {
-            background: #282828;
-            padding: 30px 25px;
-            border-radius: 12px;
-            width: 90%;
-            max-width: 380px;
-            text-align: center;
-            position: relative;
-            transform: translateY(20px);
+            background: #282828; padding: 30px 25px; border-radius: 12px;
+            width: 90%; max-width: 380px; text-align: center;
+            position: relative; transform: translateY(20px);
             transition: transform 0.3s ease;
             box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-            color: #fff;
-            border: 1px solid #3e3e3e;
-            max-height: 80vh;
-            display: flex;
-            flex-direction: column;
+            color: #fff; border: 1px solid #3e3e3e;
+            max-height: 80vh; display: flex; flex-direction: column;
         }
-        .modal-overlay.show .modal-content {
-            transform: translateY(0);
-        }
+        .modal-overlay.show .modal-content { transform: translateY(0); }
+        
         .modal-close {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: #b3b3b3;
-            font-size: 28px;
-            line-height: 1;
-            cursor: pointer;
-            transition: color 0.2s;
-            z-index: 2;
+            position: absolute; top: 10px; right: 15px; background: none;
+            border: none; color: #b3b3b3; font-size: 28px; line-height: 1;
+            cursor: pointer; transition: color 0.2s; z-index: 2;
         }
         .modal-close:hover { color: #f7d694; }
         
-        .modal-content h3 {
-            margin-bottom: 10px;
-            color: #f7d694;
-            font-size: 18px;
-            padding-right: 20px;
-        }
-        .modal-content p {
-            font-size: 14px;
-            color: #b3b3b3;
-            margin-bottom: 15px;
-            line-height: 1.6;
-        }
+        .modal-content h3 { margin-bottom: 10px; color: #f7d694; font-size: 18px; padding-right: 20px; }
+        .modal-content p { font-size: 14px; color: #b3b3b3; margin-bottom: 15px; line-height: 1.6; }
         
         .ref-theme-badge {
-            font-size: 13px;
-            color: #b3b3b3;
-            margin: 0 auto 15px auto;
-            text-align: center;
-            background: #1e1e1e;
-            padding: 10px 14px;
-            border-radius: 15px;
-            border: 1px solid #3e3e3e;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            font-size: 13px; color: #b3b3b3; margin: 0 auto 15px auto;
+            text-align: center; background: #1e1e1e; padding: 10px 14px;
+            border-radius: 15px; border: 1px solid #3e3e3e;
+            display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px;
         }
-        .ref-theme-badge span {
-            color: #fff;
-            font-weight: 600;
-        }
+        .ref-theme-badge span { color: #fff; font-weight: 600; }
 
         .view-score-btn {
-            background: #f7d694;
-            color: #000;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: 700;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
+            background: #f7d694; color: #000; border: none;
+            padding: 6px 12px; border-radius: 15px; font-size: 12px; font-weight: 700;
+            cursor: pointer; display: inline-flex; align-items: center;
             transition: transform 0.2s, background 0.2s;
         }
         .view-score-btn:hover { background: #e5c483; transform: scale(1.05); }
 
         /* Estilos Visor Pantalla Completa */
         .score-modal {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            background: #000;
-            z-index: 3000;
-            display: flex;
-            flex-direction: column;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            background: #000; z-index: 3000; display: flex; flex-direction: column;
+            opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
         }
-        .score-modal.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        .score-modal.show { opacity: 1; pointer-events: auto; }
         
         .score-header {
-            height: 55px;
-            background: #1e1e1e;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            padding: 0 15px;
-            gap: 10px;
-            border-bottom: 1px solid #3e3e3e;
-            flex-shrink: 0;
-            position: relative;
+            height: 55px; background: #1e1e1e; display: flex; justify-content: flex-end;
+            align-items: center; padding: 0 15px; gap: 10px;
+            border-bottom: 1px solid #3e3e3e; flex-shrink: 0; position: relative;
         }
         
         .score-header button.ctrl-btn {
-            background: #333;
-            color: #fff;
-            border: none;
-            width: 36px; height: 36px;
-            border-radius: 6px;
-            cursor: pointer;
-            display: flex; justify-content: center; align-items: center;
+            background: #333; color: #fff; border: none; width: 36px; height: 36px;
+            border-radius: 6px; cursor: pointer; display: flex; justify-content: center; align-items: center;
             transition: background 0.2s, color 0.2s;
         }
         .score-header button.ctrl-btn:hover { background: #f7d694; color: #000; }
         .score-header button.ctrl-btn svg { width: 22px; height: 22px; fill: currentColor; }
         
         .score-header .close-btn { 
-            background: transparent; 
-            border: none;
-            font-size: 32px; 
-            color: #b3b3b3; 
-            cursor: pointer;
-            margin-left: 5px;
+            background: transparent; border: none; font-size: 32px; 
+            color: #b3b3b3; cursor: pointer; margin-left: 5px;
         }
         .score-header .close-btn:hover { color: #f7d694; }
 
         /* Panel Flotante de Zoom */
         .score-zoom-panel {
-            display: none;
-            position: absolute;
-            top: 55px; 
-            right: 15px;
-            background: #282828;
-            border: 1px solid #3e3e3e;
-            border-radius: 8px;
-            padding: 12px;
-            box-shadow: 0 8px 24px rgba(0,0,0,0.6);
-            z-index: 3100;
-            flex-direction: column;
-            gap: 12px;
-            min-width: 150px;
+            display: none; position: absolute; top: 55px; right: 15px;
+            background: #282828; border: 1px solid #3e3e3e; border-radius: 8px;
+            padding: 12px; box-shadow: 0 8px 24px rgba(0,0,0,0.6); z-index: 3100;
+            flex-direction: column; gap: 12px; min-width: 150px;
         }
         .score-zoom-panel.show { display: flex; }
         
-        /* Contenedor scrolleable */
         .score-body {
-            flex: 1;
-            overflow: auto; 
-            background: #121212;
+            flex: 1; overflow: auto; background: #121212;
             -webkit-overflow-scrolling: touch;
         }
         
-        /* Envoltorio (Wrapper) estilo 'table' */
-        .canvas-wrapper {
-            display: table;
-            margin: 0 auto;
-            padding: 15px;
-        }
+        .canvas-wrapper { display: table; margin: 0 auto; padding: 15px; }
         
         .score-body canvas {
-            display: block;
-            margin-bottom: 6px; 
-            background: #fff;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            max-width: none; 
+            display: block; margin-bottom: 6px; background: #fff;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3); max-width: none; 
         }
         
         .score-body img {
-            display: block;
-            margin: 0 auto 15px auto;
-            width: 100%;
-            max-width: 100%;
-            -webkit-user-drag: none;
-            user-select: none;
+            display: block; margin: 0 auto 15px auto; width: 100%; max-width: 100%;
+            -webkit-user-drag: none; user-select: none;
         }
 
-        #refModalBody {
-            overflow-y: auto;
-            text-align: left;
-            margin-top: 5px;
-        }
-        .ref-list {
-            list-style: none;
-            padding: 0;
-        }
+        #refModalBody { overflow-y: auto; text-align: left; margin-top: 5px; }
+        .ref-list { list-style: none; padding: 0; }
         .ref-item {
-            background: #333;
-            padding: 12px;
-            margin-bottom: 8px;
-            border-radius: 8px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-left: 4px solid #f7d694;
+            background: #333; padding: 12px; margin-bottom: 8px; border-radius: 8px;
+            display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #f7d694;
         }
-        .ref-hymnal {
-            font-weight: 600;
-            font-size: 13px;
-            color: #fff;
-        }
+        .ref-hymnal { font-weight: 600; font-size: 13px; color: #fff; }
         .ref-number {
-            font-weight: bold;
-            color: #000;
-            background: #f7d694;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-size: 14px;
+            font-weight: bold; color: #000; background: #f7d694;
+            padding: 4px 8px; border-radius: 4px; font-size: 14px;
         }
 
         .whatsapp-btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            background: #25D366;
-            color: #000;
-            border: none;
-            cursor: pointer;
-            padding: 12px 20px;
-            border-radius: 25px;
-            font-weight: 600;
-            font-size: 16px;
-            margin-top: 10px;
-            transition: background 0.2s, transform 0.2s;
-            width: 100%;
-            font-family: inherit;
+            display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+            background: #25D366; color: #000; border: none; cursor: pointer; padding: 12px 20px;
+            border-radius: 25px; font-weight: 600; font-size: 16px; margin-top: 10px;
+            transition: background 0.2s, transform 0.2s; width: 100%; font-family: inherit;
         }
-        .whatsapp-btn:hover {
-            background: #1ebe57;
-            transform: scale(1.02);
-        }
+        .whatsapp-btn:hover { background: #1ebe57; transform: scale(1.02); }
 
         /* --- AJUSTES PARA MÓVILES Y TABLETS --- */
         @media (max-width: 768px) {
-            .now-playing { 
-                padding: 10px 12px; 
-            }
+            .now-playing { padding: 10px 12px; }
+            .vinyl-wrapper { width: 50px; height: 50px; }
+            .top-row { margin-bottom: 8px; gap: 10px; }
+            .progress-container { margin-bottom: 6px; }
+            .top-right-actions { top: 5px; right: 10px; }
+            .font-size-panel { right: 10px; top: 35px; }
             
-            .vinyl-wrapper { 
-                width: 50px; 
-                height: 50px; 
-            }
-            
-            .top-row { 
-                margin-bottom: 8px; 
-                gap: 10px; 
-            }
-            
-            .progress-container { 
-                margin-bottom: 6px; 
-            }
-            
-            .top-right-actions { 
-                top: 5px; 
-                right: 10px; 
-            }
-            .font-size-panel { 
-                right: 10px; 
-                top: 35px; 
-            }
-            
-            .controls { 
-                gap: 15px; 
-            }
-            .btn-play { 
-                width: 38px; 
-                height: 38px; 
-            }
-            .btn-play svg { 
-                width: 18px; 
-                height: 18px; 
-            }
+            .controls { gap: 15px; }
+            .btn-play { width: 38px; height: 38px; }
+            .btn-play svg { width: 18px; height: 18px; }
 
             .title-current { font-size: calc(14px * var(--text-scale)); }
             .artist-current { font-size: calc(11px * var(--text-scale)); }
 
-            .playlist-header { 
-                padding: 10px; 
-                flex-wrap: wrap; 
-            }
-            .search-container {
-                width: 100%;
-                flex: 0 0 100%; 
-                margin-bottom: 4px;
-                order: 1;
-            }
-            .theme-select {
-                flex: 1; 
-                order: 2;
-                max-width: none;
-            }
+            .playlist-header { padding: 10px; flex-wrap: wrap; }
+            .search-container { width: 100%; flex: 0 0 100%; margin-bottom: 4px; order: 1; }
+            .theme-select { flex: 1; order: 2; max-width: none; }
             .fav-filter-btn { order: 3; }
             
             .playlist-items-container { padding: 0 10px 50px 10px !important; }
@@ -870,7 +682,7 @@
             .song-actions-wrapper {
                 display: none;
                 position: absolute;
-                right: 40px;
+                right: 75px; /* Espacio modificado para que no cubra el botón de favorito ni los 3 puntos */
                 top: 50%;
                 transform: translateY(-50%);
                 background: #282828;
@@ -897,64 +709,27 @@
         }
 
         .install-banner {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: #1e1e1e;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 12px 20px;
-            box-shadow: 0 -4px 15px rgba(0,0,0,0.6);
-            transform: translateY(100%);
-            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            z-index: 2000;
-            border-top: 1px solid #3e3e3e;
+            position: fixed; bottom: 0; left: 0; width: 100%; background: #1e1e1e;
+            color: #fff; display: flex; align-items: center; justify-content: space-between;
+            padding: 12px 20px; box-shadow: 0 -4px 15px rgba(0,0,0,0.6);
+            transform: translateY(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 2000; border-top: 1px solid #3e3e3e;
         }
-        .install-banner.show {
-            transform: translateY(0);
-        }
-        .install-banner-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .install-banner-text {
-            font-size: 14px;
-            font-weight: 600;
-        }
-        .install-banner-actions {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
+        .install-banner.show { transform: translateY(0); }
+        .install-banner-info { display: flex; align-items: center; gap: 12px; }
+        .install-banner-text { font-size: 14px; font-weight: 600; }
+        .install-banner-actions { display: flex; align-items: center; gap: 12px; }
         .btn-install {
-            background: #f7d694;
-            color: #000;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 13px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            transition: transform 0.2s, background 0.2s;
+            background: #f7d694; color: #000; border: none; padding: 8px 16px; border-radius: 20px;
+            font-weight: 700; font-size: 13px; cursor: pointer; display: flex; align-items: center;
+            gap: 6px; transition: transform 0.2s, background 0.2s;
         }
         .btn-install:hover { background: #e5c483; transform: scale(1.05); }
         .btn-install svg { width: 18px; height: 18px; fill: currentColor; }
         
         .btn-close-banner {
-            background: none;
-            border: none;
-            color: #b3b3b3;
-            cursor: pointer;
-            padding: 5px;
-            display: flex;
-            transition: color 0.2s;
+            background: none; border: none; color: #b3b3b3; cursor: pointer; padding: 5px;
+            display: flex; transition: color 0.2s;
         }
         .btn-close-banner:hover { color: #fff; }
         .btn-close-banner svg { width: 22px; height: 22px; fill: currentColor; }
@@ -1022,7 +797,6 @@
                 <div class="info-current">
                     <div class="artist-current" id="artist"></div>
                     <div class="title-current" id="title">Cargando...</div>
-
                 </div>
             </div>
             
@@ -1055,7 +829,6 @@
                 <div class="search-container">
                     <svg viewBox="0 0 24 24" class="search-icon"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
                     <input type="text" id="searchInput" class="search-input" placeholder="Buscar canción..." autocomplete="off">
-
                 </div>
                 
                 <select id="themeFilter" class="theme-select">
@@ -1127,7 +900,6 @@
         
         <div class="score-body" id="scoreBody"></div>
     </div>
-<!-- Modales de ayuda y Referencia -->
     
     <!-- NUEVO MODAL DE LIMPIEZA -->
     <div class="modal-overlay" id="clearModal">
@@ -1149,26 +921,10 @@
         document.addEventListener('contextmenu', event => event.preventDefault());
 
         document.addEventListener('keydown', function(e) {
-            // F12
-            if (e.keyCode === 123) {
-                e.preventDefault();
-                return false;
-            }
-            // Ctrl+Shift+I
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) {
-                e.preventDefault();
-                return false;
-            }
-            // Ctrl+Shift+J
-            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) {
-                e.preventDefault();
-                return false;
-            }
-            // Ctrl+U (Ver código fuente)
-            if (e.ctrlKey && e.keyCode === 85) {
-                e.preventDefault();
-                return false;
-            }
+            if (e.keyCode === 123) { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 73) { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.shiftKey && e.keyCode === 74) { e.preventDefault(); return false; }
+            if (e.ctrlKey && e.keyCode === 85) { e.preventDefault(); return false; }
         });
 
         // --- LÓGICA DEL BOTÓN ESCOBA (LIMPIEZA) ---
@@ -1182,10 +938,8 @@
         clearModal.addEventListener('click', (e) => { if (e.target === clearModal) clearModal.classList.remove('show'); });
 
         btnConfirmClear.addEventListener('click', () => {
-            // Redirige al script de limpieza que creaste
             window.location.href = "/himnariocristiano/clearcookies/";
         });
-        // ------------------------------------------
         
         let activeAudio = document.getElementById("audioPlayer1");
         let isGlobalAudioUnlocked = false;
@@ -1195,8 +949,6 @@
 
         let intentionalPause = true; 
 
-        // Eliminamos la lógica de audio.play() forzado que causaba el bug.
-        // Solo mantenemos la petición de notificaciones sutil por si se necesita más adelante.
         function initializeGlobalPermissions() {
             if (isGlobalAudioUnlocked) return;
             if ("Notification" in window && Notification.permission === "default") {
@@ -1304,9 +1056,7 @@
         const scoreBody = document.getElementById('scoreBody');
         const closeScoreModal = document.getElementById('closeScoreModal');
         
-        /* ----------------------------------------------------
-           LÓGICA NATIVA DE PDF.JS (VECTORIAL) + ZOOM PANEL + PAGE INDICATOR
-           ---------------------------------------------------- */
+        /* LÓGICA NATIVA DE PDF.JS (VECTORIAL) + ZOOM PANEL + PAGE INDICATOR */
         const pdfjsLib = window['pdfjs-dist/build/pdf'];
         if (pdfjsLib) {
             pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
@@ -1317,7 +1067,6 @@
         let currentZoomPercent = 100; 
         let currentScoreIndex = null; 
         
-        // Variables para indicador de página
         let currentPageNum = 1;
         let totalPagesNum = 1;
         const scorePageIndicator = document.getElementById('scorePageIndicator');
@@ -1365,7 +1114,6 @@
         szDecrease.addEventListener('click', () => { if (currentZoomPercent > 25) { currentZoomPercent -= 25; updateScoreZoomDisplay(); } });
         szReset.addEventListener('click', () => { currentZoomPercent = 100; updateScoreZoomDisplay(); });
         
-        // Función mejorada: Crea el DOM estático antes de pintar para no perder el Scroll
         async function renderAllPages() {
             if (!pdfDoc) return;
             const previousPage = currentPageNum; 
@@ -1375,20 +1123,15 @@
             wrapper.className = 'canvas-wrapper';
             scoreBody.appendChild(wrapper);
 
-            // CORRECCIÓN NITIDEZ AQUÍ:
-            // Siempre usamos el devicePixelRatio real (o mínimo 2) para asegurar
-            // que la resolución del Canvas sea alta y cristalina en móviles y tablets.
             const deviceRatio = window.devicePixelRatio || 1;
             const hdRatio = Math.max(deviceRatio, 2); 
 
-            // 1. Obtener todas las páginas en paralelo
             const pagePromises = [];
             for (let num = 1; num <= pdfDoc.numPages; num++) {
                 pagePromises.push(pdfDoc.getPage(num));
             }
             const pages = await Promise.all(pagePromises);
 
-            // 2. Crear todos los canvas síncronamente en el DOM para fijar la altura total
             const canvasesData = [];
             for (let num = 1; num <= pages.length; num++) {
                 const page = pages[num - 1];
@@ -1403,11 +1146,7 @@
                 }
                 
                 let appliedScale = initialScale * (currentZoomPercent / 100);
-                
-                // Tamaño virtual del visor en pantalla (CSS pixels)
                 const cssViewport = page.getViewport({scale: appliedScale});
-                
-                // Tamaño interno del canvas (Resolución HD)
                 const renderViewport = page.getViewport({scale: appliedScale * hdRatio});
                 
                 const canvas = document.createElement('canvas');
@@ -1423,12 +1162,10 @@
                 canvasesData.push({ canvas, ctx, renderViewport, page });
             }
 
-            // 3. Ya con los canvas en el DOM, hacer scroll a la página en la que estábamos
             if (previousPage > 0 && previousPage <= canvasesData.length) {
                 canvasesData[previousPage - 1].canvas.scrollIntoView({ behavior: 'instant', block: 'start' });
             }
 
-            // 4. Renderizar píxeles de cada página de manera segura
             for (let i = 0; i < canvasesData.length; i++) {
                 const { canvas, ctx, renderViewport, page } = canvasesData[i];
                 const renderContext = { canvasContext: ctx, viewport: renderViewport };
@@ -1436,14 +1173,12 @@
             }
         }
         
-        // Listener para actualizar el número de página al hacer scroll en el visor
         scoreBody.addEventListener('scroll', () => {
             if (!pdfDoc) return;
             const canvases = scoreBody.querySelectorAll('canvas');
             let foundPage = currentPageNum;
             let minDistance = Infinity;
             
-            // Calculamos el centro vertical del contenedor
             const containerCenter = scoreBody.getBoundingClientRect().top + (scoreBody.clientHeight / 2);
             
             canvases.forEach((canvas) => {
@@ -1520,10 +1255,8 @@
             scorePageIndicator.style.display = 'none';
         });
 
-        // Controles de Play/Pausa Inyectados en el Visor
         document.getElementById('scorePlayPauseBtn').addEventListener('click', (e) => {
             e.stopPropagation();
-            
             if (songIndex !== currentScoreIndex) {
                 selectSong(currentScoreIndex);
             } else {
@@ -1643,7 +1376,6 @@
         searchInput.addEventListener("input", renderPlaylist);
         themeFilter.addEventListener("change", renderPlaylist);
 
-        // --- FUNCIÓN DE NORMALIZACIÓN PARA BÚSQUEDA SIN TILDES ---
         function normalizeStr(str) {
             if(!str) return "";
             return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
@@ -1688,6 +1420,7 @@
                 const favButtonHtml = `<button class="action-btn fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${index})" title="Marcar como favorito"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg></button>`;
                 const downloadButtonHtml = isDownloaded ? '' : `<button class="action-btn" onclick="downloadSongFile(event, ${index})" title="Descargar MP3">${iconDownloadSvg}</button>`;
 
+                // SE ACTUALIZÓ ESTA ESTRUCTURA PARA EL NUEVO POSICIONAMIENTO
                 item.innerHTML = `
                     <img src="${globalCoverUrl}" alt="cover">
                     <div class="song-info-list" onclick="selectSong(${index})">
@@ -1696,10 +1429,12 @@
                     </div>
                     <div class="song-actions-wrapper" id="actions-${index}">
                         ${refButtonHtml}
-                        ${favButtonHtml}
                         ${downloadButtonHtml}
                     </div>
-                    <button class="action-btn more-options-btn" onclick="toggleOptionsMenu(event, ${index})" title="Opciones">${iconDotsSvg}</button>
+                    <div class="primary-actions">
+                        ${favButtonHtml}
+                        <button class="action-btn more-options-btn" onclick="toggleOptionsMenu(event, ${index})" title="Opciones">${iconDotsSvg}</button>
+                    </div>
                 `;
                 playlistEl.appendChild(item);
             });
@@ -1860,31 +1595,24 @@
         });
 
         window.addEventListener("pageshow", () => {
-            if (backgroundPlaybackExpected && !intentionalPause) {
-                setTimeout(recoverBackgroundPlayback, 100);
-            }
+            if (backgroundPlaybackExpected && !intentionalPause) setTimeout(recoverBackgroundPlayback, 100);
         });
         window.addEventListener("focus", () => {
-            if (backgroundPlaybackExpected && !intentionalPause) {
-                setTimeout(recoverBackgroundPlayback, 100);
-            }
+            if (backgroundPlaybackExpected && !intentionalPause) setTimeout(recoverBackgroundPlayback, 100);
         });
         window.addEventListener("online", () => {
             if (backgroundPlaybackExpected && !intentionalPause && activeAudio.paused && !activeAudio.ended) {
                 setTimeout(recoverBackgroundPlayback, 300);
             }
         });
-
         document.addEventListener("pagehide", () => {
             if (isPlaying && !intentionalPause && !activeAudio.ended) {
-                backgroundPlaybackExpected = true;
-                setMediaPlaybackState("playing");
+                backgroundPlaybackExpected = true; setMediaPlaybackState("playing");
             }
         });
         document.addEventListener("freeze", () => {
             if (isPlaying && !intentionalPause && !activeAudio.ended) {
-                backgroundPlaybackExpected = true;
-                setMediaPlaybackState("playing");
+                backgroundPlaybackExpected = true; setMediaPlaybackState("playing");
             }
         });
         document.addEventListener("resume", () => {
@@ -1963,7 +1691,6 @@
         function setupAudioListeners(audioElement) {
             audioElement.addEventListener('ended', (e) => {
                 if (songs.length > 0) {
-                    
                     if (document.getElementById('scoreModal').classList.contains('show') && songIndex === currentScoreIndex) {
                         activeAudio.currentTime = 0;
                         playSong();
@@ -2003,32 +1730,25 @@
             });
 
             audioElement.addEventListener('playing', (e) => {
-                isBuffering = false;
-                intentionalPause = false;
-                backgroundPlaybackExpected = true;
-                updatePlayButton(true);
+                isBuffering = false; intentionalPause = false;
+                backgroundPlaybackExpected = true; updatePlayButton(true);
                 setMediaPlaybackState('playing');
             });
 
             audioElement.addEventListener('play', (e) => {
                 if (!intentionalPause) {
-                    backgroundPlaybackExpected = true;
-                    updatePlayButton(true);
-                    setMediaPlaybackState('playing');
+                    backgroundPlaybackExpected = true; updatePlayButton(true); setMediaPlaybackState('playing');
                 }
             });
 
             audioElement.addEventListener('pause', (e) => {
                 if (isBuffering && !intentionalPause) return;
                 if (intentionalPause) {
-                    backgroundPlaybackExpected = false;
-                    updatePlayButton(false);
-                    setMediaPlaybackState('paused');
-                    return;
+                    backgroundPlaybackExpected = false; updatePlayButton(false);
+                    setMediaPlaybackState('paused'); return;
                 }
                 if (backgroundPlaybackExpected && !activeAudio.ended) {
-                    updatePlayButton(true);
-                    setMediaPlaybackState('playing');
+                    updatePlayButton(true); setMediaPlaybackState('playing');
                     if (!document.hidden) setTimeout(recoverBackgroundPlayback, 50);
                     return;
                 }
@@ -2090,9 +1810,7 @@
                 installBanner.classList.remove('show');
                 deferredPrompt.prompt(); 
                 const { outcome } = await deferredPrompt.userChoice;
-                if (outcome === 'accepted') {
-                    console.log('App instalada');
-                }
+                if (outcome === 'accepted') { console.log('App instalada'); }
                 deferredPrompt = null;
             }
         });
