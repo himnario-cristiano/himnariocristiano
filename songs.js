@@ -1202,7 +1202,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/ov5oxhwjqosbvyt6f5ksy/101-Jubilosas-Nuestras-Voces-HG.pdf?rlkey=3qtdch0x2iqxewnwlmmz5e7qq&st=s6p85wvu&dl=0",
                 src: "https://www.dropbox.com/scl/fi/u20ht0q1y15w6mipucnqg/101.-Jubilosas-Nuestras-Voces-mujeres.mp3?rlkey=54tafle7ka8jod054soyhr7fs&st=gyvlngnp&dl=0",
                 references: [
 
@@ -1214,7 +1214,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/ov5oxhwjqosbvyt6f5ksy/101-Jubilosas-Nuestras-Voces-HG.pdf?rlkey=3qtdch0x2iqxewnwlmmz5e7qq&st=s6p85wvu&dl=0",
                 src: "https://www.dropbox.com/scl/fi/sivhxjblorusr9by8332j/101.-Jubilosas-Nuestras-Voces-Hombres.mp3?rlkey=dl7vdxcwcqhwxls81yjtrvwyt&st=usvu43mi&dl=0",
                 references: [
 
@@ -1226,7 +1226,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/8nj158cj2s6ebur2l7ejx/Puedo-Confia-en-el-se-or-modificado.pdf?rlkey=jomtmsgjjqeevgrwuevbjzy0b&st=dkg7gsbk&dl=0",
                 src: "https://www.dropbox.com/scl/fi/mis7j5hdkqlkw1zn611e8/102.-Puedo-Confiar-En-El-Se-or.mp3?rlkey=tp9g64r0iuwwna78tstiqvnqo&st=3w0hdoyq&dl=0",
                 references: [
 
@@ -1238,7 +1238,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/tw78d1em8o4mz9frep8jh/194-Dios-Est-Aqu-.-Qu-Precioso-Es.pdf?rlkey=7ai2h4o7tq35zuty1gqfy61t1&st=ksb3l9yg&dl=0",
                 src: "https://www.dropbox.com/scl/fi/rb8umahau8h66doobuqcx/103.-Dios-Esta-Aqui-Que-Precioso-Es.mp3?rlkey=hr89oqzq19l95774o641in94d&st=qctebh77&dl=0",
                 references: [
 
@@ -1250,7 +1250,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/c7sh6k8buli75xppqonjb/Busca-Primero-El-Reino-De-Dios-HG-3-estrofas.pdf?rlkey=s5hn07596hh020fhxtmkg2rmo&st=zeqb7061&dl=0",
                 src: "https://www.dropbox.com/scl/fi/pfazk9s7rpksw16dh6vra/104.-Busca-Primero-El-Reino-De-Dios.mp3?rlkey=8xa2kw7znhi3egfm8kcvhuuhr&st=tli3a1s5&dl=0",
                 references: [
 
@@ -1262,7 +1262,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/zueunsh1wskogtz536lih/Amemonos-de-Corazon-full.pdf?rlkey=96sdt2oudmx4j0l8jrockrpzy&st=48952zfy&dl=0",
                 src: "https://www.dropbox.com/scl/fi/kfvthaoeq14rqjwwttll5/106.-Am-monos-de-Coraz-n.mp3?rlkey=1ciflzf52c2acfo3guko7fufq&st=1c66vcc0&dl=0",
                 references: [
 
@@ -1274,7 +1274,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/i48a3goz0zo8lq33juk6r/Solamente-En-Cristo-HG-2-estrofas.pdf?rlkey=jdnc3p7haptpggsddxajcl5hp&st=atk9nvu6&dl=0",
                 src: "https://www.dropbox.com/scl/fi/j9hxnh2naf15onp7qffiu/107.-Solamente-En-Cristo.mp3?rlkey=llt01nikl584ab1i6akd60jta&st=r8vzb8dj&dl=0",
                 references: [
 
@@ -1286,7 +1286,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/03m97b5siz3hchr2c1kmc/061-Sin-Ti.pdf?rlkey=4dx4aj31uwqq7ylgzrmhbwvn8&st=mp2ph3pu&dl=0",
                 src: "https://www.dropbox.com/scl/fi/q65r7uswtpp0z24c4dsyt/108.-Sin-Ti-Nada-Somos-En-El-Mundo.mp3?rlkey=pflel8u02yhgbm6qqmxa1362s&st=tz8glxj5&dl=0",
                 references: [
 
@@ -1298,7 +1298,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/l238119b7sd4wydflsdfw/Jesus-Me-Pastorea.pdf?rlkey=1pg12qjdpeiou2326hm16pwl7&st=yo6g6czq&dl=0",
                 src: "https://www.dropbox.com/scl/fi/qw6lfx7w8wmihsbyh5tnr/109.-Jes-s-me-Pastorea.mp3?rlkey=uuzgt79ednixcoycha0v067tk&st=jxbs94k0&dl=0",
                 references: [
 
@@ -1310,7 +1310,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/mokpaoq06fqsqyzr1vik8/037-A-Jehov-Invocar.pdf?rlkey=1p4clvu9fe08cmtygsz4exexx&st=14bntysg&dl=0",
                 src: "https://www.dropbox.com/scl/fi/tcowfy8r8mvxkgx9uzlo8/110.-A-Jehov-Invocare.mp3?rlkey=yfoevdnvz8a8zje7ikao70slk&st=1281ki08&dl=0",
                 references: [
 
