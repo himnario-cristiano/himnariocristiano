@@ -3317,12 +3317,12 @@
                 references: [] // Array vacío si no hay referencias
             },
             {
-                title: "300 - Voy al Cielo Soy Peregrino",
+                title: "300 - El Mundo No Es Mi Hogar",
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
         		partitura: "https://www.dropbox.com/scl/fi/ieodp7du1mefbhvgopk8v/129-El-Mundo-No-Es-Mi-Hogar-Brumley.pdf?rlkey=587oqxbwyhhtgpgyejn7ns27x&st=7hoicf6x&dl=0",
-                src: "https://www.dropbox.com/scl/fi/833w09ejgfjie0hijgn74/300-.-Voy-al-Cielo-Soy-Peregrino.mp3?rlkey=essec4yax2d8bn0uee3v4c44g&st=97p963cw&dl=0",
+                src: "https://www.dropbox.com/scl/fi/w9acpm8sbnzbgpdslltv9/300.-El-Mundo-No-Es-Mi-Hogar.mp3?rlkey=i4wqo040vtorfqv33mpv1v8sp&st=lso33gpi&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
             {
