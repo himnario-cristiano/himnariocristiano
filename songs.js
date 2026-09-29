@@ -2405,7 +2405,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "https://www.dropbox.com/scl/fi/rz8gx2dgjz3wnd5trtznt/120-Dios-Es-Amor-Figuras.pdf?rlkey=z2zhtpefrqwm3lgumgytgp8t1&st=j4s0jlyc&dl=0",
+        		partitura: "https://www.dropbox.com/scl/fi/pktnxdlqpop98febya7jq/034-Dios-Es-Amor.pdf?rlkey=gb6o4i8c47o4ocb9h2g045btp&st=6gv1rwwi&dl=0",
                 src: "https://www.dropbox.com/scl/fi/cipq1thld1jshr1q879ok/204.-Dios-Es-Amor.mp3?rlkey=uwejup8zn63d0l0hqbvw5mugq&st=790i7li8&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
