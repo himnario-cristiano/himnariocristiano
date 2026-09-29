@@ -3234,7 +3234,7 @@
                 references: [] // Array vacío si no hay referencias
             },
             {
-                title: "291. Te seguiré",
+                title: "291 - Te seguiré",
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
@@ -3243,7 +3243,7 @@
                 references: [] // Array vacío si no hay referencias
             },
             {
-                title: "292. Ven A Cantar Conmigo",
+                title: "292 - Ven A Cantar Conmigo",
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
@@ -3252,7 +3252,7 @@
                 references: [] // Array vacío si no hay referencias
             },
             {
-                title: "293. Ten Cuidado",
+                title: "293 - Ten Cuidado",
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
@@ -3261,7 +3261,7 @@
                 references: [] // Array vacío si no hay referencias
             },
             {
-                title: "294. Todo Poderoso",
+                title: "294 - Todo Poderoso",
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
@@ -3270,7 +3270,7 @@
                 references: [] // Array vacío si no hay referencias
             },
             {
-                title: "295. Voy A La Ciudad",
+                title: "295 - Voy A La Ciudad",
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
@@ -3279,7 +3279,7 @@
                 references: [] // Array vacío si no hay referencias
             },
             {
-                title: "296. Buscando Al Perdido",
+                title: "296 - Buscando Al Perdido",
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
@@ -3290,7 +3290,7 @@
                 ]
             },
             {
-                title: "297. Somos De La Familia",
+                title: "297 - Somos De La Familia",
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
@@ -3299,7 +3299,7 @@
                 references: [] // Array vacío si no hay referencias
             },
             {
-                title: "298. Nos Veremos Al Final",
+                title: "298 - Nos Veremos Al Final",
                 artist: "SIN AUDIO",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
