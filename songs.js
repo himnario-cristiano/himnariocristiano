@@ -2252,7 +2252,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/r7sl4uedgqt1l9z1ycsqs/067-pon-tus-ojos-en-cristo.pdf?rlkey=y0zlamcjntpusyv76hfrzaccq&st=os7kleog&dl=0",
                 src: "https://www.dropbox.com/scl/fi/ph558xprwuxg91zkvfp5h/187.-Pon-Tus-Ojos-En-Cristo.mp3?rlkey=rvynfgjjs7hlch5jh4ptt7fpn&st=4gdzucc0&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
@@ -2261,7 +2261,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/ur7xiistnl57a2ljt1b8l/104-Venid-Fieles-Todos.pdf?rlkey=rmcvaxvl47pxwwg5qlno1ebpy&st=mhkyhcda&dl=0",
                 src: "https://www.dropbox.com/scl/fi/n9gvsy848hwmifvxzzim5/188.-Venid-Fieles-Todos.mp3?rlkey=hfihqsw3u4xpforlo15l3nvp6&st=cku80jp4&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
@@ -2270,7 +2270,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/ui5jlsly7hzwfvs34wzyx/134-El-Se-or-Resucit-16_9.pdf?rlkey=7aoycwjrby036xxop15vf0imb&st=tpahy5q2&dl=0",
                 src: "https://www.dropbox.com/scl/fi/b00prj40yzwuvmhmd03gr/189.-El-Se-or-Resucito.mp3?rlkey=fv2lx0c8r97qbn2kzha86n29h&st=kuk3c7ak&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
@@ -2279,7 +2279,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/99134o5nxge5i81oi3wun/062-Bello-Mi-Cristo-Es.pdf?rlkey=10n87qide9dxta66k2f9dccc4&st=2hgxt8v4&dl=0",
                 src: "https://www.dropbox.com/scl/fi/2mx7gy74q34d2731i93vk/190.-Bello-Mi-Cristo-Es.mp3?rlkey=3ufmdzsy42tgt0ziolxah18bp&st=7arp5pxg&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
@@ -2288,7 +2288,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/c6bdef3d7a0bug3e0rz05/224-De-Rodillas.pdf?rlkey=7gy4fh7lo17581rb43uv9dscs&st=6homotwf&dl=0",
                 src: "https://www.dropbox.com/scl/fi/k3tyd4hymk313dpipc8ku/191.-De-Rodillas-Vengo-A-Ti.mp3?rlkey=jdhfns021y7h1v3uvy72ga6qc&st=owmvewxa&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
@@ -2297,7 +2297,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/if4n08is9qhw493hhb36j/250-Soy-Un-Cordero.pdf?rlkey=6v06v078qf1ugk4t13t1ucpe2&st=ii25izz5&dl=0",
                 src: "https://www.dropbox.com/scl/fi/1vy9ss73surkwn4jxmdhm/192.-Soy-Un-Cordero.mp3?rlkey=z7p0w9vj88bq1ichw24hmue1h&st=fxxku0vc&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
@@ -2306,7 +2306,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/o9wyw30wzg30lka6wmpfe/240-Estoy-Bien-Con-Mi-Dios-16_9.pdf?rlkey=0sy1fq0pi0kb2l7l8e1gc8sim&st=49dtvri0&dl=0",
                 src: "https://www.dropbox.com/scl/fi/v6ljodnpa9bpm50zkic11/193.-Estoy-Bien-Con-Mi-Dios.mp3?rlkey=yrkfle6d2iwb5996ju2sw0aw0&st=s2wlf24e&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
@@ -2315,7 +2315,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/d2m3ateavzau636cdyx4v/A-Lugares-Obscuro.pdf?rlkey=ew3u32rkrmy7skodk6xyzas5y&st=yl4vdmh1&dl=0",
                 src: "https://www.dropbox.com/scl/fi/g4ov9i8vrkmu8vw77pq39/194.-A-lugares-Oscuros.mp3?rlkey=dmfs3ncfy4ukqc1o40ohb87g9&st=8mp7zize&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
@@ -2324,7 +2324,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/n1na8laiz9f5fm3c14d0w/202-a-ti-se-or.pdf?rlkey=hsjck20cu6hyrpmuxcqqv931j&st=ng4dgk9p&dl=0",
                 src: "https://www.dropbox.com/scl/fi/9laidzopg46fy7ei77qs2/195.-A-Ti-Se-or.mp3?rlkey=am4855454ji3f84y0f9w91pim&st=mhje35q7&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
@@ -2333,7 +2333,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/pufe2sk943s7z9y9qrhe1/242-Renu-vame.pdf?rlkey=ciqo5iys70767a5v0uw6uaroy&st=ul6zy83s&dl=0",
                 src: "https://www.dropbox.com/scl/fi/ftdjcpc1ishliy7523bev/196.-Renu-vame.mp3?rlkey=9rcknuek3dz9o0ejx7d00t7rg&st=dt4xqgxk&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
@@ -2342,16 +2342,16 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/ink1agg26scxsov61dent/197.-La-Ley-De-Jehov.pdf?rlkey=hampbmvwzzhuytf2mayazmkhv&st=5r8vev63&dl=0",
                 src: "https://www.dropbox.com/scl/fi/avzzn38aigajjls1l3fux/197.-La-Ley-De-Jehov.mp3?rlkey=q2c97ca1jjkxdoxdv51tpah5j&st=g8y6v1h5&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
             {
-                title: "198 - Yo Allí Viviré",
+                title: "198 - Yo Iré a morar",
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/3fl08re341gnz9cnl2afp/Yo-Ir-A-Morar.pdf?rlkey=nuv0luf5c6r3xexb3b78jm05z&st=eym3vn4t&dl=0",
                 src: "https://www.dropbox.com/scl/fi/q59njwdunlagbbsnywwoq/198.-Yo-All-Vivir.wav?rlkey=dibvg8j5gcqpf4s5c0k7idea6&st=rmr9b2gq&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
@@ -2360,7 +2360,7 @@
                 artist: "SIN AUDIO",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/jwz2ndhj896tmotojmc3t/199.-Ll-vame-Donde-Nadie-Esta.pdf?rlkey=z7zdeb2p4t14tmnmyrdyynopx&st=8t3pot8o&dl=0",
                 src: "https://www.dropbox.com/scl/fi/pv4jr153157c5a9poyrk8/199..mp3?rlkey=ybj8e3rhmuqwrmknoq97k3jg8&st=1dy5dm3v&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
@@ -2369,7 +2369,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "",
+        		partitura: "https://www.dropbox.com/scl/fi/lfmiayiyewpov4ah5mvyh/35-Al-Rey-Eterno-16_9.pdf?rlkey=km3dbubk42opqr2u9egb2d3lp&st=4r7qtgiq&dl=0",
                 src: "https://www.dropbox.com/scl/fi/ynrg2c3h67taxz5nsn1pn/200.-Al-Rey-Eterno.mp3?rlkey=19lq51r97eywl48cjjmfozxl1&st=8l4himgr&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
