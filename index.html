@@ -315,6 +315,11 @@
         /* Media Queries Móviles y Tablets */
         @media (max-width: 1024px) {
             .app-header { padding: calc(env(safe-area-inset-top) + 10px) 15px 15px 15px; }
+            /* --- NUEVO: Reduce los márgenes izquierdo y derecho en móviles --- */
+            .playlist-wrapper { padding: 10px 10px 100px 10px; }
+            .playlist-item { padding: 8px 10px; }
+            /* ----------------------------------------------------------------- */
+
             /* Se modificó esta zona para que todo encaje en la misma fila en móviles */
             .header-filters { flex-wrap: nowrap; gap: 8px; }
             .search-container { flex: 1; min-width: 0; order: 1; padding: 8px 10px;}
