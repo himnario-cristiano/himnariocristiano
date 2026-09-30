@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>HIMNARIO CRISTIANO</title>
 
-    <link rel="icon" href="https://i.postimg.cc/14xJ49F9/LOGO-Himnario-Cristiano.png" type="image/png">
+    <link rel="icon" href="Himnario-Cristiano.png" type="image/png">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
     <link rel="apple-touch-icon" href="icon-192x192.png">
@@ -22,16 +22,16 @@
         :root {
             --text-scale: 1; 
             
-            /* TEMA CLARO (Por Defecto) */
+            /* TEMA CLARO (Acento cambiado a amarillo oscuro) */
             --bg-main: #F1F5F9;
             --surface-color: rgba(255, 255, 255, 0.9);
             --surface-solid: #FFFFFF;
             --text-main: #0F172A;
             --text-muted: #64748B;
             --border-color: #E2E8F0;
-            --accent-color: #4F46E5; 
-            --accent-hover: #4338CA;
-            --accent-light: rgba(79, 70, 229, 0.1);
+            --accent-color: #D97706; /* Amarillo oscuro / ámbar */
+            --accent-hover: #B45309;
+            --accent-light: rgba(217, 119, 6, 0.12);
             --btn-hover-bg: rgba(15, 23, 42, 0.05);
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
             --shadow-md: 0 4px 15px rgba(0,0,0,0.05);
@@ -41,16 +41,16 @@
         }
 
         [data-theme="dark"] {
-            /* TEMA OSCURO - NEGRO FUERTE */
+            /* TEMA OSCURO - NEGRO FUERTE (Acento amarillo brillante) */
             --bg-main: #000000; 
             --surface-color: rgba(0, 0, 0, 0.85); 
             --surface-solid: #000000; 
             --text-main: #F8FAFC;
             --text-muted: #94A3B8;
             --border-color: rgba(255, 255, 255, 0.12);
-            --accent-color: #F59E0B; 
-            --accent-hover: #D97706;
-            --accent-light: rgba(245, 158, 11, 0.15);
+            --accent-color: #FACC15; /* Amarillo brillante */
+            --accent-hover: #EAB308;
+            --accent-light: rgba(250, 204, 21, 0.15);
             --btn-hover-bg: rgba(255, 255, 255, 0.08);
             --shadow-sm: 0 1px 3px rgba(0,0,0,0.5);
             --shadow-md: 0 4px 15px rgba(0,0,0,0.8);
@@ -232,7 +232,6 @@
         .fs-row button:hover { background: var(--accent-color); color: #fff; }
         #fsDisplay, #szDisplay { font-weight: 600; font-size: 14px; min-width: 45px; text-align: center; color: var(--text-main); }
         
-        /* Botones de restablecer con diseño unificado y moderno */
         #fsReset, #szReset { 
             background: var(--btn-hover-bg); 
             color: var(--text-main); 
@@ -363,7 +362,7 @@
     <header class="app-header">
         <div class="header-top">
             <div class="brand">
-                <img src="https://i.postimg.cc/14xJ49F9/LOGO-Himnario-Cristiano.png" alt="Logo">
+                <img src="Himnario-Cristiano.png" alt="Logo">
                 Himnario
             </div>
             <div class="header-actions">
@@ -494,7 +493,6 @@
                     <span id="szDisplay">100%</span>
                     <button id="szIncrease">+</button>
                 </div>
-                <!-- Botón rediseñado con estilo moderno -->
                 <button id="szReset">Restablecer 100%</button>
             </div>
             
