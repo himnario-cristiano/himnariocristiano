@@ -1257,6 +1257,18 @@
 
                 ] // {hymnal: "himnario ...", number: "00"} Array vacío si no hay referencias
             },
+			{
+                title: "105 - Yo Quiero Mas De Cristo",
+                artist: "Himnario Cristiano",
+                temas: [],
+				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
+        		partitura: "https://www.dropbox.com/scl/fi/8q6mxk1w6f60oode34dwm/105.-Yo-Quiero-M-s-y-M-s-De-Cristo-Letra.pdf?rlkey=6b6fhs5xvwzbn0yb9v4ohtmyh&st=exo9t2u2&dl=0",
+                src: "https://www.dropbox.com/scl/fi/hwcat4udg23c5s5behtv3/105-Yo-Quiero-Mas-de-Cristo.mp3?rlkey=qz49pd57giq55wekfe2e552tb&st=u2c9yxr1&dl=0",
+                references: [
+
+
+                ] // {hymnal: "himnario ...", number: "00"} Array vacío si no hay referencias
+            },
             {
                 title: "106 - Amémonos de Corazón",
                 artist: "Himnario Cristiano",
