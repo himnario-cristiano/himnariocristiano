@@ -62,7 +62,15 @@
         *, *::before, *::after { 
             box-sizing: border-box; margin: 0; padding: 0; 
             font-family: 'Inter', sans-serif; 
-            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+            /* Se eliminó la transición global para evitar el lag */
+        }
+
+        /* Transición fluida y rápida solo en elementos clave */
+        body, .app-header, .bottom-player, .playlist-item, 
+        .btn-action, .search-container, .theme-select, .search-input,
+        .modal-content, .font-size-panel, .score-header, .score-body,
+        .action-list-btn, .ctrl-btn, .fav-filter-btn, .primary-actions {
+            transition: background-color 0.15s ease-out, border-color 0.15s ease-out, color 0.15s ease-out;
         }
 
         body { 
