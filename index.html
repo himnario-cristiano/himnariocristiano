@@ -62,10 +62,16 @@
         *, *::before, *::after { 
             box-sizing: border-box; margin: 0; padding: 0; 
             font-family: 'Inter', sans-serif; 
-            /* Se eliminó la transición global para evitar el lag */
+            /* Transición global eliminada para evitar lag */
         }
 
-        
+        /* Transición fluida y rápida solo en elementos clave */
+        body, .app-header, .bottom-player, .playlist-item, 
+        .btn-action, .search-container, .theme-select, .search-input,
+        .modal-content, .font-size-panel, .score-header, .score-body,
+        .action-list-btn, .ctrl-btn, .fav-filter-btn, .primary-actions {
+            transition: background-color 0.15s ease-out, border-color 0.15s ease-out, color 0.15s ease-out;
+        }
 
         body { 
             background: var(--bg-main);
@@ -136,7 +142,7 @@
 
         /* ================= PLAYLIST ================= */
         .playlist-wrapper {
-            flex: 1; overflow-y: auto; padding: 15px 15px 120px 15px; 
+            flex: 1; overflow-y: auto; padding: 15px 20px 160px 20px; 
             -webkit-overflow-scrolling: touch;
         }
 
@@ -314,10 +320,10 @@
 
         /* Media Queries Móviles y Tablets */
         @media (max-width: 1024px) {
-           .app-header { padding: calc(env(safe-area-inset-top) + 10px) 15px 15px 15px; }
+            .app-header { padding: calc(env(safe-area-inset-top) + 10px) 15px 15px 15px; }
             
             /* --- NUEVO: Margen inferior aumentado para evitar que el reproductor tape el último ítem --- */
-            .playlist-wrapper { padding: 10px 10px 130px 10px; } /* <--- Aumentado a 160px */
+            .playlist-wrapper { padding: 10px 10px 160px 10px; } 
             .playlist-item { padding: 8px 10px; }
             /* ------------------------------------------------------------------------------------------ */
 
@@ -649,7 +655,7 @@
 
         const helpBtn = document.getElementById('helpBtn'); const helpModal = document.getElementById('helpModal'); const closeModalBtn = document.getElementById('closeModalBtn');
         helpBtn.addEventListener('click', (e) => { e.stopPropagation(); helpModal.classList.add('show'); });
-        closeModalBtn.addEventListener('click', () => helpModal.classList.remove('show'));
+        closeModalBtn.addEventListener('click', () => helpModal.classList.remove('show'); });
         helpModal.addEventListener('click', (e) => { if (e.target === helpModal) helpModal.classList.remove('show'); });
 
         const refModal = document.getElementById('refModal'); const closeRefModalBtn = document.getElementById('closeRefModalBtn');
