@@ -316,10 +316,10 @@
         @media (max-width: 1024px) {
            .app-header { padding: calc(env(safe-area-inset-top) + 10px) 15px 15px 15px; }
             
-            /* --- NUEVO: Reduce los márgenes izquierdo y derecho en móviles --- */
-            .playlist-wrapper { padding: 10px 10px 120px 10px; }
+            /* --- NUEVO: Margen inferior aumentado para evitar que el reproductor tape el último ítem --- */
+            .playlist-wrapper { padding: 10px 10px 160px 10px; } /* <--- Aumentado a 160px */
             .playlist-item { padding: 8px 10px; }
-            /* ----------------------------------------------------------------- */
+            /* ------------------------------------------------------------------------------------------ */
 
             /* Se modificó esta zona para que todo encaje en la misma fila en móviles */
             .header-filters { flex-wrap: nowrap; gap: 8px; }
