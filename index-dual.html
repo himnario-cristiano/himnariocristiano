@@ -140,19 +140,14 @@
 
         .playlist-item { 
             position: relative; width: 100%; display: flex; align-items: center; 
-            /* Reducción de padding superior e inferior */
-            padding: 6px 12px; border-radius: 10px; cursor: pointer; 
+            /* Menos padding superior e inferior */
+            padding: 8px 14px; border-radius: 10px; cursor: pointer; 
             margin-bottom: 6px; background: var(--surface-solid);
             border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);
         }
         .playlist-item:hover { transform: translateY(-1px); box-shadow: var(--shadow-md); border-color: var(--accent-color); }
         .playlist-item.active { background: var(--accent-light); border-color: var(--accent-color); }
         .playlist-item.active .song-title-list { color: var(--accent-color); }
-
-        .playlist-item img { 
-            width: 42px; height: 42px; border-radius: 8px; margin-right: 12px; 
-            object-fit: cover; border: 1px solid var(--border-color); flex-shrink: 0;
-        }
         
         .song-info-list { display: flex; flex-direction: column; overflow: hidden; flex: 1; }
         .song-title-list { font-size: calc(15px * var(--text-scale)); font-weight: 600; color: var(--text-main); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -173,7 +168,6 @@
         .fav-btn.active { color: var(--accent-color); }
         .fav-btn.active svg { fill: var(--accent-color); stroke: var(--accent-color); }
 
-        /* Ocultar botón de opciones en escritorio por defecto */
         .more-options-btn { display: none; }
 
         /* ================= BOTTOM PLAYER ================= */
@@ -182,14 +176,15 @@
             background: var(--surface-color);
             backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
             border-top: 1px solid var(--border-color);
-            padding: 0 0 calc(env(safe-area-inset-bottom) + 15px) 0;
+            padding: 0 0 calc(env(safe-area-inset-bottom) + 12px) 0;
             display: flex; flex-direction: column; z-index: 50;
             box-shadow: var(--shadow-player);
         }
 
+        /* Barra de progreso con margen para que esté dentro del rectángulo sin tocar la orilla */
         .progress-container { 
             width: 100%; display: flex; align-items: center; padding: 0 20px;
-            margin-top: -5px; position: relative; z-index: 2; gap: 12px;
+            margin-top: 10px; position: relative; z-index: 2; gap: 12px;
         }
         .time-text { font-size: calc(11px * var(--text-scale)); color: var(--text-muted); font-weight: 600; min-width: 35px;}
         
@@ -204,17 +199,11 @@
 
         .player-content {
             display: flex; align-items: center; justify-content: space-between;
-            padding: 12px 20px 5px 20px; gap: 15px;
+            padding: 8px 20px 0 20px; gap: 15px;
         }
 
         .player-info { display: flex; align-items: center; flex: 1; overflow: hidden; }
-        .artwork-wrapper { 
-            width: 54px; height: 54px; flex-shrink: 0; border-radius: 8px; 
-            overflow: hidden; margin-right: 15px; border: 1px solid var(--border-color);
-        }
-        .artwork-wrapper img { width: 100%; height: 100%; object-fit: cover; }
-        
-        .info-text { display: flex; flex-direction: column; overflow: hidden; }
+        .info-text { display: flex; flex-direction: column; overflow: hidden; width: 100%; }
         .title-current { font-size: calc(16px * var(--text-scale)); font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: var(--text-main);}
         .artist-current { font-size: calc(13px * var(--text-scale)); color: var(--text-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px;}
 
@@ -274,10 +263,9 @@
         .score-body canvas { display: block; margin-bottom: 15px; background: #fff; box-shadow: var(--shadow-md); max-width: none; border-radius: 4px; border: 1px solid #ccc;}
         .score-body img { display: block; margin: 15px auto; width: 100%; max-width: 100%; border-radius: 4px; box-shadow: var(--shadow-md); }
         
-        /* Área clickeable para el progreso en la partitura */
         .score-progress-area { 
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 12px; 
-            cursor: pointer; z-index: 10; background: transparent;
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 14px; 
+            cursor: pointer; z-index: 5; background: transparent; display: flex; align-items: center;
         }
         .navbar-progress-bar { 
             position: absolute; bottom: 0; left: 0; height: 4px; 
@@ -310,14 +298,12 @@
             .theme-select { flex: 1; order: 2; max-width: none; }
             .fav-filter-btn { order: 3; width: 42px; height: 42px; }
             
-            .player-content { padding: 10px 15px 5px 15px; gap: 10px;}
-            .artwork-wrapper { width: 48px; height: 48px; margin-right: 12px;}
+            .player-content { padding: 8px 15px 0 15px; gap: 10px;}
             
             .player-controls { gap: 8px; }
             .btn-hide-mobile { display: none; } 
             .btn-play { width: 44px; height: 44px; }
             
-            /* Mostrar botón de opciones y convertir acciones en un menú desplegable */
             .more-options-btn { display: flex; }
             .song-actions-wrapper {
                 display: none; position: absolute; right: 55px; top: 50%;
@@ -401,6 +387,7 @@
     <main class="playlist-wrapper" id="playlistItems"></main>
 
     <div class="bottom-player" id="nowPlaying">
+        <!-- Barra de progreso con márgenes internos -->
         <div class="progress-container">
             <span class="time-text" id="currTime">0:00</span>
             <div class="progress-bar-bg" id="progressArea">
@@ -411,9 +398,6 @@
 
         <div class="player-content">
             <div class="player-info">
-                <div class="artwork-wrapper">
-                    <img src="https://i.postimg.cc/14xJ49F9/LOGO-Himnario-Cristiano.png" alt="Cover" id="cover">
-                </div>
                 <div class="info-text">
                     <span class="title-current" id="title">Cargando...</span>
                     <span class="artist-current" id="artist">Selecciona un himno</span>
@@ -490,7 +474,6 @@
                 <button id="szReset">Restablecer 100%</button>
             </div>
             
-            <!-- Barra de progreso interactiva para el modal de partituras -->
             <div class="score-progress-area" id="scoreProgressArea">
                 <div class="navbar-progress-bar" id="scoreProgressBar"></div>
             </div>
@@ -561,7 +544,6 @@
         let songIndex = 0; let isPlaying = false; let showOnlyFavorites = false; let playbackMode = 0; let isBuffering = false;
 
         const playlistEl = document.getElementById("playlistItems");
-        const coverEl = document.getElementById("cover");
         const titleEl = document.getElementById("title");
         const artistEl = document.getElementById("artist");
         const playBtn = document.getElementById("playBtn");
@@ -755,8 +737,6 @@
         fsIncrease.addEventListener('click', () => { if (currentTextScale < 180) { currentTextScale += 10; applyTextScale(); }});
         fsReset.addEventListener('click', () => { currentTextScale = 100; applyTextScale(); });
 
-        coverEl.src = globalCoverUrl;
-
         function formatDropboxStreamUrl(url) { if(url.includes("dropbox.com")) return url.replace("www.dropbox.com", "dl.dropboxusercontent.com").replace("?dl=0", "").replace("?dl=1", ""); return url; }
         function formatDropboxDownloadUrl(url) { if(url.includes("dropbox.com")) { let cleanUrl = url.replace("?dl=0", "").replace("?dl=1", ""); return cleanUrl + (cleanUrl.includes("?") ? "&dl=1" : "?dl=1"); } return url; }
 
@@ -801,7 +781,6 @@
                 const downloadButtonHtml = isDownloaded ? '' : `<button class="action-list-btn" onclick="downloadSongFile(event, ${index})" title="Descargar MP3">${iconDownloadSvg}</button>`;
 
                 item.innerHTML = `
-                    <img src="${globalCoverUrl}" alt="cover">
                     <div class="song-info-list" onclick="selectSong(${index})">
                         <span class="song-title-list">${song.title}</span>
                         <span class="song-artist-list">${song.artist}</span>
@@ -891,7 +870,6 @@
             activeAudio.currentTime = Math.max(0, Math.min(1, clickX / rect.width)) * activeAudio.duration;
         });
 
-        // Habilitar adelantar o atrasar en la partitura 
         scoreProgressArea.addEventListener('click', (e) => {
             if (!Number.isFinite(activeAudio.duration) || activeAudio.duration <= 0) return;
             const rect = scoreProgressArea.getBoundingClientRect(); 
