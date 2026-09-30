@@ -1625,7 +1625,7 @@
             if (isPlaying && !intentionalPause) backgroundPlaybackExpected = true;
         });
 
-        startBackgroundRecoveryWatchdog();
+        // startBackgroundRecoveryWatchdog(); // <- Comenta esta línea
 
         playBtn.addEventListener('click', () => {
             if (activeAudio.paused || !isPlaying) playSong();
@@ -1649,6 +1649,8 @@
 
             activeAudio.src = formatDropboxStreamUrl(song.src);
             backgroundPlaybackExpected = true;
+            
+            // ELIMINADO activeAudio.load() - Dejamos que play() se encargue de todo síncronamente
             requestAudioPlay(activeAudio);
         }
 
@@ -1664,8 +1666,10 @@
             renderPlaylist();
             updateMediaSession(song);
 
+            // Asignamos el nuevo origen inmediatamente
             activeAudio.src = formatDropboxStreamUrl(song.src);
-            activeAudio.load(); 
+
+            // ELIMINADO: activeAudio.load(); <- ESTO MATABA EL AUDIO EN SEGUNDO PLANO
 
             if (isPlaying || manualClick) {
                 isPlaying = true;
@@ -1673,31 +1677,20 @@
                 backgroundPlaybackExpected = true;
                 updatePlayButton(true);
                 setMediaPlaybackState('playing');
+                // Llamamos a play() directamente para mantener el hilo de ejecución activo
                 requestAudioPlay(activeAudio); 
             }
         }
 
-        prevBtn.addEventListener('click', prevSong);
-        nextBtn.addEventListener('click', () => transitionToNext(true));
-
-        progressArea.addEventListener('click', (e) => {
-            if (!Number.isFinite(activeAudio.duration) || activeAudio.duration <= 0) return;
-            const rect = progressArea.getBoundingClientRect();
-            const clickX = e.clientX - rect.left;
-            const ratio = Math.max(0, Math.min(1, clickX / rect.width));
-            activeAudio.currentTime = ratio * activeAudio.duration;
-        });
-
+        // Se optimizan los listeners del audio para que sean síncronos y no dependan de retrasos
         function setupAudioListeners(audioElement) {
             audioElement.addEventListener('ended', (e) => {
                 if (songs.length > 0) {
                     if (document.getElementById('scoreModal').classList.contains('show') && songIndex === currentScoreIndex) {
                         activeAudio.currentTime = 0;
-                        playSong();
+                        requestAudioPlay(activeAudio);
                     } else {
-                        backgroundPlaybackExpected = true;
-                        intentionalPause = false;
-                        isPlaying = true;
+                        // Es vital que esto se llame inmediatamente sin setTimeout ni promesas intermedias
                         transitionToNext(true);
                     }
                 }
@@ -1743,15 +1736,18 @@
 
             audioElement.addEventListener('pause', (e) => {
                 if (isBuffering && !intentionalPause) return;
+                
+                // Si el navegador pausa el audio por el sistema (ej: entró una llamada), no tratamos de forzarlo
+                if (!intentionalPause && audioElement.currentTime > 0 && !audioElement.ended) {
+                    backgroundPlaybackExpected = true; // Esperamos que se recupere
+                    return; 
+                }
+
                 if (intentionalPause) {
                     backgroundPlaybackExpected = false; updatePlayButton(false);
                     setMediaPlaybackState('paused'); return;
                 }
-                if (backgroundPlaybackExpected && !activeAudio.ended) {
-                    updatePlayButton(true); setMediaPlaybackState('playing');
-                    if (!document.hidden) setTimeout(recoverBackgroundPlayback, 50);
-                    return;
-                }
+                
                 updatePlayButton(false);
             });
 
@@ -1764,7 +1760,16 @@
             audioElement.addEventListener('canplay', (e) => {
                 if (isBuffering && !intentionalPause) {
                     isBuffering = false; setMediaPlaybackState('playing');
-                    if (activeAudio.paused) playSong();
+                    if (activeAudio.paused) requestAudioPlay(activeAudio);
+                }
+            });
+            
+            // Prevenir errores al fallar la carga por red inestable al apagar pantalla
+            audioElement.addEventListener('error', (e) => {
+                console.error("Error de audio:", e);
+                // Si falla por red y se esperaba que sonara, reintentar la misma canción
+                if (backgroundPlaybackExpected) {
+                    setTimeout(() => requestAudioPlay(activeAudio), 2000);
                 }
             });
         }
