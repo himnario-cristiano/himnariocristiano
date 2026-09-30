@@ -1450,20 +1450,28 @@
             return currentIdxInFiltered === -1 ? filtered[0] : filtered[(currentIdxInFiltered + 1) % filtered.length];
         }
 
-        window.selectSong = function(index) {
+       window.selectSong = function(index) {
             if (!songs[index]) return;
             songIndex = index;
             intentionalPause = false; 
+            backgroundPlaybackExpected = true;
             
             const song = songs[songIndex];
-            titleEl.innerText = song.title || 'Sin título';
-            artistEl.innerText = song.artist || '';
-            renderPlaylist();
-            updateMediaSession(song);
-
+            
+            // 1. ACCIÓN CRÍTICA: Cambiar src y reproducir INMEDIATAMENTE
             activeAudio.src = formatDropboxStreamUrl(song.src);
-            backgroundPlaybackExpected = true;
-            requestAudioPlay(activeAudio);
+            const playPromise = activeAudio.play();
+            if (playPromise !== undefined) playPromise.catch(e => console.log(e));
+
+            // 2. ACCIÓN SECUNDARIA: Actualizar interfaz sin bloquear el hilo en segundo plano
+            setTimeout(() => {
+                titleEl.innerText = song.title || 'Sin título';
+                artistEl.innerText = song.artist || '';
+                updateMediaSession(song);
+                renderPlaylist(); // El repintado del DOM se hace después
+                updatePlayButton(true);
+                setMediaPlaybackState('playing');
+            }, 10); // 10ms es suficiente para que el audio tome prioridad
         };
 
         function safeMediaAction(action, handler) {
@@ -1640,18 +1648,23 @@
 
             songIndex = prevIndex;
             intentionalPause = false;
+            backgroundPlaybackExpected = true;
             const song = songs[songIndex];
 
-            titleEl.innerText = song.title || 'Sin título';
-            artistEl.innerText = song.artist || '';
-            renderPlaylist();
-            updateMediaSession(song);
-
+            // 1. ACCIÓN CRÍTICA: Sin esperas
             activeAudio.src = formatDropboxStreamUrl(song.src);
-            backgroundPlaybackExpected = true;
-            
-            // ELIMINADO activeAudio.load() - Dejamos que play() se encargue de todo síncronamente
-            requestAudioPlay(activeAudio);
+            const playPromise = activeAudio.play();
+            if (playPromise !== undefined) playPromise.catch(e => console.log(e));
+
+            // 2. ACCIÓN SECUNDARIA: UI Diferida
+            setTimeout(() => {
+                titleEl.innerText = song.title || 'Sin título';
+                artistEl.innerText = song.artist || '';
+                updateMediaSession(song);
+                renderPlaylist();
+                updatePlayButton(true);
+                setMediaPlaybackState('playing');
+            }, 10);
         }
 
         function transitionToNext(manualClick = false) {
@@ -1661,36 +1674,40 @@
             songIndex = getUpcomingIndex(songIndex);
             const song = songs[songIndex];
 
-            titleEl.innerText = song.title || 'Sin título';
-            artistEl.innerText = song.artist || '';
-            renderPlaylist();
-            updateMediaSession(song);
-
-            // Asignamos el nuevo origen inmediatamente
+            // 1. ACCIÓN CRÍTICA: Audio primero, asegurando el bloqueo (lock) del sistema
             activeAudio.src = formatDropboxStreamUrl(song.src);
-
-            // ELIMINADO: activeAudio.load(); <- ESTO MATABA EL AUDIO EN SEGUNDO PLANO
-
+            
             if (isPlaying || manualClick) {
                 isPlaying = true;
                 intentionalPause = false;
                 backgroundPlaybackExpected = true;
-                updatePlayButton(true);
-                setMediaPlaybackState('playing');
-                // Llamamos a play() directamente para mantener el hilo de ejecución activo
-                requestAudioPlay(activeAudio); 
+                
+                const playPromise = activeAudio.play();
+                if (playPromise !== undefined) playPromise.catch(e => console.log(e));
             }
+
+            // 2. ACCIÓN SECUNDARIA: UI y DOM se actualizan asíncronamente
+            setTimeout(() => {
+                titleEl.innerText = song.title || 'Sin título';
+                artistEl.innerText = song.artist || '';
+                updateMediaSession(song);
+                renderPlaylist();
+                
+                if (isPlaying || manualClick) {
+                    updatePlayButton(true);
+                    setMediaPlaybackState('playing');
+                }
+            }, 10);
         }
 
-        // Se optimizan los listeners del audio para que sean síncronos y no dependan de retrasos
         function setupAudioListeners(audioElement) {
             audioElement.addEventListener('ended', (e) => {
                 if (songs.length > 0) {
                     if (document.getElementById('scoreModal').classList.contains('show') && songIndex === currentScoreIndex) {
-                        activeAudio.currentTime = 0;
-                        requestAudioPlay(activeAudio);
+                        audioElement.currentTime = 0;
+                        audioElement.play().catch(e => console.log(e));
                     } else {
-                        // Es vital que esto se llame inmediatamente sin setTimeout ni promesas intermedias
+                        // Salto automático limpio y síncrono
                         transitionToNext(true);
                     }
                 }
@@ -1737,22 +1754,19 @@
             audioElement.addEventListener('pause', (e) => {
                 if (isBuffering && !intentionalPause) return;
                 
-                // Si el navegador pausa el audio por el sistema (ej: entró una llamada), no tratamos de forzarlo
                 if (!intentionalPause && audioElement.currentTime > 0 && !audioElement.ended) {
-                    backgroundPlaybackExpected = true; // Esperamos que se recupere
-                    return; 
+                    backgroundPlaybackExpected = true; return; 
                 }
-
+                
                 if (intentionalPause) {
                     backgroundPlaybackExpected = false; updatePlayButton(false);
                     setMediaPlaybackState('paused'); return;
                 }
-                
                 updatePlayButton(false);
             });
 
             audioElement.addEventListener('waiting', (e) => {
-                if (!intentionalPause && !activeAudio.ended) {
+                if (!intentionalPause && !audioElement.ended) {
                     isBuffering = true; updatePlayButton(true); setMediaPlaybackState('playing');
                 }
             });
@@ -1760,16 +1774,14 @@
             audioElement.addEventListener('canplay', (e) => {
                 if (isBuffering && !intentionalPause) {
                     isBuffering = false; setMediaPlaybackState('playing');
-                    if (activeAudio.paused) requestAudioPlay(activeAudio);
+                    if (audioElement.paused) audioElement.play().catch(e => {});
                 }
             });
             
-            // Prevenir errores al fallar la carga por red inestable al apagar pantalla
             audioElement.addEventListener('error', (e) => {
                 console.error("Error de audio:", e);
-                // Si falla por red y se esperaba que sonara, reintentar la misma canción
                 if (backgroundPlaybackExpected) {
-                    setTimeout(() => requestAudioPlay(activeAudio), 2000);
+                    setTimeout(() => audioElement.play().catch(e => {}), 2000);
                 }
             });
         }
