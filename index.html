@@ -313,10 +313,11 @@
         /* Media Queries Móviles y Tablets */
         @media (max-width: 1024px) {
             .app-header { padding: calc(env(safe-area-inset-top) + 10px) 15px 15px 15px; }
-            .header-filters { flex-wrap: wrap; }
-            .search-container { flex: 0 0 100%; order: 1; }
-            .theme-select { flex: 1; order: 2; max-width: none; }
-            .fav-filter-btn { order: 3; width: 42px; height: 42px; }
+            /* Se modificó esta zona para que todo encaje en la misma fila en móviles */
+            .header-filters { flex-wrap: nowrap; gap: 8px; }
+            .search-container { flex: 1; min-width: 0; order: 1; padding: 8px 10px;}
+            .theme-select { flex: 0 1 auto; order: 2; max-width: 110px; padding: 8px; font-size: 12px; }
+            .fav-filter-btn { order: 3; width: 38px; height: 38px; flex-shrink: 0; }
             
             .player-content { padding: 8px 15px 0 15px; gap: 10px;}
             
@@ -395,10 +396,10 @@
                 <svg viewBox="0 0 24 24" class="search-icon"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
                 <input type="text" id="searchInput" class="search-input" placeholder="Buscar himno..." autocomplete="off">
             </div>
-            <select id="themeFilter" class="theme-select">
+            <select id="themeFilter" class="theme-select" style="display: none;">
                 <option value="all">Todos los temas</option>
             </select>
-            <button class="btn-action stroke-icon fav-filter-btn" id="favFilterBtn" title="Solo Favoritos">
+            <button class="btn-action stroke-icon fav-filter-btn" id="favFilterBtn" title="Solo Favoritos" style="display: none;">
                 <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
             </button>
         </div>
@@ -601,6 +602,20 @@
         const iconBookSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
         const iconDotsSvg = `<svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>`;
 
+        // NUEVA FUNCIÓN para comprobar si existen favoritos y mostrar u ocultar el botón
+        function updateFavFilterVisibility() {
+            const hasFavs = songs.some(song => localStorage.getItem('fav_' + song.src) === 'true');
+            if (hasFavs) {
+                favFilterBtn.style.display = ''; // Regresa al display css normal (flex)
+            } else {
+                favFilterBtn.style.display = 'none';
+                if (showOnlyFavorites) {
+                    showOnlyFavorites = false;
+                    favFilterBtn.classList.remove('active');
+                }
+            }
+        }
+
         function initThemeFilter() {
             let allThemes = [];
             songs.forEach(song => { if (song.temas && Array.isArray(song.temas)) allThemes = allThemes.concat(song.temas); });
@@ -608,6 +623,13 @@
             uniqueThemes.forEach(tema => {
                 const option = document.createElement("option"); option.value = tema; option.textContent = tema; themeFilter.appendChild(option);
             });
+            
+            // LÓGICA PARA OCULTAR: Si no hay temas, oculta el <select>
+            if (uniqueThemes.length === 0) {
+                themeFilter.style.display = 'none';
+            } else {
+                themeFilter.style.display = '';
+            }
         }
 
         document.addEventListener('click', (e) => {
@@ -777,7 +799,11 @@
 
         window.toggleFav = function(event, index) {
             event.stopPropagation(); const song = songs[index]; const key = 'fav_' + song.src;
-            if (localStorage.getItem(key) === 'true') localStorage.removeItem(key); else localStorage.setItem(key, 'true'); renderPlaylist(); 
+            if (localStorage.getItem(key) === 'true') localStorage.removeItem(key); else localStorage.setItem(key, 'true'); 
+            
+            // ACTUALIZACIÓN DE VISIBILIDAD DE FAVORITOS
+            updateFavFilterVisibility(); 
+            renderPlaylist(); 
         }
 
         favFilterBtn.addEventListener('click', () => { showOnlyFavorites = !showOnlyFavorites; favFilterBtn.classList.toggle('active', showOnlyFavorites); renderPlaylist(); });
@@ -918,7 +944,19 @@
 
         setupAudioListeners(activeAudio);
 
-        function initPlayer() { initThemeFilter(); if (songs.length > 0) { const song = songs[songIndex]; titleEl.innerText = song.title || 'Sin título'; artistEl.innerText = song.artist || ''; activeAudio.src = formatDropboxStreamUrl(song.src); renderPlaylist(); updateMediaSession(song); } }
+        function initPlayer() { 
+            initThemeFilter(); 
+            updateFavFilterVisibility(); // ACTUALIZA ESTADO INICIAL
+            
+            if (songs.length > 0) { 
+                const song = songs[songIndex]; 
+                titleEl.innerText = song.title || 'Sin título'; 
+                artistEl.innerText = song.artist || ''; 
+                activeAudio.src = formatDropboxStreamUrl(song.src); 
+                renderPlaylist(); 
+                updateMediaSession(song); 
+            } 
+        }
         initPlayer();
         
         if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(e => console.log('SW:', e)); }); }
