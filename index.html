@@ -367,6 +367,18 @@
         @media (max-width: 1024px) {
             .app-header { padding: calc(env(safe-area-inset-top) + 10px) 15px 15px 15px; }
             .playlist-wrapper { padding: 5px 5px 125px 5px; }
+
+            /* --- INICIO: REDUCIR ESPACIO ENTRE PÁGINAS DEL PDF --- */
+            .canvas-wrapper { 
+                padding: 5px; /* Reduce el espacio general alrededor de las páginas */
+            }
+            .score-body canvas { 
+                margin-bottom: 6px; /* Reduce la brecha vertical entre página y página */
+            }
+            .score-body img { 
+                margin: 6px auto; /* Lo mismo si el archivo es una imagen en vez de PDF */
+            }
+            /* --- FIN: REDUCIR ESPACIO --- */
             .playlist-item { padding: 5px 8px; margin-bottom: 4px; border-radius: 8px; }
             .song-title-list { font-size: calc(14px * var(--text-scale)); }
             .song-artist-list { font-size: calc(11px * var(--text-scale)); }
