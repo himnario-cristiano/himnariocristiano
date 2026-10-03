@@ -267,19 +267,16 @@
         /* ================= MODAL PARTITURA ================= */
         .score-modal { 
             position: fixed; top: 0; left: 0; 
-            width: 100vw; height: 100vh; /* Dimensiones iniciales */
+            width: 100vw; height: 100vh;
             background: var(--score-bg); z-index: 3000; 
             display: flex; flex-direction: column; 
             opacity: 0; pointer-events: none; 
-            /* Transición fluida al empujar la ventana (Divided Screen) */
-            transition: width 0.3s ease, height 0.3s ease; 
+            transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), height 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
         }
         .score-modal.show { opacity: 1; pointer-events: auto; }
         
-        /* Clase añadida cuando se abre el panel de grabación en Escritorio */
-        .score-modal.with-recording-panel {
-            width: calc(100vw - 320px);
-        }
+        /* En escritorio al abrir el panel, ocupa el resto del ancho */
+        .score-modal.with-recording-panel { width: calc(100vw - 320px); }
 
         .score-header { height: 60px; background: var(--surface-solid); display: flex; justify-content: flex-end; align-items: center; padding: 0 15px; gap: 12px; border-bottom: 1px solid var(--border-color); flex-shrink: 0; position: relative; box-shadow: var(--shadow-sm); }
         .score-header button.ctrl-btn-score { background: var(--btn-hover-bg); color: var(--text-main); border: none; width: 40px; height: 40px; border-radius: 8px; cursor: pointer; display: flex; justify-content: center; align-items: center; }
@@ -294,12 +291,10 @@
 
         .canvas-wrapper { display: table; margin: 0 auto; padding: 15px; }
         
-        /* Modificado para que el canvas se adapte automáticamente al reducirse el contenedor */
         .score-body canvas { 
             display: block; margin-bottom: 15px; background: #fff; 
             box-shadow: var(--shadow-md); 
-            max-width: 100%; /* Cambiado de "none" a "100%" */
-            height: auto !important; /* Para conservar proporción sin deformarse */
+            max-width: 100%; height: auto !important; 
             border-radius: 4px; border: 1px solid #ccc;
         }
         .score-body img { 
@@ -340,13 +335,17 @@
             position: fixed; top: 0; right: 0; width: 320px; height: 100vh;
             background: var(--surface-solid); z-index: 4000;
             box-shadow: -4px 0 15px rgba(0,0,0,0.1);
-            transform: translateX(100%); transition: transform 0.3s ease;
+            transform: translateX(100%); transition: transform 0.3s ease, height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex; flex-direction: column; border-left: 1px solid var(--border-color);
         }
         .recording-panel.show { transform: translateX(0); }
-        .rp-header { padding: 15px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        
+        .rp-drag-indicator { display: none; }
+        .rp-header { padding: 15px; border-bottom: 1px solid var(--border-color); }
+        .rp-header-content { display: flex; justify-content: space-between; align-items: center; width: 100%; }
+        
         .rp-body { padding: 15px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
-        .rp-controls { display: flex; gap: 10px; justify-content: center; align-items: center; background: var(--btn-hover-bg); padding: 15px; border-radius: 12px;}
+        .rp-controls { display: flex; gap: 10px; justify-content: center; align-items: center; background: var(--btn-hover-bg); padding: 15px; border-radius: 12px; flex-shrink: 0;}
         .rp-btn { width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; transition: 0.2s;}
         .rp-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .rp-start { background: var(--danger-color); }
@@ -355,6 +354,7 @@
         .rp-stop { background: #3B82F6; }
         .rp-time { font-size: 18px; font-weight: bold; font-variant-numeric: tabular-nums; color: var(--text-main);}
         .recordings-list { display: flex; flex-direction: column; gap: 10px; }
+        
         .recording-item { background: var(--bg-main); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px;}
         .recording-item-header { display: flex; justify-content: space-between; align-items: center; }
         .recording-name { font-weight: 600; font-size: 14px; border: none; background: transparent; color: var(--text-main); width: 60%; font-family: 'Inter', sans-serif;}
@@ -366,7 +366,6 @@
         /* Media Queries Móviles y Tablets */
         @media (max-width: 1024px) {
             .app-header { padding: calc(env(safe-area-inset-top) + 10px) 15px 15px 15px; }
-            
             .playlist-wrapper { padding: 5px 5px 125px 5px; }
             .playlist-item { padding: 5px 8px; margin-bottom: 4px; border-radius: 8px; }
             .song-title-list { font-size: calc(14px * var(--text-scale)); }
@@ -391,19 +390,39 @@
             }
             .song-actions-wrapper.show { display: flex; flex-direction: row; gap: 4px; }
 
-            /* Panel de Grabación en Móvil */
+            /* ================= COMPORTAMIENTO MÓVIL DEL GRABADOR ================= */
+            .rp-drag-indicator {
+                display: block; width: 36px; height: 5px; background: var(--text-muted);
+                border-radius: 3px; margin: 0 auto 8px auto; opacity: 0.4;
+            }
+            .rp-header { 
+                cursor: pointer; padding: 12px 15px; 
+                display: flex; flex-direction: column; align-items: stretch;
+                -webkit-tap-highlight-color: transparent;
+            }
+
             .recording-panel {
-                top: auto; bottom: 0; right: 0; width: 100%; height: 50vh;
+                top: auto; bottom: 0; right: 0; width: 100%; 
+                height: 160px; /* Inicia colapsado cubriendo solo los controles */
                 transform: translateY(100%); border-left: none; border-top: 1px solid var(--border-color);
                 border-radius: 20px 20px 0 0;
             }
             .recording-panel.show { transform: translateY(0); }
+            .recording-panel.expanded { height: 60vh; } /* Alto al estar desplegado */
 
-            /* Empuje de PDF en Móvil (Divided Screen) */
+            /* Empuje de PDF en Móvil */
             .score-modal.with-recording-panel {
                 width: 100vw;
-                height: 50vh; /* El PDF ocupa la mitad superior, el grabador la inferior */
+                height: calc(100vh - 160px); /* El PDF deja exactos 160px para el grabador */
             }
+            .score-modal.with-recording-panel.expanded {
+                height: 40vh; /* El PDF cede espacio cuando el panel se expande a 60vh */
+            }
+
+            /* Ocultar/Mostrar la lista con animacion en movil */
+            .recording-panel:not(.expanded) .rp-body { overflow: hidden; }
+            .recording-panel:not(.expanded) .recordings-list { opacity: 0; pointer-events: none; transition: opacity 0.1s; }
+            .recording-panel.expanded .recordings-list { opacity: 1; pointer-events: auto; transition: opacity 0.3s 0.2s; }
         }
 
         /* Install Banner */
@@ -579,11 +598,14 @@
         <div class="score-body" id="scoreBody"></div>
     </div>
 
-    <!-- PANEL LATERAL/INFERIOR DE GRABACIÓN -->
+    <!-- PANEL LATERAL/INFERIOR DE GRABACIÓN COLAPSABLE -->
     <div class="recording-panel" id="recordingPanel">
-        <div class="rp-header">
-            <h3 style="font-size: 16px; color: var(--text-main);">Mis Grabaciones</h3>
-            <button class="modal-close" id="closeRecordingPanelBtn" style="position:static;">&times;</button>
+        <div class="rp-header" id="rpHeaderToggle">
+            <div class="rp-drag-indicator"></div>
+            <div class="rp-header-content">
+                <h3 style="font-size: 16px; color: var(--text-main); margin: 0;">Mis Grabaciones</h3>
+                <button class="modal-close" id="closeRecordingPanelBtn" style="position:static;">&times;</button>
+            </div>
         </div>
         <div class="rp-body">
             <div class="rp-controls">
@@ -724,15 +746,15 @@
             }
         }
 
-        // LÓGICA DE CIERRE GLOBAL ACTUALIZADA (Eliminar clase with-recording-panel)
+        // Click general actualizado para cerrar
         document.addEventListener('click', (e) => {
             if (!textSizePanel.contains(e.target) && !textSizeBtn.contains(e.target)) textSizePanel.classList.remove('show');
             if (!e.target.closest('.song-actions-wrapper') && !e.target.closest('.more-options-btn')) {
                 document.querySelectorAll('.song-actions-wrapper.show').forEach(el => el.classList.remove('show'));
             }
             if (!recordingPanel.contains(e.target) && !openRecordPanelBtn.contains(e.target) && !e.target.closest('.recording-actions')) {
-                recordingPanel.classList.remove('show');
-                scoreModal.classList.remove('with-recording-panel'); // Reestablece el tamaño del PDF si se cierra
+                recordingPanel.classList.remove('show', 'expanded');
+                scoreModal.classList.remove('with-recording-panel', 'expanded'); 
             }
         });
 
@@ -829,9 +851,9 @@
             event.stopPropagation(); currentScoreIndex = index; const url = songs[index].partitura; scoreBody.innerHTML = '';
             if(scorePlayIcon) { if(songIndex === currentScoreIndex && isPlaying) { scorePlayIcon.innerHTML = iconPause; } else { scorePlayIcon.innerHTML = iconPlay; } }
 
-            // RESETEAR CUALQUIER ESTADO PREVIO AL ABRIR UN NUEVO PDF
-            recordingPanel.classList.remove('show');
-            scoreModal.classList.remove('with-recording-panel');
+            // RESETEAR EL PANEL AL ABRIR UN NUEVO PDF
+            recordingPanel.classList.remove('show', 'expanded');
+            scoreModal.classList.remove('with-recording-panel', 'expanded');
 
             const isPdf = url.toLowerCase().includes('.pdf');
             let finalUrl = url;
@@ -855,11 +877,11 @@
             scoreModal.classList.add('show');
         };
 
-        // AL CERRAR LA PARTITURA, TAMBIÉN CERRAMOS EL PANEL DE GRABACIÓN
+        // CIERRE SINCRONIZADO
         closeScoreModal.addEventListener('click', () => { 
             scoreModal.classList.remove('show'); 
-            scoreModal.classList.remove('with-recording-panel');
-            recordingPanel.classList.remove('show');
+            scoreModal.classList.remove('with-recording-panel', 'expanded');
+            recordingPanel.classList.remove('show', 'expanded');
             scoreZoomPanel.classList.remove('show'); 
             scoreBody.innerHTML = ''; 
             pdfDoc = null; 
@@ -1072,6 +1094,7 @@
         const recordingPanel = document.getElementById('recordingPanel');
         const openRecordPanelBtn = document.getElementById('openRecordPanelBtn');
         const closeRecordingPanelBtn = document.getElementById('closeRecordingPanelBtn');
+        const rpHeaderToggle = document.getElementById('rpHeaderToggle');
         const rpStartBtn = document.getElementById('rpStartBtn');
         const rpPauseBtn = document.getElementById('rpPauseBtn');
         const rpStopBtn = document.getElementById('rpStopBtn');
@@ -1080,20 +1103,40 @@
 
         let mediaRecorder;
         let audioChunks = [];
-        let recordings = []; // Array temporal en sesión
+        let recordings = []; 
         let recInterval;
         let recSeconds = 0;
 
-        // ABRIR/CERRAR PANEL DE GRABACIÓN Y REDIMENSIONAR PDF
+        // ABRIR PANEL
         openRecordPanelBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            recordingPanel.classList.toggle('show');
-            scoreModal.classList.toggle('with-recording-panel'); // Clase mágica para hacer la pantalla dividida
+            // Si el panel no estaba abierto, lo mostramos colapsado (en móviles)
+            if (!recordingPanel.classList.contains('show')) {
+                recordingPanel.classList.add('show');
+                recordingPanel.classList.remove('expanded'); // Forzar inicio colapsado
+                
+                scoreModal.classList.add('with-recording-panel');
+                scoreModal.classList.remove('expanded'); // Forzar que PDF empuje solo lo colapsado
+            } else {
+                // Si ya estaba abierto, lo cerramos
+                recordingPanel.classList.remove('show', 'expanded');
+                scoreModal.classList.remove('with-recording-panel', 'expanded');
+            }
         });
         
-        closeRecordingPanelBtn.addEventListener('click', () => {
-            recordingPanel.classList.remove('show');
-            scoreModal.classList.remove('with-recording-panel'); // Regresamos el PDF a su tamaño normal
+        // CERRAR PANEL DESDE EL BOTON 'X' DEL PROPIO PANEL
+        closeRecordingPanelBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Evita que se dispare el toggle de expandir
+            recordingPanel.classList.remove('show', 'expanded');
+            scoreModal.classList.remove('with-recording-panel', 'expanded');
+        });
+
+        // EXPANDIR / COLAPSAR AL TOCAR EL ENCABEZADO (SOLO MÓVILES - visualmente activo por CSS)
+        rpHeaderToggle.addEventListener('click', () => {
+            if (recordingPanel.classList.contains('show')) {
+                recordingPanel.classList.toggle('expanded');
+                scoreModal.classList.toggle('expanded'); // Hace que el PDF empuje al 60vh
+            }
         });
 
         function formatRecTime(sec) {
