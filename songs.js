@@ -3160,7 +3160,7 @@
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
-        		partitura: "https://www.dropbox.com/scl/fi/9u3wlzvx50pdx46o9r0w9/Mas-All-Del-Sol.pdf?rlkey=nsi6fyktvn8r6rshu9h0k4hmy&st=tbmmp367&dl=0",
+        		partitura: "https://www.dropbox.com/scl/fi/bi6t20d9k4tlt185f3v8r/Mas-Alla-284.pdf?rlkey=h44k2wr12psy062y25p922ii6&st=tc5b0377&dl=0",
                 src: "https://www.dropbox.com/scl/fi/j8ff4ua47t7vs12wq4tqc/284.-M-s-All.mp3?rlkey=ct08wycoffciukg0r672wch5x&st=t1mfijb8&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
