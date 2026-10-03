@@ -8,7 +8,7 @@
     <link rel="icon" href="Himnario-Cristiano.png" type="image/png">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#000000">
-    <link rel="apple-touch-icon" href="icon-192x192.png">
+    <link rel="apple-touch-icon" href="Himnario-Cristiano.png">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -62,7 +62,6 @@
         *, *::before, *::after { 
             box-sizing: border-box; margin: 0; padding: 0; 
             font-family: 'Inter', sans-serif; 
-            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
         }
 
         body { 
@@ -94,7 +93,7 @@
         .header-top { display: flex; justify-content: space-between; align-items: center; }
         
         .brand { display: flex; align-items: center; gap: 12px; font-weight: 700; font-size: 18px; letter-spacing: -0.3px; color: var(--text-main); }
-        .brand img { width: 34px; height: 34px; border-radius: 8px; box-shadow: var(--shadow-sm); }
+        .brand img { width: 40px; height: 40px; border-radius: 8px; box-shadow: var(--shadow-sm); }
 
         .header-actions { display: flex; gap: 6px; position: relative; }
         
@@ -134,7 +133,7 @@
 
         /* ================= PLAYLIST ================= */
         .playlist-wrapper {
-            flex: 1; overflow-y: auto; padding: 15px 20px 120px 20px; 
+            flex: 1; overflow-y: auto; padding: 10px 10px 120px 10px; 
             -webkit-overflow-scrolling: touch;
         }
 
@@ -310,13 +309,49 @@
         ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
+        /* ================= VENTANA DE GRABACIÓN ================= */
+        .recording-panel {
+            position: fixed; top: 0; right: 0; width: 320px; height: 100vh;
+            background: var(--surface-solid); z-index: 4000;
+            box-shadow: -4px 0 15px rgba(0,0,0,0.1);
+            transform: translateX(100%); transition: transform 0.3s ease;
+            display: flex; flex-direction: column; border-left: 1px solid var(--border-color);
+        }
+        .recording-panel.show { transform: translateX(0); }
+        .rp-header { padding: 15px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .rp-body { padding: 15px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; }
+        .rp-controls { display: flex; gap: 10px; justify-content: center; align-items: center; background: var(--btn-hover-bg); padding: 15px; border-radius: 12px;}
+        .rp-btn { width: 44px; height: 44px; border-radius: 50%; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; transition: 0.2s;}
+        .rp-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        .rp-start { background: var(--danger-color); }
+        .rp-start:hover:not(:disabled) { transform: scale(1.05); }
+        .rp-pause { background: #F59E0B; }
+        .rp-stop { background: #3B82F6; }
+        .rp-time { font-size: 18px; font-weight: bold; font-variant-numeric: tabular-nums; color: var(--text-main);}
+        .recordings-list { display: flex; flex-direction: column; gap: 10px; }
+        .recording-item { background: var(--bg-main); padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); display: flex; flex-direction: column; gap: 8px;}
+        .recording-item-header { display: flex; justify-content: space-between; align-items: center; }
+        .recording-name { font-weight: 600; font-size: 14px; border: none; background: transparent; color: var(--text-main); width: 60%; font-family: 'Inter', sans-serif;}
+        .recording-name:focus { border-bottom: 1px solid var(--accent-color); outline: none; }
+        .recording-actions { display: flex; gap: 5px; }
+        .recording-actions button { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; border-radius: 4px; display: flex; align-items: center;}
+        .recording-actions button:hover { background: var(--btn-hover-bg); color: var(--accent-color); }
+
         /* Media Queries Móviles y Tablets */
         @media (max-width: 1024px) {
             .app-header { padding: calc(env(safe-area-inset-top) + 10px) 15px 15px 15px; }
-            .header-filters { flex-wrap: wrap; }
-            .search-container { flex: 0 0 100%; order: 1; }
-            .theme-select { flex: 1; order: 2; max-width: none; }
-            .fav-filter-btn { order: 3; width: 42px; height: 42px; }
+            
+            /* --- MODIFICADO: Las páginas se apegan más en móviles --- */
+            .playlist-wrapper { padding: 5px 5px 125px 5px; }
+            .playlist-item { padding: 5px 8px; margin-bottom: 4px; border-radius: 8px; }
+            .song-title-list { font-size: calc(14px * var(--text-scale)); }
+            .song-artist-list { font-size: calc(11px * var(--text-scale)); }
+            /* ------------------------------------------------------------------------------------------ */
+
+            .header-filters { flex-wrap: nowrap; gap: 8px; }
+            .search-container { flex: 1; min-width: 0; order: 1; padding: 8px 10px;}
+            .theme-select { flex: 0 1 auto; order: 2; max-width: 110px; padding: 8px; font-size: 12px; }
+            .fav-filter-btn { order: 3; width: 38px; height: 38px; flex-shrink: 0; }
             
             .player-content { padding: 8px 15px 0 15px; gap: 10px;}
             
@@ -332,6 +367,14 @@
                 border: 1px solid var(--border-color); z-index: 100;
             }
             .song-actions-wrapper.show { display: flex; flex-direction: row; gap: 4px; }
+
+            /* Panel de Grabación en Móvil (Colapsable inferior) */
+            .recording-panel {
+                top: auto; bottom: 0; right: 0; width: 100%; height: 50vh;
+                transform: translateY(100%); border-left: none; border-top: 1px solid var(--border-color);
+                border-radius: 20px 20px 0 0;
+            }
+            .recording-panel.show { transform: translateY(0); }
         }
 
         /* Install Banner */
@@ -363,7 +406,7 @@
         <div class="header-top">
             <div class="brand">
                 <img src="Himnario-Cristiano.png" alt="Logo">
-                Himnario
+                Himnario Cristiano
             </div>
             <div class="header-actions">
                 <button class="btn-action stroke-icon" id="themeToggleBtn" title="Cambiar Tema">
@@ -395,10 +438,10 @@
                 <svg viewBox="0 0 24 24" class="search-icon"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
                 <input type="text" id="searchInput" class="search-input" placeholder="Buscar himno..." autocomplete="off">
             </div>
-            <select id="themeFilter" class="theme-select">
+            <select id="themeFilter" class="theme-select" style="display: none;">
                 <option value="all">Todos los temas</option>
             </select>
-            <button class="btn-action stroke-icon fav-filter-btn" id="favFilterBtn" title="Solo Favoritos">
+            <button class="btn-action stroke-icon fav-filter-btn" id="favFilterBtn" title="Solo Favoritos" style="display: none;">
                 <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
             </button>
         </div>
@@ -445,7 +488,7 @@
         <div class="modal-content">
             <button class="modal-close" id="closeModalBtn">&times;</button>
             <h3>Soporte Técnico</h3>
-            <p>¿Deseas compartir audios o sugerir mejoras para enriquecer nuestra comunidad?</p>
+            <p>¿Deseas compartir audios o sugerir mejoras para enriquecer nuestro reproductor?</p>
             <button id="btnWhatsappContact" class="primary-btn whatsapp-btn">
                 <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
                 Contactar por WhatsApp
@@ -485,6 +528,10 @@
             <button id="scoreZoomToggle" class="ctrl-btn-score" title="Ajustar Zoom">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
             </button>
+            <!-- NUEVO BOTÓN DE GRABACIÓN -->
+            <button id="openRecordPanelBtn" class="ctrl-btn-score" title="Grabar Audio">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
+            </button>
             <button class="modal-close" id="closeScoreModal" style="position:static; margin-left:10px;">&times;</button>
             
             <div class="font-size-panel" id="scoreZoomPanel">
@@ -501,6 +548,25 @@
             </div>
         </div>
         <div class="score-body" id="scoreBody"></div>
+    </div>
+
+    <!-- NUEVO PANEL LATERAL/INFERIOR DE GRABACIÓN -->
+    <div class="recording-panel" id="recordingPanel">
+        <div class="rp-header">
+            <h3 style="font-size: 16px; color: var(--text-main);">Mis Grabaciones</h3>
+            <button class="modal-close" id="closeRecordingPanelBtn" style="position:static;">&times;</button>
+        </div>
+        <div class="rp-body">
+            <div class="rp-controls">
+                <button class="rp-btn rp-start" id="rpStartBtn" title="Grabar"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="8"></circle></svg></button>
+                <button class="rp-btn rp-pause" id="rpPauseBtn" title="Pausar" disabled><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg></button>
+                <button class="rp-btn rp-stop" id="rpStopBtn" title="Detener" disabled><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12"></rect></svg></button>
+                <span class="rp-time" id="rpTimeDisplay">00:00</span>
+            </div>
+            <div class="recordings-list" id="recordingsList">
+                <!-- Las grabaciones se insertarán aquí -->
+            </div>
+        </div>
     </div>
 
     <script src="songs.js"></script>
@@ -601,6 +667,19 @@
         const iconBookSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
         const iconDotsSvg = `<svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>`;
 
+        function updateFavFilterVisibility() {
+            const hasFavs = songs.some(song => localStorage.getItem('fav_' + song.src) === 'true');
+            if (hasFavs) {
+                favFilterBtn.style.display = ''; 
+            } else {
+                favFilterBtn.style.display = 'none';
+                if (showOnlyFavorites) {
+                    showOnlyFavorites = false;
+                    favFilterBtn.classList.remove('active');
+                }
+            }
+        }
+
         function initThemeFilter() {
             let allThemes = [];
             songs.forEach(song => { if (song.temas && Array.isArray(song.temas)) allThemes = allThemes.concat(song.temas); });
@@ -608,12 +687,21 @@
             uniqueThemes.forEach(tema => {
                 const option = document.createElement("option"); option.value = tema; option.textContent = tema; themeFilter.appendChild(option);
             });
+            
+            if (uniqueThemes.length === 0) {
+                themeFilter.style.display = 'none';
+            } else {
+                themeFilter.style.display = '';
+            }
         }
 
         document.addEventListener('click', (e) => {
             if (!textSizePanel.contains(e.target) && !textSizeBtn.contains(e.target)) textSizePanel.classList.remove('show');
             if (!e.target.closest('.song-actions-wrapper') && !e.target.closest('.more-options-btn')) {
                 document.querySelectorAll('.song-actions-wrapper.show').forEach(el => el.classList.remove('show'));
+            }
+            if (!recordingPanel.contains(e.target) && !openRecordPanelBtn.contains(e.target) && !e.target.closest('.recording-actions')) {
+                recordingPanel.classList.remove('show');
             }
         });
 
@@ -741,7 +829,7 @@
             event.stopPropagation(); document.querySelectorAll('.song-actions-wrapper.show').forEach(el => el.classList.remove('show'));
             const song = songs[index]; refModalTitle.innerText = song.title; let html = ''; let themeHtml = '';
             if (song.temas && song.temas.length > 0) { themeHtml += `<span>Tema(s): <span style="color:var(--text-muted);">${song.temas.join(", ")}</span></span>`; }
-            if (song.partitura) { themeHtml += `<button class="view-score-btn" onclick="openScore(event, ${index})"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> Ver Partitura</button>`; }
+            if (song.partitura) { themeHtml += `<button class="view-score-btn" onclick="openScore(event, ${index})"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" style="margin-right:6px;"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> Ver Partitura/Letra</button>`; }
             if (themeHtml) { html += `<div class="ref-theme-badge">${themeHtml}</div>`; }
             if (song.references && song.references.length > 0) {
                 html += '<ul class="ref-list">'; song.references.forEach(ref => { html += `<li class="ref-item"><span class="ref-hymnal">${ref.hymnal}</span><span class="ref-number">#${ref.number}</span></li>`; }); html += '</ul>';
@@ -777,7 +865,10 @@
 
         window.toggleFav = function(event, index) {
             event.stopPropagation(); const song = songs[index]; const key = 'fav_' + song.src;
-            if (localStorage.getItem(key) === 'true') localStorage.removeItem(key); else localStorage.setItem(key, 'true'); renderPlaylist(); 
+            if (localStorage.getItem(key) === 'true') localStorage.removeItem(key); else localStorage.setItem(key, 'true'); 
+            
+            updateFavFilterVisibility(); 
+            renderPlaylist(); 
         }
 
         favFilterBtn.addEventListener('click', () => { showOnlyFavorites = !showOnlyFavorites; favFilterBtn.classList.toggle('active', showOnlyFavorites); renderPlaylist(); });
@@ -918,9 +1009,184 @@
 
         setupAudioListeners(activeAudio);
 
-        function initPlayer() { initThemeFilter(); if (songs.length > 0) { const song = songs[songIndex]; titleEl.innerText = song.title || 'Sin título'; artistEl.innerText = song.artist || ''; activeAudio.src = formatDropboxStreamUrl(song.src); renderPlaylist(); updateMediaSession(song); } }
-        initPlayer();
+        function initPlayer() { 
+            initThemeFilter(); 
+            updateFavFilterVisibility(); 
+            
+            if (songs.length > 0) { 
+                const song = songs[songIndex]; 
+                titleEl.innerText = song.title || 'Sin título'; 
+                artistEl.innerText = song.artist || ''; 
+                activeAudio.src = formatDropboxStreamUrl(song.src); 
+                renderPlaylist(); 
+                updateMediaSession(song); 
+            } 
+        }
         
+        // ================= LÓGICA DE GRABACIÓN ================= //
+        const recordingPanel = document.getElementById('recordingPanel');
+        const openRecordPanelBtn = document.getElementById('openRecordPanelBtn');
+        const closeRecordingPanelBtn = document.getElementById('closeRecordingPanelBtn');
+        const rpStartBtn = document.getElementById('rpStartBtn');
+        const rpPauseBtn = document.getElementById('rpPauseBtn');
+        const rpStopBtn = document.getElementById('rpStopBtn');
+        const rpTimeDisplay = document.getElementById('rpTimeDisplay');
+        const recordingsList = document.getElementById('recordingsList');
+
+        let mediaRecorder;
+        let audioChunks = [];
+        let recordings = []; // Array temporal en sesión
+        let recInterval;
+        let recSeconds = 0;
+
+        openRecordPanelBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            recordingPanel.classList.add('show');
+        });
+        closeRecordingPanelBtn.addEventListener('click', () => {
+            recordingPanel.classList.remove('show');
+        });
+
+        function formatRecTime(sec) {
+            const m = Math.floor(sec / 60).toString().padStart(2, '0');
+            const s = (sec % 60).toString().padStart(2, '0');
+            return `${m}:${s}`;
+        }
+
+        rpStartBtn.addEventListener('click', async () => {
+            if (!mediaRecorder || mediaRecorder.state === 'inactive') {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    
+                    mediaRecorder.ondataavailable = e => {
+                        if (e.data.size > 0) audioChunks.push(e.data);
+                    };
+
+                    mediaRecorder.onstop = () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        const audioUrl = URL.createObjectURL(audioBlob);
+                        recordings.push({
+                            id: Date.now(),
+                            name: `Grabación ${recordings.length + 1}`,
+                            blob: audioBlob,
+                            url: audioUrl
+                        });
+                        audioChunks = [];
+                        renderRecordingsList();
+                        // Libera el micrófono
+                        stream.getTracks().forEach(track => track.stop());
+                    };
+
+                    mediaRecorder.start();
+                    rpStartBtn.disabled = true;
+                    rpPauseBtn.disabled = false;
+                    rpStopBtn.disabled = false;
+                    
+                    recSeconds = 0;
+                    rpTimeDisplay.innerText = formatRecTime(recSeconds);
+                    recInterval = setInterval(() => {
+                        recSeconds++;
+                        rpTimeDisplay.innerText = formatRecTime(recSeconds);
+                    }, 1000);
+                } catch (err) {
+                    alert('No se pudo acceder al micrófono o se denegaron los permisos.');
+                }
+            }
+        });
+
+        rpPauseBtn.addEventListener('click', () => {
+            if (mediaRecorder && mediaRecorder.state === 'recording') {
+                mediaRecorder.pause();
+                rpPauseBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+                clearInterval(recInterval);
+            } else if (mediaRecorder && mediaRecorder.state === 'paused') {
+                mediaRecorder.resume();
+                rpPauseBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+                recInterval = setInterval(() => {
+                    recSeconds++;
+                    rpTimeDisplay.innerText = formatRecTime(recSeconds);
+                }, 1000);
+            }
+        });
+
+        rpStopBtn.addEventListener('click', () => {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                clearInterval(recInterval);
+                rpStartBtn.disabled = false;
+                rpPauseBtn.disabled = true;
+                rpStopBtn.disabled = true;
+                rpPauseBtn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+                rpTimeDisplay.innerText = "00:00";
+            }
+        });
+
+        function renderRecordingsList() {
+            recordingsList.innerHTML = '';
+            recordings.forEach((rec, index) => {
+                const item = document.createElement('div');
+                item.className = 'recording-item';
+                
+                item.innerHTML = `
+                    <div class="recording-item-header">
+                        <input type="text" class="recording-name" value="${rec.name}" onchange="updateRecordName(${index}, this.value)" placeholder="Nombre de grabación">
+                        <div class="recording-actions">
+                            <button title="Compartir/Descargar" onclick="shareRecording(${index})">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                            </button>
+                            <button title="Eliminar" onclick="deleteRecording(${index})" style="color: var(--danger-color);">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                            </button>
+                        </div>
+                    </div>
+                    <audio controls src="${rec.url}" style="width: 100%; height: 35px;"></audio>
+                `;
+                recordingsList.appendChild(item);
+            });
+        }
+
+        window.updateRecordName = function(index, newName) {
+            recordings[index].name = newName;
+        };
+
+        window.deleteRecording = function(index) {
+            if(confirm('¿Seguro que deseas eliminar esta grabación?')) {
+                URL.revokeObjectURL(recordings[index].url);
+                recordings.splice(index, 1);
+                renderRecordingsList();
+            }
+        };
+
+        window.shareRecording = async function(index) {
+            const rec = recordings[index];
+            const file = new File([rec.blob], rec.name + '.webm', { type: rec.blob.type });
+            
+            if (navigator.canShare && navigator.canShare({ files: [file] })) {
+                try {
+                    await navigator.share({
+                        files: [file],
+                        title: rec.name,
+                        text: 'Escucha mi grabación'
+                    });
+                } catch (error) {
+                    console.log('Error compartiendo, o acción cancelada.');
+                }
+            } else {
+                // Si el navegador (ej: PC) no soporta share nativo, descargamos
+                const a = document.createElement('a');
+                a.href = rec.url;
+                a.download = rec.name + '.webm';
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+            }
+        };
+
+        // ======================================================= //
+        
+        initPlayer();
+
         if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(e => console.log('SW:', e)); }); }
         let deferredPrompt; const installBanner = document.getElementById('installBanner'); const btnInstallApp = document.getElementById('btnInstallApp'); const btnCloseBanner = document.getElementById('btnCloseBanner');
         window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); deferredPrompt = e; installBanner.classList.add('show'); });
