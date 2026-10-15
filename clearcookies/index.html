@@ -67,30 +67,8 @@
     <script>
         // Detectar y aplicar el tema actual antes de limpiar el almacenamiento
         (function() {
-            function getAutomaticTheme() {
-    const horaLocal = new Date().getHours();
-    // Si son las 18:00 (6 PM) o más, o antes de las 06:00 (6 AM), fuerza el tema oscuro
-    if (horaLocal >= 18 || horaLocal < 6) {
-        return 'dark';
-    }
-    // Si es de día, verifica la preferencia del sistema, sino por defecto será claro
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
-
-// 1. Aplica el tema guardado. Si el usuario no ha tocado el botón, usa la lógica de la hora.
-const savedTheme = localStorage.getItem('app-theme') || getAutomaticTheme();
-applyTheme(savedTheme);
-
-// 2. Opcional: Revisa cada minuto. Si la app se queda abierta y dan las 6 PM, cambiará solo 
-// (siempre y cuando el usuario no haya forzado un tema manualmente guardado).
-setInterval(() => {
-    if (!localStorage.getItem('app-theme')) {
-        const timeTheme = getAutomaticTheme();
-        if (root.getAttribute('data-theme') !== timeTheme) {
-            applyTheme(timeTheme);
-        }
-    }
-}, 60000);
+            const savedTheme = localStorage.getItem('app-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            document.documentElement.setAttribute('data-theme', savedTheme);
         })();
     </script>
 </head>
