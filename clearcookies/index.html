@@ -65,9 +65,17 @@
         }
     </style>
     <script>
-        // Detectar y aplicar el tema actual antes de limpiar el almacenamiento
+        // Detectar y aplicar el tema actual (incluyendo horario) antes de limpiar el almacenamiento
         (function() {
-            const savedTheme = localStorage.getItem('app-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+            function getAutomaticTheme() {
+                const horaLocal = new Date().getHours();
+                if (horaLocal >= 18 || horaLocal < 6) {
+                    return 'dark';
+                }
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+            
+            const savedTheme = localStorage.getItem('app-theme') || getAutomaticTheme();
             document.documentElement.setAttribute('data-theme', savedTheme);
         })();
     </script>
