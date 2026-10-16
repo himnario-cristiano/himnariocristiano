@@ -370,13 +370,13 @@
 
             /* --- INICIO: REDUCIR ESPACIO ENTRE PÁGINAS DEL PDF --- */
             .canvas-wrapper { 
-                padding: 5px; /* Reduce el espacio general alrededor de las páginas */
+                padding: 5px; 
             }
             .score-body canvas { 
-                margin-bottom: 6px; /* Reduce la brecha vertical entre página y página */
+                margin-bottom: 6px; 
             }
             .score-body img { 
-                margin: 6px auto; /* Lo mismo si el archivo es una imagen en vez de PDF */
+                margin: 6px auto; 
             }
             /* --- FIN: REDUCIR ESPACIO --- */
             .playlist-item { padding: 5px 8px; margin-bottom: 4px; border-radius: 8px; }
@@ -415,20 +415,20 @@
 
             .recording-panel {
                 top: auto; bottom: 0; right: 0; width: 100%; 
-                height: 160px; /* Inicia colapsado cubriendo solo los controles */
+                height: 160px;
                 transform: translateY(100%); border-left: none; border-top: 1px solid var(--border-color);
                 border-radius: 20px 20px 0 0;
             }
             .recording-panel.show { transform: translateY(0); }
-            .recording-panel.expanded { height: 60vh; } /* Alto al estar desplegado */
+            .recording-panel.expanded { height: 60vh; }
 
             /* Empuje de PDF en Móvil */
             .score-modal.with-recording-panel {
                 width: 100vw;
-                height: calc(100vh - 160px); /* El PDF deja exactos 160px para el grabador */
+                height: calc(100vh - 160px); 
             }
             .score-modal.with-recording-panel.expanded {
-                height: 40vh; /* El PDF cede espacio cuando el panel se expande a 60vh */
+                height: 40vh; 
             }
 
             /* Ocultar/Mostrar la lista con animacion en movil */
@@ -654,26 +654,17 @@
 
         function getAutomaticTheme() {
             const horaLocal = new Date().getHours();
-            // Si son las 18:00 (6 PM) o más, o antes de las 06:00 (6 AM), fuerza el tema oscuro
-            if (horaLocal >= 18 || horaLocal < 6) {
-                return 'dark';
-            }
-            // Si es de día, verifica la preferencia del sistema, sino por defecto será claro
+            if (horaLocal >= 18 || horaLocal < 6) { return 'dark'; }
             return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
 
-        // 1. Aplica el tema guardado. Si el usuario no ha tocado el botón, usa la lógica de la hora.
         const savedTheme = localStorage.getItem('app-theme') || getAutomaticTheme();
         applyTheme(savedTheme);
 
-        // 2. Opcional: Revisa cada minuto. Si la app se queda abierta y dan las 6 PM, cambiará solo 
-        // (siempre y cuando el usuario no haya forzado un tema manualmente guardado).
         setInterval(() => {
             if (!localStorage.getItem('app-theme')) {
                 const timeTheme = getAutomaticTheme();
-                if (root.getAttribute('data-theme') !== timeTheme) {
-                    applyTheme(timeTheme);
-                }
+                if (root.getAttribute('data-theme') !== timeTheme) { applyTheme(timeTheme); }
             }
         }, 60000);
 
@@ -700,7 +691,6 @@
                     e.preventDefault();
                     if(typeof projectorWin.nextPage === 'function') {
                         projectorWin.nextPage();
-                        // Scrollear en el modal de forma sincronizada
                         let c = document.querySelector('.score-body canvas[data-page-num="' + projectorWin.currentPage + '"]');
                         if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
@@ -708,7 +698,6 @@
                     e.preventDefault();
                     if(typeof projectorWin.prevPage === 'function') {
                         projectorWin.prevPage();
-                        // Scrollear en el modal de forma sincronizada
                         let c = document.querySelector('.score-body canvas[data-page-num="' + projectorWin.currentPage + '"]');
                         if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
                     }
@@ -779,7 +768,6 @@
         const iconDownloadSvg = `<svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>`;
         const iconBookSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>`;
         const iconDotsSvg = `<svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>`;
-        const iconProjectSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="12" rx="2" ry="2"></rect><polygon points="12 21 8 21 9 17 15 17 16 21 12 21"></polygon></svg>`;
 
         function updateFavFilterVisibility() {
             const hasFavs = songs.some(song => localStorage.getItem('fav_' + song.src) === 'true');
@@ -809,7 +797,6 @@
             }
         }
 
-        // Click general actualizado para cerrar
         document.addEventListener('click', (e) => {
             if (!textSizePanel.contains(e.target) && !textSizeBtn.contains(e.target)) textSizePanel.classList.remove('show');
             if (!e.target.closest('.song-actions-wrapper') && !e.target.closest('.more-options-btn')) {
@@ -914,7 +901,6 @@
             event.stopPropagation(); currentScoreIndex = index; const url = songs[index].partitura; scoreBody.innerHTML = '';
             if(scorePlayIcon) { if(songIndex === currentScoreIndex && isPlaying) { scorePlayIcon.innerHTML = iconPause; } else { scorePlayIcon.innerHTML = iconPlay; } }
 
-            // RESETEAR EL PANEL AL ABRIR UN NUEVO PDF
             recordingPanel.classList.remove('show', 'expanded');
             scoreModal.classList.remove('with-recording-panel', 'expanded');
 
@@ -941,113 +927,110 @@
         };
 
         // ================= APERTURA DE VENTANA DE PROYECCIÓN =================
-window.openProjection = function(event, index) {
-    event.stopPropagation();
-    
-    // Abre el modal también en la pantalla principal
-    window.openScore(event, index);
+        window.openProjection = function(event, index) {
+            event.stopPropagation();
+            
+            window.openScore(event, index);
 
-    const song = songs[index];
-    let finalUrl = song.partitura;
-    if (!finalUrl) return; // Evita errores si no hay partitura
-    
-    const isPdf = finalUrl.toLowerCase().includes('.pdf');
-    
-    if (finalUrl.includes("dropbox.com")) {
-        finalUrl = finalUrl.replace(/[?&]dl=[01]/g, "").replace(/[?&]raw=[01]/g, "");
-        finalUrl = finalUrl.replace("www.dropbox.com", "dl.dropboxusercontent.com");
-    }
+            const song = songs[index];
+            let finalUrl = song.partitura;
+            if (!finalUrl) return; 
+            
+            const isPdf = finalUrl.toLowerCase().includes('.pdf');
+            
+            if (finalUrl.includes("dropbox.com")) {
+                finalUrl = finalUrl.replace(/[?&]dl=[01]/g, "").replace(/[?&]raw=[01]/g, "");
+                finalUrl = finalUrl.replace("www.dropbox.com", "dl.dropboxusercontent.com");
+            }
 
-    projectorWin = window.open('', '_blank', 'width=1280,height=720');
-    if (projectorWin) {
-        const pDoc = projectorWin.document;
-        pDoc.open();
-        
-        // Usamos variables separadas para evitar que el navegador cierre el JS principal por error
-        const sTag = '<scr' + 'ipt';
-        const eTag = '</scr' + 'ipt>';
-        
-        pDoc.write(`
-        <!DOCTYPE html>
-        <html lang="es">
-        <head>
-            <meta charset="UTF-8">
-            <title>Proyección - ${song.title}</title>
-            <style>
-                body { background: #000; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-                #content { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; position: relative; }
-                canvas, img { max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; opacity: 0; transition: opacity 0.3s ease; }
-                .active { opacity: 1; z-index: 10; }
-                .loading { color: #fff; font-family: 'Inter', sans-serif; font-size: 20px; text-align: center; }
-            </style>
-            ${sTag} src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js">${eTag}
-        </head>
-        <body>
-            <div id="content"><div class="loading">Cargando proyector...</div></div>
-            ${sTag}>
-                window.currentPage = 1;
-                window.totalPages = 1;
-                const isPdf = ${isPdf};
-                const url = "${finalUrl}";
+            projectorWin = window.open('', '_blank', 'width=1280,height=720');
+            if (projectorWin) {
+                const pDoc = projectorWin.document;
+                pDoc.open();
+                
+                const sTag = '<scr' + 'ipt';
+                const eTag = '</scr' + 'ipt>';
+                
+                pDoc.write(`
+                <!DOCTYPE html>
+                <html lang="es">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Proyección - ${song.title}</title>
+                    <style>
+                        body { background: #000; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+                        #content { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; position: relative; }
+                        canvas, img { max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; opacity: 0; transition: opacity 0.3s ease; }
+                        .active { opacity: 1; z-index: 10; }
+                        .loading { color: #fff; font-family: 'Inter', sans-serif; font-size: 20px; text-align: center; }
+                    </style>
+                    ${sTag} src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js">${eTag}
+                </head>
+                <body>
+                    <div id="content"><div class="loading">Cargando proyector...</div></div>
+                    ${sTag}>
+                        window.currentPage = 1;
+                        window.totalPages = 1;
+                        const isPdf = ${isPdf};
+                        const url = "${finalUrl}";
 
-                if(!isPdf) {
-                    document.getElementById('content').innerHTML = '<img src="'+url+'" class="active" />';
-                } else {
-                    const pdfjsLib = window['pdfjs-dist/build/pdf'];
-                    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
-                    
-                    pdfjsLib.getDocument(url).promise.then(pdf => {
-                        window.totalPages = pdf.numPages;
-                        document.getElementById('content').innerHTML = ''; 
-                        
-                        for(let i = 1; i <= window.totalPages; i++) {
-                            let canvas = document.createElement('canvas');
-                            canvas.id = 'page-' + i;
-                            if(i === 1) canvas.classList.add('active');
-                            document.getElementById('content').appendChild(canvas);
+                        if(!isPdf) {
+                            document.getElementById('content').innerHTML = '<img src="'+url+'" class="active" />';
+                        } else {
+                            const pdfjsLib = window['pdfjs-dist/build/pdf'];
+                            pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
                             
-                            pdf.getPage(i).then(page => {
-                                let viewport = page.getViewport({scale: 2.0}); 
-                                canvas.height = viewport.height;
-                                canvas.width = viewport.width;
-                                let ctx = canvas.getContext('2d');
-                                page.render({canvasContext: ctx, viewport: viewport});
+                            pdfjsLib.getDocument(url).promise.then(pdf => {
+                                window.totalPages = pdf.numPages;
+                                document.getElementById('content').innerHTML = ''; 
+                                
+                                for(let i = 1; i <= window.totalPages; i++) {
+                                    let canvas = document.createElement('canvas');
+                                    canvas.id = 'page-' + i;
+                                    if(i === 1) canvas.classList.add('active');
+                                    document.getElementById('content').appendChild(canvas);
+                                    
+                                    pdf.getPage(i).then(page => {
+                                        let viewport = page.getViewport({scale: 2.0}); 
+                                        canvas.height = viewport.height;
+                                        canvas.width = viewport.width;
+                                        let ctx = canvas.getContext('2d');
+                                        page.render({canvasContext: ctx, viewport: viewport});
+                                    });
+                                }
+                            }).catch(err => {
+                                document.getElementById('content').innerHTML = '<div class="loading">Error al cargar la partitura</div>';
                             });
                         }
-                    }).catch(err => {
-                        document.getElementById('content').innerHTML = '<div class="loading">Error al cargar la partitura</div>';
-                    });
-                }
 
-                window.showPage = function(num) {
-                    if(num < 1 || num > window.totalPages) return;
-                    document.querySelectorAll('canvas').forEach(c => c.classList.remove('active'));
-                    let target = document.getElementById('page-' + num);
-                    if(target) target.classList.add('active');
-                    window.currentPage = num;
-                };
+                        window.showPage = function(num) {
+                            if(num < 1 || num > window.totalPages) return;
+                            document.querySelectorAll('canvas').forEach(c => c.classList.remove('active'));
+                            let target = document.getElementById('page-' + num);
+                            if(target) target.classList.add('active');
+                            window.currentPage = num;
+                        };
 
-                window.nextPage = function() { window.showPage(window.currentPage + 1); };
-                window.prevPage = function() { window.showPage(window.currentPage - 1); };
+                        window.nextPage = function() { window.showPage(window.currentPage + 1); };
+                        window.prevPage = function() { window.showPage(window.currentPage - 1); };
 
-                window.addEventListener('keydown', (e) => {
-                    if(['ArrowRight', 'ArrowDown', 'Space', 'Enter', 'PageDown'].includes(e.code)) {
-                        window.nextPage();
-                    } else if(['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.code)) {
-                        window.prevPage();
-                    }
-                });
-            ${eTag}
-        </body>
-        </html>
-        `);
-        pDoc.close();
-    } else {
-        alert('Por favor, permite las ventanas emergentes (pop-ups) en tu navegador para abrir el proyector.');
-    }
-};
+                        window.addEventListener('keydown', (e) => {
+                            if(['ArrowRight', 'ArrowDown', 'Space', 'Enter', 'PageDown'].includes(e.code)) {
+                                window.nextPage();
+                            } else if(['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.code)) {
+                                window.prevPage();
+                            }
+                        });
+                    ${eTag}
+                </body>
+                </html>
+                `);
+                pDoc.close();
+            } else {
+                alert('Por favor, permite las ventanas emergentes (pop-ups) en tu navegador para abrir el proyector.');
+            }
+        };
 
-        // CIERRE SINCRONIZADO DE PROYECTOR Y MODAL
         closeScoreModal.addEventListener('click', () => { 
             scoreModal.classList.remove('show'); 
             scoreModal.classList.remove('with-recording-panel', 'expanded');
@@ -1057,7 +1040,6 @@ window.openProjection = function(event, index) {
             pdfDoc = null; 
             scorePageIndicator.style.display = 'none'; 
 
-            // Cierra la ventana del proyector de forma automática si estaba abierta
             if (projectorWin && !projectorWin.closed) {
                 projectorWin.close();
                 projectorWin = null;
@@ -1139,9 +1121,11 @@ window.openProjection = function(event, index) {
                 const song = songs[index]; const item = document.createElement("div"); item.className = `playlist-item ${index === songIndex ? "active" : ""}`;
                 const isDownloaded = localStorage.getItem('downloaded_' + song.src) === 'true'; const isFav = localStorage.getItem('fav_' + song.src) === 'true';
 
+                // AQUÍ FALTABA ESTA VARIABLE EN TU CÓDIGO
+                const favButtonHtml = `<button class="action-list-btn fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${index})" title="Favorito"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>`;
+
                 const refButtonHtml = `<button class="action-list-btn stroke-icon" onclick="openRefModal(event, ${index})" title="Ver en otros Himnarios">${iconBookSvg}</button>`;
                 
-                // INYECCIÓN DEL NUEVO BOTÓN DE PROYECCIÓN 
                 const projectButtonHtml = `<button class="action-list-btn stroke-icon" onclick="openProjection(event, ${index})" title="Proyectar Partitura">${iconProjectSvg}</button>`;
                 
                 const downloadButtonHtml = isDownloaded ? '' : `<button class="action-list-btn" onclick="downloadSongFile(event, ${index})" title="Descargar MP3">${iconDownloadSvg}</button>`;
@@ -1286,35 +1270,30 @@ window.openProjection = function(event, index) {
         let recInterval;
         let recSeconds = 0;
 
-        // ABRIR PANEL
         openRecordPanelBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            // Si el panel no estaba abierto, lo mostramos colapsado (en móviles)
             if (!recordingPanel.classList.contains('show')) {
                 recordingPanel.classList.add('show');
-                recordingPanel.classList.remove('expanded'); // Forzar inicio colapsado
+                recordingPanel.classList.remove('expanded'); 
                 
                 scoreModal.classList.add('with-recording-panel');
-                scoreModal.classList.remove('expanded'); // Forzar que PDF empuje solo lo colapsado
+                scoreModal.classList.remove('expanded'); 
             } else {
-                // Si ya estaba abierto, lo cerramos
                 recordingPanel.classList.remove('show', 'expanded');
                 scoreModal.classList.remove('with-recording-panel', 'expanded');
             }
         });
         
-        // CERRAR PANEL DESDE EL BOTON 'X' DEL PROPIO PANEL
         closeRecordingPanelBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Evita que se dispare el toggle de expandir
+            e.stopPropagation(); 
             recordingPanel.classList.remove('show', 'expanded');
             scoreModal.classList.remove('with-recording-panel', 'expanded');
         });
 
-        // EXPANDIR / COLAPSAR AL TOCAR EL ENCABEZADO (SOLO MÓVILES - visualmente activo por CSS)
         rpHeaderToggle.addEventListener('click', () => {
             if (recordingPanel.classList.contains('show')) {
                 recordingPanel.classList.toggle('expanded');
-                scoreModal.classList.toggle('expanded'); // Hace que el PDF empuje al 60vh
+                scoreModal.classList.toggle('expanded'); 
             }
         });
 
