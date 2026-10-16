@@ -252,7 +252,7 @@
         /* Modales */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0, 0, 0, 0.6); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; backdrop-filter: blur(4px); }
         .modal-overlay.show { opacity: 1; pointer-events: auto; }
-        .modal-content { background: var(--surface-solid); padding: 30px 25px; border-radius: 16px; width: 90%; max-width: 400px; text-align: center; position: relative; transform: translateY(20px); box-shadow: var(--shadow-player); border: 1px solid var(--border-color); color: var(--text-main); max-height: 85vh; display: flex; flex-direction: column; }
+        .modal-content { background: var(--surface-solid); padding: 30px 25px; border-radius: 16px; width: 90%; max-width: 400px; text-align: center; position: relative; transform: translateY(20px); box-shadow: var(--shadow-player); border: 1px solid var(--border-color); color: var(--text-main); max-height: 90vh; display: flex; flex-direction: column; }
         .modal-overlay.show .modal-content { transform: translateY(0); }
         .modal-close { position: absolute; top: 15px; right: 15px; background: var(--btn-hover-bg); border-radius: 50%; border: none; color: var(--text-muted); width: 32px; height: 32px; font-size: 20px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
         .modal-close:hover { background: var(--accent-color); color: #fff; }
@@ -263,6 +263,38 @@
         .primary-btn:hover { background: var(--accent-hover); }
         .whatsapp-btn { background: #10B981; } .whatsapp-btn:hover { background: #059669; }
         .danger-btn { background: var(--danger-color); } .danger-btn:hover { background: #B91C1C; }
+
+        /* Estilos del Preview de Proyección (Canva / Presenter View) */
+        .projection-preview-box {
+            width: 100%;
+            height: 60vh;
+            background: #0F172A;
+            border-radius: 10px;
+            margin: 0 0 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid var(--border-color);
+            position: relative;
+        }
+        .projection-preview-box canvas, .projection-preview-box img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        .proj-page-indicator {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            color: #fff;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 10;
+        }
 
         /* ================= MODAL PARTITURA ================= */
         .score-modal { 
@@ -275,7 +307,6 @@
         }
         .score-modal.show { opacity: 1; pointer-events: auto; }
         
-        /* En escritorio al abrir el panel, ocupa el resto del ancho */
         .score-modal.with-recording-panel { width: calc(100vw - 320px); }
 
         .score-header { height: 60px; background: var(--surface-solid); display: flex; justify-content: flex-end; align-items: center; padding: 0 15px; gap: 12px; border-bottom: 1px solid var(--border-color); flex-shrink: 0; position: relative; box-shadow: var(--shadow-sm); }
@@ -285,38 +316,25 @@
         .score-body { flex: 1; overflow: auto; background: var(--score-bg); -webkit-overflow-scrolling: touch; padding-bottom: 20px;}
         
         .score-body.invert-colors canvas,
-        .score-body.invert-colors img {
-            filter: invert(100%) hue-rotate(180deg) contrast(95%);
-        }
+        .score-body.invert-colors img { filter: invert(100%) hue-rotate(180deg) contrast(95%); }
 
         .canvas-wrapper { display: table; margin: 0 auto; padding: 15px; }
         
         .score-body canvas { 
             display: block; margin-bottom: 15px; background: #fff; 
-            box-shadow: var(--shadow-md); 
-            max-width: 100%; height: auto !important; 
+            box-shadow: var(--shadow-md); max-width: 100%; height: auto !important; 
             border-radius: 4px; border: 1px solid #ccc;
         }
         .score-body img { 
-            display: block; margin: 15px auto; width: 100%; 
-            max-width: 100%; height: auto !important;
+            display: block; margin: 15px auto; width: 100%; max-width: 100%; height: auto !important;
             border-radius: 4px; box-shadow: var(--shadow-md); 
         }
         
-        .score-progress-area { 
-            position: absolute; bottom: 0; left: 0; width: 100%; height: 14px; 
-            cursor: pointer; z-index: 5; background: transparent; display: flex; align-items: center;
-        }
-        .navbar-progress-bar { 
-            position: absolute; bottom: 0; left: 0; height: 4px; 
-            background: var(--accent-color); width: 0%; 
-            transition: width 0.1s linear; pointer-events: none;
-        }
+        .score-progress-area { position: absolute; bottom: 0; left: 0; width: 100%; height: 14px; cursor: pointer; z-index: 5; background: transparent; display: flex; align-items: center;}
+        .navbar-progress-bar { position: absolute; bottom: 0; left: 0; height: 4px; background: var(--accent-color); width: 0%; transition: width 0.1s linear; pointer-events: none;}
 
-        /* Referencias Modal */
         .view-score-btn { background: var(--accent-light); color: var(--accent-color); border: 1px solid var(--accent-light); padding: 8px 16px; border-radius: 8px; font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; margin-top: 10px; }
         .view-score-btn:hover { background: var(--accent-color); color: #fff; }
-        
         .ref-theme-badge { font-size: 13px; color: var(--text-main); margin: 0 auto 20px auto; text-align: center; background: var(--btn-hover-bg); padding: 12px; border-radius: 10px; border: 1px solid var(--border-color); display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 10px; }
         .ref-theme-badge span { font-weight: 500; }
         .ref-list { list-style: none; padding: 0; text-align: left;}
@@ -324,7 +342,6 @@
         .ref-hymnal { font-weight: 600; font-size: 14px; color: var(--text-main); }
         .ref-number { font-weight: bold; color: var(--accent-color); background: var(--accent-light); padding: 4px 10px; border-radius: 6px; font-size: 14px; }
 
-        /* Scrollbar Desktop */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 10px; }
@@ -368,17 +385,13 @@
             .app-header { padding: calc(env(safe-area-inset-top) + 10px) 15px 15px 15px; }
             .playlist-wrapper { padding: 5px 5px 125px 5px; }
 
-            /* --- INICIO: REDUCIR ESPACIO ENTRE PÁGINAS DEL PDF --- */
-            .canvas-wrapper { 
-                padding: 5px; /* Reduce el espacio general alrededor de las páginas */
-            }
-            .score-body canvas { 
-                margin-bottom: 6px; /* Reduce la brecha vertical entre página y página */
-            }
-            .score-body img { 
-                margin: 6px auto; /* Lo mismo si el archivo es una imagen en vez de PDF */
-            }
-            /* --- FIN: REDUCIR ESPACIO --- */
+            /* --- OCULTAR PROYECTOR EN MÓVILES --- */
+            .project-btn-desktop { display: none !important; }
+
+            .canvas-wrapper { padding: 5px; }
+            .score-body canvas { margin-bottom: 6px; }
+            .score-body img { margin: 6px auto; }
+            
             .playlist-item { padding: 5px 8px; margin-bottom: 4px; border-radius: 8px; }
             .song-title-list { font-size: calc(14px * var(--text-scale)); }
             .song-artist-list { font-size: calc(11px * var(--text-scale)); }
@@ -402,42 +415,18 @@
             }
             .song-actions-wrapper.show { display: flex; flex-direction: row; gap: 4px; }
 
-            /* ================= COMPORTAMIENTO MÓVIL DEL GRABADOR ================= */
-            .rp-drag-indicator {
-                display: block; width: 36px; height: 5px; background: var(--text-muted);
-                border-radius: 3px; margin: 0 auto 8px auto; opacity: 0.4;
-            }
-            .rp-header { 
-                cursor: pointer; padding: 12px 15px; 
-                display: flex; flex-direction: column; align-items: stretch;
-                -webkit-tap-highlight-color: transparent;
-            }
-
-            .recording-panel {
-                top: auto; bottom: 0; right: 0; width: 100%; 
-                height: 160px; /* Inicia colapsado cubriendo solo los controles */
-                transform: translateY(100%); border-left: none; border-top: 1px solid var(--border-color);
-                border-radius: 20px 20px 0 0;
-            }
+            .rp-drag-indicator { display: block; width: 36px; height: 5px; background: var(--text-muted); border-radius: 3px; margin: 0 auto 8px auto; opacity: 0.4;}
+            .rp-header { cursor: pointer; padding: 12px 15px; display: flex; flex-direction: column; align-items: stretch; -webkit-tap-highlight-color: transparent;}
+            .recording-panel { top: auto; bottom: 0; right: 0; width: 100%; height: 160px; transform: translateY(100%); border-left: none; border-top: 1px solid var(--border-color); border-radius: 20px 20px 0 0;}
             .recording-panel.show { transform: translateY(0); }
-            .recording-panel.expanded { height: 60vh; } /* Alto al estar desplegado */
-
-            /* Empuje de PDF en Móvil */
-            .score-modal.with-recording-panel {
-                width: 100vw;
-                height: calc(100vh - 160px); /* El PDF deja exactos 160px para el grabador */
-            }
-            .score-modal.with-recording-panel.expanded {
-                height: 40vh; /* El PDF cede espacio cuando el panel se expande a 60vh */
-            }
-
-            /* Ocultar/Mostrar la lista con animacion en movil */
+            .recording-panel.expanded { height: 60vh; }
+            .score-modal.with-recording-panel { width: 100vw; height: calc(100vh - 160px); }
+            .score-modal.with-recording-panel.expanded { height: 40vh; }
             .recording-panel:not(.expanded) .rp-body { overflow: hidden; }
             .recording-panel:not(.expanded) .recordings-list { opacity: 0; pointer-events: none; transition: opacity 0.1s; }
             .recording-panel.expanded .recordings-list { opacity: 1; pointer-events: auto; transition: opacity 0.3s 0.2s; }
         }
 
-        /* Install Banner */
         .install-banner { position: fixed; top: 0; left: 0; width: 100%; background: var(--accent-color); color: #fff; display: flex; align-items: center; justify-content: space-between; padding: calc(env(safe-area-inset-top) + 12px) 20px 12px 20px; box-shadow: var(--shadow-md); transform: translateY(-100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 2000; }
         .install-banner.show { transform: translateY(0); }
         .install-banner-info { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 14px;}
@@ -543,7 +532,7 @@
         </div>
     </div>
 
-    <!-- Modales -->
+    <!-- Modales de Sistema -->
     <div class="modal-overlay" id="helpModal">
         <div class="modal-content">
             <button class="modal-close" id="closeModalBtn">&times;</button>
@@ -575,7 +564,32 @@
             <div id="refModalBody"></div>
         </div>
     </div>
+
+    <!-- NUEVO MODAL DE VISTA DE PRESENTADOR (PROYECCIÓN) -->
+    <div class="modal-overlay" id="projectionModal">
+        <div class="modal-content" style="max-width: 800px; padding: 20px;">
+            <button class="modal-close" id="closeProjectionModalBtn">&times;</button>
+            <h3 style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="12" rx="2" ry="2"></rect><polygon points="12 21 8 21 9 17 15 17 16 21 12 21"></polygon></svg>
+                Control de Proyección
+            </h3>
+            <p id="projectionModalSongName" style="color: var(--accent-color); font-weight: bold; font-size: 16px; margin-bottom: 10px;"></p>
+            
+            <!-- Lienzo de Vista Previa -->
+            <div class="projection-preview-box">
+                <div class="proj-page-indicator" id="projPageIndicator"></div>
+                <canvas id="projectionPreviewCanvas" style="display: none;"></canvas>
+                <img id="projectionPreviewImage" style="display: none;" />
+            </div>
+
+            <div style="display: flex; gap: 15px; justify-content: center;">
+                <button id="projPrevBtn" class="primary-btn" style="width: auto; background: var(--btn-hover-bg); color: var(--text-main); border: 1px solid var(--border-color);">&larr; Anterior</button>
+                <button id="projNextBtn" class="primary-btn" style="width: auto;">Siguiente &rarr;</button>
+            </div>
+        </div>
+    </div>
     
+    <!-- MODAL DE LECTURA REGULAR -->
     <div class="score-modal" id="scoreModal">
         <div class="score-header">
             <div id="scorePageIndicator" style="color: var(--text-muted); font-size: 14px; margin-right: auto; font-weight: 600; display: none;"></div>
@@ -588,7 +602,6 @@
             <button id="scoreZoomToggle" class="ctrl-btn-score" title="Ajustar Zoom">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
             </button>
-            <!-- BOTÓN DE GRABACIÓN -->
             <button id="openRecordPanelBtn" class="ctrl-btn-score" title="Grabar Audio">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
             </button>
@@ -641,7 +654,8 @@
 
         const iconSun = `<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>`;
         const iconMoon = `<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>`;
-
+        const iconProjectSvg = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="12" rx="2" ry="2"></rect><polygon points="12 21 8 21 9 17 15 17 16 21 12 21"></polygon></svg>`;
+        
         function applyTheme(theme) {
             root.setAttribute('data-theme', theme);
             themeIcon.innerHTML = theme === 'dark' ? iconSun : iconMoon;
@@ -652,29 +666,20 @@
         }
 
         function getAutomaticTheme() {
-    const horaLocal = new Date().getHours();
-    // Si son las 18:00 (6 PM) o más, o antes de las 06:00 (6 AM), fuerza el tema oscuro
-    if (horaLocal >= 18 || horaLocal < 6) {
-        return 'dark';
-    }
-    // Si es de día, verifica la preferencia del sistema, sino por defecto será claro
-    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-}
-
-// 1. Aplica el tema guardado. Si el usuario no ha tocado el botón, usa la lógica de la hora.
-const savedTheme = localStorage.getItem('app-theme') || getAutomaticTheme();
-applyTheme(savedTheme);
-
-// 2. Opcional: Revisa cada minuto. Si la app se queda abierta y dan las 6 PM, cambiará solo 
-// (siempre y cuando el usuario no haya forzado un tema manualmente guardado).
-setInterval(() => {
-    if (!localStorage.getItem('app-theme')) {
-        const timeTheme = getAutomaticTheme();
-        if (root.getAttribute('data-theme') !== timeTheme) {
-            applyTheme(timeTheme);
+            const horaLocal = new Date().getHours();
+            if (horaLocal >= 18 || horaLocal < 6) { return 'dark'; }
+            return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
         }
-    }
-}, 60000);
+
+        const savedTheme = localStorage.getItem('app-theme') || getAutomaticTheme();
+        applyTheme(savedTheme);
+
+        setInterval(() => {
+            if (!localStorage.getItem('app-theme')) {
+                const timeTheme = getAutomaticTheme();
+                if (root.getAttribute('data-theme') !== timeTheme) { applyTheme(timeTheme); }
+            }
+        }, 60000);
 
         themeToggleBtn.addEventListener('click', () => {
             const currentTheme = root.getAttribute('data-theme');
@@ -684,8 +689,109 @@ setInterval(() => {
         });
 
         document.addEventListener('contextmenu', event => event.preventDefault());
+
+        // ==============================================================
+        // VARIABLES GLOBALES DE PROYECTOR Y VISTA DE PRESENTADOR 
+        let projectorWin = null;
+        let previewPdfDoc = null;
+        let previewCurrentPage = 1;
+        let previewTotalPages = 1;
+        
+        const projectionModal = document.getElementById('projectionModal');
+        const closeProjectionModalBtn = document.getElementById('closeProjectionModalBtn');
+        const projectionModalSongName = document.getElementById('projectionModalSongName');
+        const projPrevBtn = document.getElementById('projPrevBtn');
+        const projNextBtn = document.getElementById('projNextBtn');
+        const projPageIndicator = document.getElementById('projPageIndicator');
+        const previewCanvas = document.getElementById('projectionPreviewCanvas');
+        const previewImage = document.getElementById('projectionPreviewImage');
+
+        // Función para renderizar localmente la vista previa en el modal
+        function renderPreviewPage(num) {
+            if (!previewPdfDoc) return;
+            projPageIndicator.innerText = `Página ${num} de ${previewTotalPages}`;
+            previewPdfDoc.getPage(num).then(page => {
+                const ctx = previewCanvas.getContext('2d');
+                const viewport = page.getViewport({ scale: 1.5 }); // Escala ideal para vista previa
+                previewCanvas.width = viewport.width;
+                previewCanvas.height = viewport.height;
+                page.render({ canvasContext: ctx, viewport: viewport });
+            });
+        }
+
+        // CIERRE DEL MODAL DE PROYECCIÓN - YA NO SE CIERRA LA SEGUNDA PANTALLA
+        closeProjectionModalBtn.addEventListener('click', () => {
+            projectionModal.classList.remove('show');
+        });
+        
+        projectionModal.addEventListener('click', (e) => {
+            if (e.target === projectionModal) {
+                projectionModal.classList.remove('show');
+            }
+        });
+
+        projNextBtn.addEventListener('click', () => {
+            if (projectorWin && !projectorWin.closed && typeof projectorWin.nextPage === 'function') {
+                projectorWin.nextPage();
+                
+                // Actualiza la vista previa del modal
+                if (previewPdfDoc && previewCurrentPage < previewTotalPages) {
+                    previewCurrentPage++;
+                    renderPreviewPage(previewCurrentPage);
+                }
+            }
+        });
+        
+        projPrevBtn.addEventListener('click', () => {
+            if (projectorWin && !projectorWin.closed && typeof projectorWin.prevPage === 'function') {
+                projectorWin.prevPage();
+                
+                // Actualiza la vista previa del modal
+                if (previewPdfDoc && previewCurrentPage > 1) {
+                    previewCurrentPage--;
+                    renderPreviewPage(previewCurrentPage);
+                }
+            }
+        });
+        // ==============================================================
+
         document.addEventListener('keydown', function(e) {
             if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85)) { e.preventDefault(); return false; }
+            
+            // SINCRONIZACIÓN DE TECLADO (Aplica para ambos modales)
+            if ((scoreModal.classList.contains('show') || projectionModal.classList.contains('show')) && projectorWin && !projectorWin.closed) {
+                if (['ArrowRight', 'ArrowDown', 'Space', 'PageDown', 'Enter'].includes(e.code)) {
+                    e.preventDefault();
+                    if(typeof projectorWin.nextPage === 'function') {
+                        projectorWin.nextPage();
+                        
+                        if (scoreModal.classList.contains('show')) {
+                            let c = document.querySelector('.score-body canvas[data-page-num="' + projectorWin.currentPage + '"]');
+                            if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                        
+                        if (projectionModal.classList.contains('show') && previewPdfDoc && previewCurrentPage < previewTotalPages) {
+                            previewCurrentPage++;
+                            renderPreviewPage(previewCurrentPage);
+                        }
+                    }
+                } else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.code)) {
+                    e.preventDefault();
+                    if(typeof projectorWin.prevPage === 'function') {
+                        projectorWin.prevPage();
+                        
+                        if (scoreModal.classList.contains('show')) {
+                            let c = document.querySelector('.score-body canvas[data-page-num="' + projectorWin.currentPage + '"]');
+                            if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                        
+                        if (projectionModal.classList.contains('show') && previewPdfDoc && previewCurrentPage > 1) {
+                            previewCurrentPage--;
+                            renderPreviewPage(previewCurrentPage);
+                        }
+                    }
+                }
+            }
         });
 
         const clearBtn = document.getElementById('clearBtn');
@@ -780,7 +886,6 @@ setInterval(() => {
             }
         }
 
-        // Click general actualizado para cerrar
         document.addEventListener('click', (e) => {
             if (!textSizePanel.contains(e.target) && !textSizeBtn.contains(e.target)) textSizePanel.classList.remove('show');
             if (!e.target.closest('.song-actions-wrapper') && !e.target.closest('.more-options-btn')) {
@@ -885,7 +990,6 @@ setInterval(() => {
             event.stopPropagation(); currentScoreIndex = index; const url = songs[index].partitura; scoreBody.innerHTML = '';
             if(scorePlayIcon) { if(songIndex === currentScoreIndex && isPlaying) { scorePlayIcon.innerHTML = iconPause; } else { scorePlayIcon.innerHTML = iconPlay; } }
 
-            // RESETEAR EL PANEL AL ABRIR UN NUEVO PDF
             recordingPanel.classList.remove('show', 'expanded');
             scoreModal.classList.remove('with-recording-panel', 'expanded');
 
@@ -911,7 +1015,162 @@ setInterval(() => {
             scoreModal.classList.add('show');
         };
 
-        // CIERRE SINCRONIZADO
+        // ================= APERTURA DE VENTANA DE PROYECCIÓN (VISTA DE MODERADOR) =================
+        window.openProjection = function(event, index) {
+            event.stopPropagation();
+            
+            const song = songs[index];
+            
+            // 1. Mostrar el modal de control
+            projectionModalSongName.innerText = song.title;
+            projectionModal.classList.add('show');
+
+            let finalUrl = song.partitura;
+            if (!finalUrl) return; 
+            
+            const isPdf = finalUrl.toLowerCase().includes('.pdf');
+            
+            if (finalUrl.includes("dropbox.com")) {
+                finalUrl = finalUrl.replace(/[?&]dl=[01]/g, "").replace(/[?&]raw=[01]/g, "");
+                finalUrl = finalUrl.replace("www.dropbox.com", "dl.dropboxusercontent.com");
+            }
+
+            // 2. Preparar el lienzo de Preview en el Modal
+            previewPdfDoc = null;
+            previewCurrentPage = 1;
+            previewTotalPages = 1;
+            projPageIndicator.innerText = '';
+            
+            if (isPdf && pdfjsLib) {
+                previewCanvas.style.display = 'block';
+                previewImage.style.display = 'none';
+                pdfjsLib.getDocument(finalUrl).promise.then(pdf => {
+                    previewPdfDoc = pdf;
+                    previewTotalPages = pdf.numPages;
+                    renderPreviewPage(1);
+                });
+            } else {
+                previewCanvas.style.display = 'none';
+                previewImage.style.display = 'block';
+                previewImage.src = finalUrl;
+            }
+
+            // 3. LOGICA DE INYECCIÓN DINÁMICA: Si ya está abierta, solo actualiza.
+            if (projectorWin && !projectorWin.closed && typeof projectorWin.loadNewSong === 'function') {
+                projectorWin.loadNewSong(finalUrl, isPdf, song.title);
+            } else {
+                projectorWin = window.open('', 'ProyectorHimnario', 'width=1280,height=720');
+                if (projectorWin) {
+                    const pDoc = projectorWin.document;
+                    pDoc.open();
+                    
+                    const sTag = '<scr' + 'ipt';
+                    const eTag = '</scr' + 'ipt>';
+                    
+                    pDoc.write(`
+                    <!DOCTYPE html>
+                    <html lang="es">
+                    <head>
+                        <meta charset="UTF-8">
+                        <title>Proyección - ${song.title}</title>
+                        <style>
+                            body { background: #000; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+                            #content { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; position: relative; }
+                            canvas, img { max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; opacity: 0; transition: opacity 0.3s ease; }
+                            .active { opacity: 1; z-index: 10; }
+                            .loading { color: #fff; font-family: 'Inter', sans-serif; font-size: 20px; text-align: center; }
+                        </style>
+                        ${sTag} src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js">${eTag}
+                    </head>
+                    <body>
+                        <div id="content"></div>
+                        ${sTag}>
+                            window.currentPage = 1;
+                            window.totalPages = 1;
+
+                            // EVENTO DE ANTICLIC PARA PANTALLA COMPLETA
+                            window.addEventListener('contextmenu', (e) => {
+                                e.preventDefault(); 
+                                if (!document.fullscreenElement) {
+                                    document.documentElement.requestFullscreen().catch(err => {
+                                        console.log("No se pudo iniciar pantalla completa: ", err);
+                                    });
+                                } else {
+                                    document.exitFullscreen();
+                                }
+                            });
+
+                            // FUNCIÓN QUE PERMITE CARGAR UN NUEVO CANTO SIN RECARGAR LA PÁGINA
+                            window.loadNewSong = function(url, isPdf, title) {
+                                document.title = "Proyección - " + title;
+                                const content = document.getElementById('content');
+                                content.innerHTML = '<div class="loading">Cargando proyector...</div>';
+                                window.currentPage = 1;
+                                window.totalPages = 1;
+
+                                if(!isPdf) {
+                                    content.innerHTML = '<img src="'+url+'" class="active" />';
+                                } else {
+                                    const pdfjsLib = window['pdfjs-dist/build/pdf'];
+                                    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+                                    
+                                    pdfjsLib.getDocument(url).promise.then(pdf => {
+                                        window.totalPages = pdf.numPages;
+                                        content.innerHTML = ''; 
+                                        
+                                        for(let i = 1; i <= window.totalPages; i++) {
+                                            let canvas = document.createElement('canvas');
+                                            canvas.id = 'page-' + i;
+                                            if(i === 1) canvas.classList.add('active');
+                                            content.appendChild(canvas);
+                                            
+                                            pdf.getPage(i).then(page => {
+                                                let viewport = page.getViewport({scale: 2.0}); 
+                                                canvas.height = viewport.height;
+                                                canvas.width = viewport.width;
+                                                let ctx = canvas.getContext('2d');
+                                                page.render({canvasContext: ctx, viewport: viewport});
+                                            });
+                                        }
+                                    }).catch(err => {
+                                        content.innerHTML = '<div class="loading">Error al cargar la partitura</div>';
+                                    });
+                                }
+                            };
+
+                            window.showPage = function(num) {
+                                if(num < 1 || num > window.totalPages) return;
+                                document.querySelectorAll('canvas').forEach(c => c.classList.remove('active'));
+                                let target = document.getElementById('page-' + num);
+                                if(target) target.classList.add('active');
+                                window.currentPage = num;
+                            };
+
+                            window.nextPage = function() { window.showPage(window.currentPage + 1); };
+                            window.prevPage = function() { window.showPage(window.currentPage - 1); };
+
+                            window.addEventListener('keydown', (e) => {
+                                if(['ArrowRight', 'ArrowDown', 'Space', 'Enter', 'PageDown'].includes(e.code)) {
+                                    window.nextPage();
+                                } else if(['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.code)) {
+                                    window.prevPage();
+                                }
+                            });
+
+                            // EJECUTAR CARGA INICIAL
+                            window.loadNewSong("${finalUrl}", ${isPdf}, "${song.title}");
+                        ${eTag}
+                    </body>
+                    </html>
+                    `);
+                    pDoc.close();
+                } else {
+                    alert('Por favor, permite las ventanas emergentes (pop-ups) en tu navegador para abrir el proyector.');
+                }
+            }
+        };
+
+        // CIERRE DEL MODAL DE PARTITURA REGULAR - Tampoco cierra el proyector
         closeScoreModal.addEventListener('click', () => { 
             scoreModal.classList.remove('show'); 
             scoreModal.classList.remove('with-recording-panel', 'expanded');
@@ -997,8 +1256,12 @@ setInterval(() => {
                 const song = songs[index]; const item = document.createElement("div"); item.className = `playlist-item ${index === songIndex ? "active" : ""}`;
                 const isDownloaded = localStorage.getItem('downloaded_' + song.src) === 'true'; const isFav = localStorage.getItem('fav_' + song.src) === 'true';
 
+                const favButtonHtml = `<button class="action-list-btn fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${index})" title="Favorito"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>`;
+                
                 const refButtonHtml = `<button class="action-list-btn stroke-icon" onclick="openRefModal(event, ${index})" title="Ver en otros Himnarios">${iconBookSvg}</button>`;
-                const favButtonHtml = `<button class="action-list-btn stroke-icon fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${index})" title="Marcar como favorito"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>`;
+                
+                const projectButtonHtml = `<button class="action-list-btn stroke-icon project-btn-desktop" onclick="openProjection(event, ${index})" title="Proyectar Partitura">${iconProjectSvg}</button>`;
+                
                 const downloadButtonHtml = isDownloaded ? '' : `<button class="action-list-btn" onclick="downloadSongFile(event, ${index})" title="Descargar MP3">${iconDownloadSvg}</button>`;
 
                 item.innerHTML = `
@@ -1007,7 +1270,7 @@ setInterval(() => {
                         <span class="song-artist-list">${song.artist}</span>
                     </div>
                     <div class="song-actions-wrapper" id="actions-${index}">
-                        ${refButtonHtml} ${downloadButtonHtml}
+                        ${refButtonHtml} ${projectButtonHtml} ${downloadButtonHtml}
                     </div>
                     <div class="primary-actions">
                         ${favButtonHtml}
@@ -1141,35 +1404,30 @@ setInterval(() => {
         let recInterval;
         let recSeconds = 0;
 
-        // ABRIR PANEL
         openRecordPanelBtn.addEventListener('click', (e) => {
             e.stopPropagation();
-            // Si el panel no estaba abierto, lo mostramos colapsado (en móviles)
             if (!recordingPanel.classList.contains('show')) {
                 recordingPanel.classList.add('show');
-                recordingPanel.classList.remove('expanded'); // Forzar inicio colapsado
+                recordingPanel.classList.remove('expanded'); 
                 
                 scoreModal.classList.add('with-recording-panel');
-                scoreModal.classList.remove('expanded'); // Forzar que PDF empuje solo lo colapsado
+                scoreModal.classList.remove('expanded'); 
             } else {
-                // Si ya estaba abierto, lo cerramos
                 recordingPanel.classList.remove('show', 'expanded');
                 scoreModal.classList.remove('with-recording-panel', 'expanded');
             }
         });
         
-        // CERRAR PANEL DESDE EL BOTON 'X' DEL PROPIO PANEL
         closeRecordingPanelBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // Evita que se dispare el toggle de expandir
+            e.stopPropagation(); 
             recordingPanel.classList.remove('show', 'expanded');
             scoreModal.classList.remove('with-recording-panel', 'expanded');
         });
 
-        // EXPANDIR / COLAPSAR AL TOCAR EL ENCABEZADO (SOLO MÓVILES - visualmente activo por CSS)
         rpHeaderToggle.addEventListener('click', () => {
             if (recordingPanel.classList.contains('show')) {
                 recordingPanel.classList.toggle('expanded');
-                scoreModal.classList.toggle('expanded'); // Hace que el PDF empuje al 60vh
+                scoreModal.classList.toggle('expanded'); 
             }
         });
 
