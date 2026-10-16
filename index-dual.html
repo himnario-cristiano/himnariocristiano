@@ -264,7 +264,7 @@
         .whatsapp-btn { background: #10B981; } .whatsapp-btn:hover { background: #059669; }
         .danger-btn { background: var(--danger-color); } .danger-btn:hover { background: #B91C1C; }
 
-        /* Estilos del Preview de Proyección (Canva / Presenter View) */
+        /* Estilos del Preview de Proyección */
         .projection-preview-box {
             width: 100%;
             height: 60vh;
@@ -294,6 +294,19 @@
             font-size: 12px;
             font-weight: bold;
             z-index: 10;
+        }
+        
+        /* Barra de progreso sutil para la vista previa modal */
+        .modal-loading-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent-color);
+            width: 0%;
+            transition: width 0.2s ease;
+            z-index: 20;
+            border-radius: 3px 3px 0 0;
         }
 
         /* ================= MODAL PARTITURA ================= */
@@ -385,7 +398,6 @@
             .app-header { padding: calc(env(safe-area-inset-top) + 10px) 15px 15px 15px; }
             .playlist-wrapper { padding: 5px 5px 125px 5px; }
 
-            /* --- OCULTAR PROYECTOR EN MÓVILES --- */
             .project-btn-desktop { display: none !important; }
 
             .canvas-wrapper { padding: 5px; }
@@ -577,6 +589,7 @@
             
             <!-- Lienzo de Vista Previa -->
             <div class="projection-preview-box">
+                <div class="modal-loading-bar" id="modalLoadingBar"></div>
                 <div class="proj-page-indicator" id="projPageIndicator"></div>
                 <canvas id="projectionPreviewCanvas" style="display: none;"></canvas>
                 <img id="projectionPreviewImage" style="display: none;" />
@@ -623,7 +636,7 @@
         <div class="score-body" id="scoreBody"></div>
     </div>
 
-    <!-- PANEL LATERAL/INFERIOR DE GRABACIÓN COLAPSABLE -->
+    <!-- PANEL LATERAL/INFERIOR DE GRABACIÓN COLLAPSIBLE -->
     <div class="recording-panel" id="recordingPanel">
         <div class="rp-header" id="rpHeaderToggle">
             <div class="rp-drag-indicator"></div>
@@ -705,21 +718,39 @@
         const projPageIndicator = document.getElementById('projPageIndicator');
         const previewCanvas = document.getElementById('projectionPreviewCanvas');
         const previewImage = document.getElementById('projectionPreviewImage');
+        const modalLoadingBar = document.getElementById('modalLoadingBar');
 
-        // Función para renderizar localmente la vista previa en el modal
+        // Función para renderizar localmente la vista previa usando Doble Búfer y barra de carga
         function renderPreviewPage(num) {
             if (!previewPdfDoc) return;
-            projPageIndicator.innerText = `Página ${num} de ${previewTotalPages}`;
+            projPageIndicator.innerText = `Pág. ${num} - ${previewTotalPages}`;
+            
+            modalLoadingBar.style.width = '30%';
             previewPdfDoc.getPage(num).then(page => {
-                const ctx = previewCanvas.getContext('2d');
-                const viewport = page.getViewport({ scale: 1.5 }); // Escala ideal para vista previa
-                previewCanvas.width = viewport.width;
-                previewCanvas.height = viewport.height;
-                page.render({ canvasContext: ctx, viewport: viewport });
+                const viewport = page.getViewport({ scale: 1.5 });
+                modalLoadingBar.style.width = '60%';
+                
+                const offCanvas = document.createElement('canvas');
+                offCanvas.width = viewport.width;
+                offCanvas.height = viewport.height;
+                const ctx = offCanvas.getContext('2d');
+                
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, offCanvas.width, offCanvas.height);
+
+                page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
+                    previewCanvas.width = viewport.width;
+                    previewCanvas.height = viewport.height;
+                    const visibleCtx = previewCanvas.getContext('2d');
+                    visibleCtx.drawImage(offCanvas, 0, 0);
+                    
+                    modalLoadingBar.style.width = '100%';
+                    setTimeout(() => { modalLoadingBar.style.width = '0%'; }, 250);
+                });
             });
         }
 
-        // CIERRE DEL MODAL DE PROYECCIÓN - YA NO SE CIERRA LA SEGUNDA PANTALLA
+        // CIERRE DEL MODAL DE PROYECCIÓN
         closeProjectionModalBtn.addEventListener('click', () => {
             projectionModal.classList.remove('show');
         });
@@ -734,7 +765,6 @@
             if (projectorWin && !projectorWin.closed && typeof projectorWin.nextPage === 'function') {
                 projectorWin.nextPage();
                 
-                // Actualiza la vista previa del modal
                 if (previewPdfDoc && previewCurrentPage < previewTotalPages) {
                     previewCurrentPage++;
                     renderPreviewPage(previewCurrentPage);
@@ -746,7 +776,6 @@
             if (projectorWin && !projectorWin.closed && typeof projectorWin.prevPage === 'function') {
                 projectorWin.prevPage();
                 
-                // Actualiza la vista previa del modal
                 if (previewPdfDoc && previewCurrentPage > 1) {
                     previewCurrentPage--;
                     renderPreviewPage(previewCurrentPage);
@@ -758,7 +787,6 @@
         document.addEventListener('keydown', function(e) {
             if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85)) { e.preventDefault(); return false; }
             
-            // SINCRONIZACIÓN DE TECLADO (Aplica para ambos modales)
             if ((scoreModal.classList.contains('show') || projectionModal.classList.contains('show')) && projectorWin && !projectorWin.closed) {
                 if (['ArrowRight', 'ArrowDown', 'Space', 'PageDown', 'Enter'].includes(e.code)) {
                     e.preventDefault();
@@ -1040,6 +1068,7 @@
             previewCurrentPage = 1;
             previewTotalPages = 1;
             projPageIndicator.innerText = '';
+            modalLoadingBar.style.width = '10%';
             
             if (isPdf && pdfjsLib) {
                 previewCanvas.style.display = 'block';
@@ -1053,9 +1082,11 @@
                 previewCanvas.style.display = 'none';
                 previewImage.style.display = 'block';
                 previewImage.src = finalUrl;
+                modalLoadingBar.style.width = '100%';
+                setTimeout(() => modalLoadingBar.style.width = '0%', 200);
             }
 
-            // 3. LOGICA DE INYECCIÓN DINÁMICA: Si ya está abierta, solo actualiza.
+            // 3. LOGICA DE INYECCIÓN DINÁMICA
             if (projectorWin && !projectorWin.closed && typeof projectorWin.loadNewSong === 'function') {
                 projectorWin.loadNewSong(finalUrl, isPdf, song.title);
             } else {
@@ -1074,15 +1105,30 @@
                         <meta charset="UTF-8">
                         <title>Proyección - ${song.title}</title>
                         <style>
-                            body { background: #000; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-                            #content { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; position: relative; }
+                            body { background: #000; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; position: relative; }
+                            #content { width: 100%; height: 100%; position: relative; }
+                            
+                            /* Barra de progreso sutil en la parte superior de la segunda pantalla */
+                            #projLoadingBar {
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                height: 4px;
+                                background: #FACC15;
+                                width: 0%;
+                                transition: width 0.2s ease, opacity 0.3s ease;
+                                z-index: 100;
+                            }
+
+                            .layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.5s ease; z-index: 1;}
+                            .active-layer { opacity: 1; z-index: 2; }
                             canvas, img { max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; opacity: 0; transition: opacity 0.3s ease; }
                             .active { opacity: 1; z-index: 10; }
-                            .loading { color: #fff; font-family: 'Inter', sans-serif; font-size: 20px; text-align: center; }
                         </style>
                         ${sTag} src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js">${eTag}
                     </head>
                     <body>
+                        <div id="projLoadingBar"></div>
                         <div id="content"></div>
                         ${sTag}>
                             window.currentPage = 1;
@@ -1100,49 +1146,115 @@
                                 }
                             });
 
-                            // FUNCIÓN QUE PERMITE CARGAR UN NUEVO CANTO SIN RECARGAR LA PÁGINA
+                            // FUNCIÓN QUE PERMITE CARGAR UN NUEVO CANTO CON BARRA DE PROGRESO EN SEGUNDO PLANO
                             window.loadNewSong = function(url, isPdf, title) {
                                 document.title = "Proyección - " + title;
                                 const content = document.getElementById('content');
-                                content.innerHTML = '<div class="loading">Cargando proyector...</div>';
+                                const bar = document.getElementById('projLoadingBar');
+                                
+                                bar.style.opacity = '1';
+                                bar.style.width = '15%';
+
+                                const newLayer = document.createElement('div');
+                                newLayer.className = 'layer';
+                                content.appendChild(newLayer);
+
                                 window.currentPage = 1;
                                 window.totalPages = 1;
 
                                 if(!isPdf) {
-                                    content.innerHTML = '<img src="'+url+'" class="active" />';
+                                    let img = document.createElement('img');
+                                    img.src = url;
+                                    img.onload = () => {
+                                        bar.style.width = '100%';
+                                        newLayer.appendChild(img);
+                                        img.classList.add('active');
+                                        switchLayers(newLayer);
+                                        setTimeout(() => { bar.style.opacity = '0'; bar.style.width = '0%'; }, 300);
+                                    };
                                 } else {
                                     const pdfjsLib = window['pdfjs-dist/build/pdf'];
                                     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
                                     
                                     pdfjsLib.getDocument(url).promise.then(pdf => {
                                         window.totalPages = pdf.numPages;
-                                        content.innerHTML = ''; 
+                                        bar.style.width = '30%';
+                                        
+                                        let completedPages = 0;
+                                        let renderPromises = [];
                                         
                                         for(let i = 1; i <= window.totalPages; i++) {
                                             let canvas = document.createElement('canvas');
                                             canvas.id = 'page-' + i;
-                                            if(i === 1) canvas.classList.add('active');
-                                            content.appendChild(canvas);
+                                            newLayer.appendChild(canvas);
                                             
-                                            pdf.getPage(i).then(page => {
-                                                let viewport = page.getViewport({scale: 2.0}); 
-                                                canvas.height = viewport.height;
-                                                canvas.width = viewport.width;
-                                                let ctx = canvas.getContext('2d');
-                                                page.render({canvasContext: ctx, viewport: viewport});
+                                            let renderPromise = pdf.getPage(i).then(page => {
+                                                let viewport = page.getViewport({scale: 2.5}); 
+                                                
+                                                let offCanvas = document.createElement('canvas');
+                                                offCanvas.width = viewport.width;
+                                                offCanvas.height = viewport.height;
+                                                let ctx = offCanvas.getContext('2d');
+                                                
+                                                ctx.fillStyle = '#ffffff';
+                                                ctx.fillRect(0, 0, offCanvas.width, offCanvas.height);
+                                                
+                                                return page.render({canvasContext: ctx, viewport: viewport}).promise.then(() => {
+                                                    canvas.width = viewport.width;
+                                                    canvas.height = viewport.height;
+                                                    canvas.getContext('2d').drawImage(offCanvas, 0, 0);
+                                                    
+                                                    completedPages++;
+                                                    let progress = 30 + Math.floor((completedPages / window.totalPages) * 70);
+                                                    bar.style.width = progress + '%';
+                                                });
+                                            });
+                                            
+                                            renderPromises.push({ index: i, promise: renderPromise });
+                                        }
+
+                                        const firstPage = renderPromises.find(rp => rp.index === 1);
+                                        if(firstPage) {
+                                            firstPage.promise.then(() => {
+                                                switchLayers(newLayer);
+                                                window.showPage(1);
                                             });
                                         }
+
+                                        // Esperar a que todas las páginas terminen para ocultar la barra limpiamente
+                                        Promise.all(renderPromises.map(p => p.promise)).then(() => {
+                                            bar.style.width = '100%';
+                                            setTimeout(() => { bar.style.opacity = '0'; bar.style.width = '0%'; }, 300);
+                                        });
+
                                     }).catch(err => {
-                                        content.innerHTML = '<div class="loading">Error al cargar la partitura</div>';
+                                        console.error("Error al cargar la partitura", err);
+                                        bar.style.opacity = '0';
+                                    });
+                                }
+
+                                function switchLayers(activeLayer) {
+                                    activeLayer.classList.add('active-layer');
+                                    const layers = content.querySelectorAll('.layer');
+                                    layers.forEach(layer => {
+                                        if (layer !== activeLayer) {
+                                            layer.classList.remove('active-layer');
+                                            setTimeout(() => layer.remove(), 600);
+                                        }
                                     });
                                 }
                             };
 
                             window.showPage = function(num) {
                                 if(num < 1 || num > window.totalPages) return;
-                                document.querySelectorAll('canvas').forEach(c => c.classList.remove('active'));
-                                let target = document.getElementById('page-' + num);
+                                
+                                const activeLayer = document.querySelector('.active-layer');
+                                if(!activeLayer) return;
+
+                                activeLayer.querySelectorAll('canvas, img').forEach(c => c.classList.remove('active'));
+                                let target = activeLayer.querySelector('#page-' + num);
                                 if(target) target.classList.add('active');
+                                
                                 window.currentPage = num;
                             };
 
@@ -1170,7 +1282,7 @@
             }
         };
 
-        // CIERRE DEL MODAL DE PARTITURA REGULAR - Tampoco cierra el proyector
+        // CIERRE DEL MODAL DE PARTITURA REGULAR
         closeScoreModal.addEventListener('click', () => { 
             scoreModal.classList.remove('show'); 
             scoreModal.classList.remove('with-recording-panel', 'expanded');
