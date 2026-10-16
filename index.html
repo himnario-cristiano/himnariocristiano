@@ -264,7 +264,7 @@
         .whatsapp-btn { background: #10B981; } .whatsapp-btn:hover { background: #059669; }
         .danger-btn { background: var(--danger-color); } .danger-btn:hover { background: #B91C1C; }
 
-        /* Estilos del Preview de Proyección (Canva / Presenter View) */
+        /* Estilos del Preview de Proyección */
         .projection-preview-box {
             width: 100%;
             height: 60vh;
@@ -385,7 +385,6 @@
             .app-header { padding: calc(env(safe-area-inset-top) + 10px) 15px 15px 15px; }
             .playlist-wrapper { padding: 5px 5px 125px 5px; }
 
-            /* --- OCULTAR PROYECTOR EN MÓVILES --- */
             .project-btn-desktop { display: none !important; }
 
             .canvas-wrapper { padding: 5px; }
@@ -706,20 +705,36 @@
         const previewCanvas = document.getElementById('projectionPreviewCanvas');
         const previewImage = document.getElementById('projectionPreviewImage');
 
-        // Función para renderizar localmente la vista previa en el modal
+        // Función para renderizar localmente la vista previa usando Doble Búfer
         function renderPreviewPage(num) {
             if (!previewPdfDoc) return;
             projPageIndicator.innerText = `Pág. ${num} - ${previewTotalPages}`;
+            
             previewPdfDoc.getPage(num).then(page => {
-                const ctx = previewCanvas.getContext('2d');
-                const viewport = page.getViewport({ scale: 1.5 }); // Escala ideal para vista previa
-                previewCanvas.width = viewport.width;
-                previewCanvas.height = viewport.height;
-                page.render({ canvasContext: ctx, viewport: viewport });
+                const viewport = page.getViewport({ scale: 1.5 });
+                
+                // 1. Crear un lienzo en memoria (Offscreen Buffer)
+                const offCanvas = document.createElement('canvas');
+                offCanvas.width = viewport.width;
+                offCanvas.height = viewport.height;
+                const ctx = offCanvas.getContext('2d');
+                
+                // Fondo blanco por defecto para evitar transparencias extrañas
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, offCanvas.width, offCanvas.height);
+
+                // 2. Renderizar el PDF en el lienzo oculto
+                page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
+                    // 3. Cuando finaliza la carga, copiar la imagen al lienzo visible instantáneamente
+                    previewCanvas.width = viewport.width;
+                    previewCanvas.height = viewport.height;
+                    const visibleCtx = previewCanvas.getContext('2d');
+                    visibleCtx.drawImage(offCanvas, 0, 0);
+                });
             });
         }
 
-        // CIERRE DEL MODAL DE PROYECCIÓN - YA NO SE CIERRA LA SEGUNDA PANTALLA
+        // CIERRE DEL MODAL DE PROYECCIÓN
         closeProjectionModalBtn.addEventListener('click', () => {
             projectionModal.classList.remove('show');
         });
@@ -1055,7 +1070,7 @@
                 previewImage.src = finalUrl;
             }
 
-            // 3. LOGICA DE INYECCIÓN DINÁMICA: Si ya está abierta, solo actualiza.
+            // 3. LOGICA DE INYECCIÓN DINÁMICA
             if (projectorWin && !projectorWin.closed && typeof projectorWin.loadNewSong === 'function') {
                 projectorWin.loadNewSong(finalUrl, isPdf, song.title);
             } else {
@@ -1075,10 +1090,12 @@
                         <title>Proyección - ${song.title}</title>
                         <style>
                             body { background: #000; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
-                            #content { width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; position: relative; }
+                            #content { width: 100%; height: 100%; position: relative; }
+                            /* Capas para permitir transiciones sin pantalla blanca */
+                            .layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.5s ease; z-index: 1;}
+                            .active-layer { opacity: 1; z-index: 2; }
                             canvas, img { max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; opacity: 0; transition: opacity 0.3s ease; }
                             .active { opacity: 1; z-index: 10; }
-                            .loading { color: #fff; font-family: 'Inter', sans-serif; font-size: 20px; text-align: center; }
                         </style>
                         ${sTag} src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js">${eTag}
                     </head>
@@ -1100,49 +1117,99 @@
                                 }
                             });
 
-                            // FUNCIÓN QUE PERMITE CARGAR UN NUEVO CANTO SIN RECARGAR LA PÁGINA
+                            // FUNCIÓN QUE PERMITE CARGAR UN NUEVO CANTO SIN PANTALLAS BLANCAS
                             window.loadNewSong = function(url, isPdf, title) {
                                 document.title = "Proyección - " + title;
                                 const content = document.getElementById('content');
-                                content.innerHTML = '<div class="loading">Cargando proyector...</div>';
+                                
+                                // Creamos una nueva capa invisible (Cargamos atrás sin borrar el actual)
+                                const newLayer = document.createElement('div');
+                                newLayer.className = 'layer';
+                                content.appendChild(newLayer);
+
                                 window.currentPage = 1;
                                 window.totalPages = 1;
 
                                 if(!isPdf) {
-                                    content.innerHTML = '<img src="'+url+'" class="active" />';
+                                    let img = document.createElement('img');
+                                    img.src = url;
+                                    img.onload = () => {
+                                        newLayer.appendChild(img);
+                                        img.classList.add('active');
+                                        switchLayers(newLayer);
+                                    };
                                 } else {
                                     const pdfjsLib = window['pdfjs-dist/build/pdf'];
                                     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
                                     
                                     pdfjsLib.getDocument(url).promise.then(pdf => {
                                         window.totalPages = pdf.numPages;
-                                        content.innerHTML = ''; 
+                                        let renderPromises = [];
                                         
                                         for(let i = 1; i <= window.totalPages; i++) {
                                             let canvas = document.createElement('canvas');
                                             canvas.id = 'page-' + i;
-                                            if(i === 1) canvas.classList.add('active');
-                                            content.appendChild(canvas);
+                                            newLayer.appendChild(canvas);
                                             
-                                            pdf.getPage(i).then(page => {
-                                                let viewport = page.getViewport({scale: 2.0}); 
-                                                canvas.height = viewport.height;
-                                                canvas.width = viewport.width;
-                                                let ctx = canvas.getContext('2d');
-                                                page.render({canvasContext: ctx, viewport: viewport});
+                                            // Renderizado a través de doble búfer (off-canvas)
+                                            let renderPromise = pdf.getPage(i).then(page => {
+                                                let viewport = page.getViewport({scale: 2.5}); 
+                                                
+                                                let offCanvas = document.createElement('canvas');
+                                                offCanvas.width = viewport.width;
+                                                offCanvas.height = viewport.height;
+                                                let ctx = offCanvas.getContext('2d');
+                                                
+                                                // Fondo blanco para seguridad del PDF
+                                                ctx.fillStyle = '#ffffff';
+                                                ctx.fillRect(0, 0, offCanvas.width, offCanvas.height);
+                                                
+                                                return page.render({canvasContext: ctx, viewport: viewport}).promise.then(() => {
+                                                    canvas.width = viewport.width;
+                                                    canvas.height = viewport.height;
+                                                    canvas.getContext('2d').drawImage(offCanvas, 0, 0);
+                                                });
+                                            });
+                                            
+                                            renderPromises.push({ index: i, promise: renderPromise });
+                                        }
+
+                                        // CUANDO LA PÁGINA 1 ESTÉ LISTA, RECIÉN HACEMOS EL CAMBIO
+                                        const firstPage = renderPromises.find(rp => rp.index === 1);
+                                        if(firstPage) {
+                                            firstPage.promise.then(() => {
+                                                switchLayers(newLayer);
+                                                window.showPage(1);
                                             });
                                         }
                                     }).catch(err => {
-                                        content.innerHTML = '<div class="loading">Error al cargar la partitura</div>';
+                                        console.error("Error al cargar la partitura", err);
+                                    });
+                                }
+
+                                function switchLayers(activeLayer) {
+                                    activeLayer.classList.add('active-layer');
+                                    // Eliminamos suavemente los cantos anteriores
+                                    const layers = content.querySelectorAll('.layer');
+                                    layers.forEach(layer => {
+                                        if (layer !== activeLayer) {
+                                            layer.classList.remove('active-layer');
+                                            setTimeout(() => layer.remove(), 600); // 600ms para asegurar la transición
+                                        }
                                     });
                                 }
                             };
 
                             window.showPage = function(num) {
                                 if(num < 1 || num > window.totalPages) return;
-                                document.querySelectorAll('canvas').forEach(c => c.classList.remove('active'));
-                                let target = document.getElementById('page-' + num);
+                                
+                                const activeLayer = document.querySelector('.active-layer');
+                                if(!activeLayer) return;
+
+                                activeLayer.querySelectorAll('canvas, img').forEach(c => c.classList.remove('active'));
+                                let target = activeLayer.querySelector('#page-' + num);
                                 if(target) target.classList.add('active');
+                                
                                 window.currentPage = num;
                             };
 
