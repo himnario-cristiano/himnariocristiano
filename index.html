@@ -709,7 +709,7 @@
         // Función para renderizar localmente la vista previa en el modal
         function renderPreviewPage(num) {
             if (!previewPdfDoc) return;
-            projPageIndicator.innerText = `Página ${num} de ${previewTotalPages}`;
+            projPageIndicator.innerText = `Pág. ${num} - ${previewTotalPages}`;
             previewPdfDoc.getPage(num).then(page => {
                 const ctx = previewCanvas.getContext('2d');
                 const viewport = page.getViewport({ scale: 1.5 }); // Escala ideal para vista previa
