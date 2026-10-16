@@ -267,10 +267,10 @@
         /* Estilos del Preview de Proyección (Canva / Presenter View) */
         .projection-preview-box {
             width: 100%;
-            height: 38vh;
+            height: 60vh; /* Altura aumentada para maximizar el canvas */
             background: #0F172A;
             border-radius: 10px;
-            margin: 10px 0 20px 0;
+            margin: 0 0 15px 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -567,14 +567,13 @@
 
     <!-- NUEVO MODAL DE VISTA DE PRESENTADOR (PROYECCIÓN) -->
     <div class="modal-overlay" id="projectionModal">
-        <div class="modal-content" style="max-width: 700px;">
+        <div class="modal-content" style="max-width: 800px; padding: 20px;">
             <button class="modal-close" id="closeProjectionModalBtn">&times;</button>
-            <h3 style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+            <h3 style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 8px;">
                 <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="12" rx="2" ry="2"></rect><polygon points="12 21 8 21 9 17 15 17 16 21 12 21"></polygon></svg>
                 Control de Proyección
             </h3>
-            <p id="projectionModalSongName" style="color: var(--accent-color); font-weight: bold; font-size: 16px; margin-bottom: 5px;"></p>
-            <p style="font-size: 13px; margin-bottom: 10px;">Vista de moderador en tiempo real. Usa los botones o las flechas de tu teclado.</p>
+            <p id="projectionModalSongName" style="color: var(--accent-color); font-weight: bold; font-size: 16px; margin-bottom: 10px;"></p>
             
             <!-- Lienzo de Vista Previa -->
             <div class="projection-preview-box">
@@ -1092,6 +1091,18 @@
                         window.totalPages = 1;
                         const isPdf = ${isPdf};
                         const url = "${finalUrl}";
+
+                        // EVENTO DE ANTICLIC PARA ENTRAR/SALIR DE PANTALLA COMPLETA
+                        window.addEventListener('contextmenu', (e) => {
+                            e.preventDefault(); // Bloquea el menú de opciones (anticlic)
+                            if (!document.fullscreenElement) {
+                                document.documentElement.requestFullscreen().catch(err => {
+                                    console.log("No se pudo iniciar pantalla completa: ", err);
+                                });
+                            } else {
+                                document.exitFullscreen();
+                            }
+                        });
 
                         if(!isPdf) {
                             document.getElementById('content').innerHTML = '<img src="'+url+'" class="active" />';
