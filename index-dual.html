@@ -368,17 +368,13 @@
             .app-header { padding: calc(env(safe-area-inset-top) + 10px) 15px 15px 15px; }
             .playlist-wrapper { padding: 5px 5px 125px 5px; }
 
-            /* --- INICIO: REDUCIR ESPACIO ENTRE PÁGINAS DEL PDF --- */
-            .canvas-wrapper { 
-                padding: 5px; 
-            }
-            .score-body canvas { 
-                margin-bottom: 6px; 
-            }
-            .score-body img { 
-                margin: 6px auto; 
-            }
-            /* --- FIN: REDUCIR ESPACIO --- */
+            /* --- OCULTAR PROYECTOR EN MÓVILES --- */
+            .project-btn-desktop { display: none !important; }
+
+            .canvas-wrapper { padding: 5px; }
+            .score-body canvas { margin-bottom: 6px; }
+            .score-body img { margin: 6px auto; }
+            
             .playlist-item { padding: 5px 8px; margin-bottom: 4px; border-radius: 8px; }
             .song-title-list { font-size: calc(14px * var(--text-scale)); }
             .song-artist-list { font-size: calc(11px * var(--text-scale)); }
@@ -402,7 +398,6 @@
             }
             .song-actions-wrapper.show { display: flex; flex-direction: row; gap: 4px; }
 
-            /* ================= COMPORTAMIENTO MÓVIL DEL GRABADOR ================= */
             .rp-drag-indicator {
                 display: block; width: 36px; height: 5px; background: var(--text-muted);
                 border-radius: 3px; margin: 0 auto 8px auto; opacity: 0.4;
@@ -422,7 +417,6 @@
             .recording-panel.show { transform: translateY(0); }
             .recording-panel.expanded { height: 60vh; }
 
-            /* Empuje de PDF en Móvil */
             .score-modal.with-recording-panel {
                 width: 100vw;
                 height: calc(100vh - 160px); 
@@ -431,7 +425,6 @@
                 height: 40vh; 
             }
 
-            /* Ocultar/Mostrar la lista con animacion en movil */
             .recording-panel:not(.expanded) .rp-body { overflow: hidden; }
             .recording-panel:not(.expanded) .recordings-list { opacity: 0; pointer-events: none; transition: opacity 0.1s; }
             .recording-panel.expanded .recordings-list { opacity: 1; pointer-events: auto; transition: opacity 0.3s 0.2s; }
@@ -543,7 +536,7 @@
         </div>
     </div>
 
-    <!-- Modales -->
+    <!-- Modales de Sistema -->
     <div class="modal-overlay" id="helpModal">
         <div class="modal-content">
             <button class="modal-close" id="closeModalBtn">&times;</button>
@@ -575,6 +568,24 @@
             <div id="refModalBody"></div>
         </div>
     </div>
+
+    <!-- NUEVO MODAL DE CONTROL DE PROYECCIÓN -->
+    <div class="modal-overlay" id="projectionModal">
+        <div class="modal-content" style="max-width: 500px;">
+            <button class="modal-close" id="closeProjectionModalBtn">&times;</button>
+            <h3 style="display: flex; align-items: center; justify-content: center; gap: 8px;">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="12" rx="2" ry="2"></rect><polygon points="12 21 8 21 9 17 15 17 16 21 12 21"></polygon></svg>
+                Control de Proyección
+            </h3>
+            <p id="projectionModalSongName" style="color: var(--accent-color); font-weight: bold; font-size: 16px; margin-bottom: 10px;"></p>
+            <p style="font-size: 13px;">La ventana del proyector se ha abierto en otra pantalla. Utiliza estos controles o las flechas de tu teclado para cambiar de página.</p>
+            
+            <div style="display: flex; gap: 15px; justify-content: center; margin-top: 20px;">
+                <button id="projPrevBtn" class="primary-btn" style="width: auto; background: var(--btn-hover-bg); color: var(--text-main); border: 1px solid var(--border-color);">&larr; Anterior</button>
+                <button id="projNextBtn" class="primary-btn" style="width: auto;">Siguiente &rarr;</button>
+            </div>
+        </div>
+    </div>
     
     <div class="score-modal" id="scoreModal">
         <div class="score-header">
@@ -588,7 +599,6 @@
             <button id="scoreZoomToggle" class="ctrl-btn-score" title="Ajustar Zoom">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
             </button>
-            <!-- BOTÓN DE GRABACIÓN -->
             <button id="openRecordPanelBtn" class="ctrl-btn-score" title="Grabar Audio">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path><line x1="12" y1="19" x2="12" y2="22"></line></svg>
             </button>
@@ -678,28 +688,61 @@
         document.addEventListener('contextmenu', event => event.preventDefault());
 
         // ==============================================================
-        // NUEVA VARIABLE GLOBAL PARA EL PROYECTOR
+        // VARIABLE GLOBAL Y LÓGICA DE PROYECTOR 
         let projectorWin = null;
+        
+        const projectionModal = document.getElementById('projectionModal');
+        const closeProjectionModalBtn = document.getElementById('closeProjectionModalBtn');
+        const projectionModalSongName = document.getElementById('projectionModalSongName');
+        const projPrevBtn = document.getElementById('projPrevBtn');
+        const projNextBtn = document.getElementById('projNextBtn');
+
+        closeProjectionModalBtn.addEventListener('click', () => {
+            projectionModal.classList.remove('show');
+        });
+        
+        projectionModal.addEventListener('click', (e) => {
+            if (e.target === projectionModal) projectionModal.classList.remove('show');
+        });
+
+        projNextBtn.addEventListener('click', () => {
+            if (projectorWin && !projectorWin.closed && typeof projectorWin.nextPage === 'function') {
+                projectorWin.nextPage();
+            }
+        });
+        
+        projPrevBtn.addEventListener('click', () => {
+            if (projectorWin && !projectorWin.closed && typeof projectorWin.prevPage === 'function') {
+                projectorWin.prevPage();
+            }
+        });
         // ==============================================================
 
         document.addEventListener('keydown', function(e) {
             if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85)) { e.preventDefault(); return false; }
             
-            // SINCRONIZACIÓN MODAL + PROYECTOR (Avance de páginas con el teclado)
-            if (scoreModal.classList.contains('show') && projectorWin && !projectorWin.closed) {
+            // SINCRONIZACIÓN MODAL + PROYECTOR (Aplica si está abierto el PDF normal O el nuevo modal de Proyección)
+            if ((scoreModal.classList.contains('show') || projectionModal.classList.contains('show')) && projectorWin && !projectorWin.closed) {
                 if (['ArrowRight', 'ArrowDown', 'Space', 'PageDown', 'Enter'].includes(e.code)) {
                     e.preventDefault();
                     if(typeof projectorWin.nextPage === 'function') {
                         projectorWin.nextPage();
-                        let c = document.querySelector('.score-body canvas[data-page-num="' + projectorWin.currentPage + '"]');
-                        if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        
+                        // Solo intenta scrollear si el visor de PDF local está abierto
+                        if (scoreModal.classList.contains('show')) {
+                            let c = document.querySelector('.score-body canvas[data-page-num="' + projectorWin.currentPage + '"]');
+                            if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
                     }
                 } else if (['ArrowLeft', 'ArrowUp', 'PageUp'].includes(e.code)) {
                     e.preventDefault();
                     if(typeof projectorWin.prevPage === 'function') {
                         projectorWin.prevPage();
-                        let c = document.querySelector('.score-body canvas[data-page-num="' + projectorWin.currentPage + '"]');
-                        if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        
+                        if (scoreModal.classList.contains('show')) {
+                            let c = document.querySelector('.score-body canvas[data-page-num="' + projectorWin.currentPage + '"]');
+                            if (c) c.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
                     }
                 }
             }
@@ -930,9 +973,12 @@
         window.openProjection = function(event, index) {
             event.stopPropagation();
             
-            window.openScore(event, index);
-
             const song = songs[index];
+            
+            // 1. En vez de abrir el visor (openScore), abrimos el modal de Control
+            projectionModalSongName.innerText = song.title;
+            projectionModal.classList.add('show');
+
             let finalUrl = song.partitura;
             if (!finalUrl) return; 
             
@@ -943,7 +989,13 @@
                 finalUrl = finalUrl.replace("www.dropbox.com", "dl.dropboxusercontent.com");
             }
 
-            projectorWin = window.open('', '_blank', 'width=1280,height=720');
+            // 2. Si hay un proyector abierto de antes, lo cerramos para evitar multiples ventanas ocultas
+            if (projectorWin && !projectorWin.closed) {
+                projectorWin.close();
+            }
+
+            // 3. Abrimos el proyector en su ventana
+            projectorWin = window.open('', 'ProyectorHimnario', 'width=1280,height=720');
             if (projectorWin) {
                 const pDoc = projectorWin.document;
                 pDoc.open();
@@ -1121,12 +1173,12 @@
                 const song = songs[index]; const item = document.createElement("div"); item.className = `playlist-item ${index === songIndex ? "active" : ""}`;
                 const isDownloaded = localStorage.getItem('downloaded_' + song.src) === 'true'; const isFav = localStorage.getItem('fav_' + song.src) === 'true';
 
-                // AQUÍ FALTABA ESTA VARIABLE EN TU CÓDIGO
                 const favButtonHtml = `<button class="action-list-btn fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${index})" title="Favorito"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>`;
-
+                
                 const refButtonHtml = `<button class="action-list-btn stroke-icon" onclick="openRefModal(event, ${index})" title="Ver en otros Himnarios">${iconBookSvg}</button>`;
                 
-                const projectButtonHtml = `<button class="action-list-btn stroke-icon" onclick="openProjection(event, ${index})" title="Proyectar Partitura">${iconProjectSvg}</button>`;
+                // NOTA IMPORTANTE: AQUÍ AÑADÍ LA CLASE .project-btn-desktop 
+                const projectButtonHtml = `<button class="action-list-btn stroke-icon project-btn-desktop" onclick="openProjection(event, ${index})" title="Proyectar Partitura">${iconProjectSvg}</button>`;
                 
                 const downloadButtonHtml = isDownloaded ? '' : `<button class="action-list-btn" onclick="downloadSongFile(event, ${index})" title="Descargar MP3">${iconDownloadSvg}</button>`;
 
