@@ -295,6 +295,19 @@
             font-weight: bold;
             z-index: 10;
         }
+        
+        /* Barra de progreso sutil para la vista previa modal */
+        .modal-loading-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: var(--accent-color);
+            width: 0%;
+            transition: width 0.2s ease;
+            z-index: 20;
+            border-radius: 3px 3px 0 0;
+        }
 
         /* ================= MODAL PARTITURA ================= */
         .score-modal { 
@@ -576,6 +589,7 @@
             
             <!-- Lienzo de Vista Previa -->
             <div class="projection-preview-box">
+                <div class="modal-loading-bar" id="modalLoadingBar"></div>
                 <div class="proj-page-indicator" id="projPageIndicator"></div>
                 <canvas id="projectionPreviewCanvas" style="display: none;"></canvas>
                 <img id="projectionPreviewImage" style="display: none;" />
@@ -622,7 +636,7 @@
         <div class="score-body" id="scoreBody"></div>
     </div>
 
-    <!-- PANEL LATERAL/INFERIOR DE GRABACIÓN COLAPSABLE -->
+    <!-- PANEL LATERAL/INFERIOR DE GRABACIÓN COLLAPSIBLE -->
     <div class="recording-panel" id="recordingPanel">
         <div class="rp-header" id="rpHeaderToggle">
             <div class="rp-drag-indicator"></div>
@@ -704,32 +718,34 @@
         const projPageIndicator = document.getElementById('projPageIndicator');
         const previewCanvas = document.getElementById('projectionPreviewCanvas');
         const previewImage = document.getElementById('projectionPreviewImage');
+        const modalLoadingBar = document.getElementById('modalLoadingBar');
 
-        // Función para renderizar localmente la vista previa usando Doble Búfer
+        // Función para renderizar localmente la vista previa usando Doble Búfer y barra de carga
         function renderPreviewPage(num) {
             if (!previewPdfDoc) return;
             projPageIndicator.innerText = `Pág. ${num} - ${previewTotalPages}`;
             
+            modalLoadingBar.style.width = '30%';
             previewPdfDoc.getPage(num).then(page => {
                 const viewport = page.getViewport({ scale: 1.5 });
+                modalLoadingBar.style.width = '60%';
                 
-                // 1. Crear un lienzo en memoria (Offscreen Buffer)
                 const offCanvas = document.createElement('canvas');
                 offCanvas.width = viewport.width;
                 offCanvas.height = viewport.height;
                 const ctx = offCanvas.getContext('2d');
                 
-                // Fondo blanco por defecto para evitar transparencias extrañas
                 ctx.fillStyle = '#ffffff';
                 ctx.fillRect(0, 0, offCanvas.width, offCanvas.height);
 
-                // 2. Renderizar el PDF en el lienzo oculto
                 page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
-                    // 3. Cuando finaliza la carga, copiar la imagen al lienzo visible instantáneamente
                     previewCanvas.width = viewport.width;
                     previewCanvas.height = viewport.height;
                     const visibleCtx = previewCanvas.getContext('2d');
                     visibleCtx.drawImage(offCanvas, 0, 0);
+                    
+                    modalLoadingBar.style.width = '100%';
+                    setTimeout(() => { modalLoadingBar.style.width = '0%'; }, 250);
                 });
             });
         }
@@ -749,7 +765,6 @@
             if (projectorWin && !projectorWin.closed && typeof projectorWin.nextPage === 'function') {
                 projectorWin.nextPage();
                 
-                // Actualiza la vista previa del modal
                 if (previewPdfDoc && previewCurrentPage < previewTotalPages) {
                     previewCurrentPage++;
                     renderPreviewPage(previewCurrentPage);
@@ -761,7 +776,6 @@
             if (projectorWin && !projectorWin.closed && typeof projectorWin.prevPage === 'function') {
                 projectorWin.prevPage();
                 
-                // Actualiza la vista previa del modal
                 if (previewPdfDoc && previewCurrentPage > 1) {
                     previewCurrentPage--;
                     renderPreviewPage(previewCurrentPage);
@@ -773,7 +787,6 @@
         document.addEventListener('keydown', function(e) {
             if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && (e.keyCode === 73 || e.keyCode === 74)) || (e.ctrlKey && e.keyCode === 85)) { e.preventDefault(); return false; }
             
-            // SINCRONIZACIÓN DE TECLADO (Aplica para ambos modales)
             if ((scoreModal.classList.contains('show') || projectionModal.classList.contains('show')) && projectorWin && !projectorWin.closed) {
                 if (['ArrowRight', 'ArrowDown', 'Space', 'PageDown', 'Enter'].includes(e.code)) {
                     e.preventDefault();
@@ -1055,6 +1068,7 @@
             previewCurrentPage = 1;
             previewTotalPages = 1;
             projPageIndicator.innerText = '';
+            modalLoadingBar.style.width = '10%';
             
             if (isPdf && pdfjsLib) {
                 previewCanvas.style.display = 'block';
@@ -1068,6 +1082,8 @@
                 previewCanvas.style.display = 'none';
                 previewImage.style.display = 'block';
                 previewImage.src = finalUrl;
+                modalLoadingBar.style.width = '100%';
+                setTimeout(() => modalLoadingBar.style.width = '0%', 200);
             }
 
             // 3. LOGICA DE INYECCIÓN DINÁMICA
@@ -1089,9 +1105,21 @@
                         <meta charset="UTF-8">
                         <title>Proyección - ${song.title}</title>
                         <style>
-                            body { background: #000; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; }
+                            body { background: #000; margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; position: relative; }
                             #content { width: 100%; height: 100%; position: relative; }
-                            /* Capas para permitir transiciones sin pantalla blanca */
+                            
+                            /* Barra de progreso sutil en la parte superior de la segunda pantalla */
+                            #projLoadingBar {
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                height: 4px;
+                                background: #FACC15;
+                                width: 0%;
+                                transition: width 0.2s ease, opacity 0.3s ease;
+                                z-index: 100;
+                            }
+
                             .layer { position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; opacity: 0; transition: opacity 0.5s ease; z-index: 1;}
                             .active-layer { opacity: 1; z-index: 2; }
                             canvas, img { max-width: 100%; max-height: 100%; object-fit: contain; position: absolute; opacity: 0; transition: opacity 0.3s ease; }
@@ -1100,6 +1128,7 @@
                         ${sTag} src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js">${eTag}
                     </head>
                     <body>
+                        <div id="projLoadingBar"></div>
                         <div id="content"></div>
                         ${sTag}>
                             window.currentPage = 1;
@@ -1117,12 +1146,16 @@
                                 }
                             });
 
-                            // FUNCIÓN QUE PERMITE CARGAR UN NUEVO CANTO SIN PANTALLAS BLANCAS
+                            // FUNCIÓN QUE PERMITE CARGAR UN NUEVO CANTO CON BARRA DE PROGRESO EN SEGUNDO PLANO
                             window.loadNewSong = function(url, isPdf, title) {
-                                document.title = "Proyección - " + title;
+                                document.title = title;
                                 const content = document.getElementById('content');
+                                const bar = document.getElementById('projLoadingBar');
                                 
-                                // Creamos una nueva capa invisible (Cargamos atrás sin borrar el actual)
+                                // Mantenemos la barra invisible en segundo plano
+                                bar.style.opacity = '0';
+                                bar.style.width = '0%';
+
                                 const newLayer = document.createElement('div');
                                 newLayer.className = 'layer';
                                 content.appendChild(newLayer);
@@ -1134,9 +1167,11 @@
                                     let img = document.createElement('img');
                                     img.src = url;
                                     img.onload = () => {
+                                        bar.style.width = '100%';
                                         newLayer.appendChild(img);
                                         img.classList.add('active');
                                         switchLayers(newLayer);
+                                        setTimeout(() => { bar.style.opacity = '0'; bar.style.width = '0%'; }, 300);
                                     };
                                 } else {
                                     const pdfjsLib = window['pdfjs-dist/build/pdf'];
@@ -1144,6 +1179,9 @@
                                     
                                     pdfjsLib.getDocument(url).promise.then(pdf => {
                                         window.totalPages = pdf.numPages;
+                                        bar.style.width = '30%';
+                                        
+                                        let completedPages = 0;
                                         let renderPromises = [];
                                         
                                         for(let i = 1; i <= window.totalPages; i++) {
@@ -1151,7 +1189,6 @@
                                             canvas.id = 'page-' + i;
                                             newLayer.appendChild(canvas);
                                             
-                                            // Renderizado a través de doble búfer (off-canvas)
                                             let renderPromise = pdf.getPage(i).then(page => {
                                                 let viewport = page.getViewport({scale: 2.5}); 
                                                 
@@ -1160,7 +1197,6 @@
                                                 offCanvas.height = viewport.height;
                                                 let ctx = offCanvas.getContext('2d');
                                                 
-                                                // Fondo blanco para seguridad del PDF
                                                 ctx.fillStyle = '#ffffff';
                                                 ctx.fillRect(0, 0, offCanvas.width, offCanvas.height);
                                                 
@@ -1168,13 +1204,16 @@
                                                     canvas.width = viewport.width;
                                                     canvas.height = viewport.height;
                                                     canvas.getContext('2d').drawImage(offCanvas, 0, 0);
+                                                    
+                                                    completedPages++;
+                                                    let progress = 30 + Math.floor((completedPages / window.totalPages) * 70);
+                                                    bar.style.width = progress + '%';
                                                 });
                                             });
                                             
                                             renderPromises.push({ index: i, promise: renderPromise });
                                         }
 
-                                        // CUANDO LA PÁGINA 1 ESTÉ LISTA, RECIÉN HACEMOS EL CAMBIO
                                         const firstPage = renderPromises.find(rp => rp.index === 1);
                                         if(firstPage) {
                                             firstPage.promise.then(() => {
@@ -1182,19 +1221,26 @@
                                                 window.showPage(1);
                                             });
                                         }
+
+                                        // Esperar a que todas las páginas terminen para ocultar la barra limpiamente
+                                        Promise.all(renderPromises.map(p => p.promise)).then(() => {
+                                            bar.style.width = '100%';
+                                            setTimeout(() => { bar.style.opacity = '0'; bar.style.width = '0%'; }, 300);
+                                        });
+
                                     }).catch(err => {
                                         console.error("Error al cargar la partitura", err);
+                                        bar.style.opacity = '0';
                                     });
                                 }
 
                                 function switchLayers(activeLayer) {
                                     activeLayer.classList.add('active-layer');
-                                    // Eliminamos suavemente los cantos anteriores
                                     const layers = content.querySelectorAll('.layer');
                                     layers.forEach(layer => {
                                         if (layer !== activeLayer) {
                                             layer.classList.remove('active-layer');
-                                            setTimeout(() => layer.remove(), 600); // 600ms para asegurar la transición
+                                            setTimeout(() => layer.remove(), 600);
                                         }
                                     });
                                 }
@@ -1237,7 +1283,7 @@
             }
         };
 
-        // CIERRE DEL MODAL DE PARTITURA REGULAR - Tampoco cierra el proyector
+        // CIERRE DEL MODAL DE PARTITURA REGULAR
         closeScoreModal.addEventListener('click', () => { 
             scoreModal.classList.remove('show'); 
             scoreModal.classList.remove('with-recording-panel', 'expanded');
