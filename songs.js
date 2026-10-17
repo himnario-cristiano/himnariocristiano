@@ -2493,7 +2493,7 @@
                 references: [] // Array vacío si no hay referencias
             },
             {
-                title: "213. Gloria A Ti Señor",
+                title: "213 - Gloria A Ti Señor",
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
@@ -3066,7 +3066,7 @@
                 references: [] // Array vacío si no hay referencias
             },
             {
-                title: "275 - Alzare Mis Ojos.",
+                title: "275 - Alzare Mis Ojos",
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
