@@ -446,6 +446,36 @@
         .btn-install { background: #fff; color: var(--accent-color); border: none; padding: 6px 14px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; }
         .btn-close-banner { background: none; border: none; color: #fff; cursor: pointer; display: flex; }
         .btn-close-banner svg { width: 24px; height: 24px; fill: currentColor; }
+        /* ================= PESTAÑAS PARA MODALES ================= */
+.modal-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 15px;
+    width: 100%;
+}
+.tab-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 10px 5px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.2s ease;
+}
+.tab-btn:hover { color: var(--text-main); }
+.tab-btn.active {
+    color: var(--accent-color);
+    border-bottom-color: var(--accent-color);
+}
+.tab-content {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+}
+.tab-content.active { display: flex; }
     </style>
 </head>
 <body>
@@ -546,9 +576,19 @@
     </div>
 
     <!-- Modales de Sistema -->
-    <div class="modal-overlay" id="helpModal">
-        <div class="modal-content">
-            <button class="modal-close" id="closeModalBtn">&times;</button>
+    <!-- Modal de Ayuda (Actualizado con Pestañas) -->
+<div class="modal-overlay" id="helpModal">
+    <div class="modal-content">
+        <button class="modal-close" id="closeModalBtn">&times;</button>
+        
+        <!-- Contenedor de Pestañas -->
+        <div class="modal-tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'soporte')">Soporte</button>
+            <button class="tab-btn" onclick="switchTab(event, 'donativo')">Donativo</button>
+        </div>
+
+        <!-- Contenido: Pestaña Soporte -->
+        <div id="tab-soporte" class="tab-content active">
             <h3>Soporte Técnico</h3>
             <p>¿Deseas compartir audios o sugerir mejoras para enriquecer nuestro reproductor?</p>
             <button id="btnWhatsappContact" class="primary-btn whatsapp-btn">
@@ -556,7 +596,36 @@
                 Contactar por WhatsApp
             </button>
         </div>
+
+        <!-- Contenido: Pestaña Donativo -->
+        <div id="tab-donativo" class="tab-content">
+            <h3>Apoya el Proyecto</h3>
+            <p style="margin-bottom: 15px;">Tu aporte nos ayuda a mantener y mejorar esta aplicación. Selecciona un método:</p>
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button id="btnMetodo1" class="primary-btn" style="background: #00B2A9;">Opción de Pago 1</button>
+                <button id="btnMetodo2" class="primary-btn" style="background: #003087;">Opción de Pago 2</button>
+            </div>
+        </div>
     </div>
+</div>
+
+<!-- Modal para Método de Pago 1 -->
+<div class="modal-overlay" id="payModal1">
+    <div class="modal-content">
+        <button class="modal-close" onclick="document.getElementById('payModal1').classList.remove('show')">&times;</button>
+        <h3>Opción de Pago 1</h3>
+        <p>Aquí puedes incluir los datos, número de cuenta o código QR para el primer método de pago.</p>
+    </div>
+</div>
+
+<!-- Modal para Método de Pago 2 -->
+<div class="modal-overlay" id="payModal2">
+    <div class="modal-content">
+        <button class="modal-close" onclick="document.getElementById('payModal2').classList.remove('show')">&times;</button>
+        <h3>Opción de Pago 2</h3>
+        <p>Aquí puedes incluir los detalles para el segundo método de pago.</p>
+    </div>
+</div>
 
     <div class="modal-overlay" id="clearModal">
         <div class="modal-content">
@@ -1738,6 +1807,39 @@ audioElement.addEventListener('suspend', () => {
         btnInstallApp.addEventListener('click', async () => { if (deferredPrompt) { installBanner.classList.remove('show'); deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; } });
         btnCloseBanner.addEventListener('click', () => { installBanner.classList.remove('show'); });
         window.addEventListener('appinstalled', () => { installBanner.classList.remove('show'); deferredPrompt = null; });
+
+        // ================= LOGICA PARA PESTAÑAS DEL MODAL DE AYUDA ================= //
+window.switchTab = function(event, tabId) {
+    // Quita la clase 'active' de todos los botones de pestaña
+    const modalContent = event.target.closest('.modal-content');
+    modalContent.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    
+    // Quita la clase 'active' de todos los contenidos
+    modalContent.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    
+    // Agrega 'active' a la pestaña clickeada y a su contenido respectivo
+    event.target.classList.add('active');
+    document.getElementById('tab-' + tabId).classList.add('active');
+};
+
+// ================= LOGICA PARA ABRIR LOS MODALES DE PAGO ================= //
+document.getElementById('btnMetodo1').addEventListener('click', () => {
+    document.getElementById('helpModal').classList.remove('show'); // Cierra modal principal (Opcional)
+    document.getElementById('payModal1').classList.add('show');
+});
+
+document.getElementById('btnMetodo2').addEventListener('click', () => {
+    document.getElementById('helpModal').classList.remove('show'); // Cierra modal principal (Opcional)
+    document.getElementById('payModal2').classList.add('show');
+});
+
+// Cierre al hacer clic fuera del contenido en los nuevos modales
+['payModal1', 'payModal2'].forEach(id => {
+    const modal = document.getElementById(id);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('show');
+    });
+});
     </script>
 </body>
 </html>
