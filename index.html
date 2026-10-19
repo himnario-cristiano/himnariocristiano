@@ -476,6 +476,50 @@
     width: 100%;
 }
 .tab-content.active { display: flex; }
+        /* ================= MÉTODOS DE PAGO Y BOTÓN COPIAR ================= */
+.payment-method {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--btn-hover-bg);
+    padding: 12px 15px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border-color);
+}
+.payment-info {
+    text-align: left;
+    font-size: 14px;
+    color: var(--text-main);
+    line-height: 1.4;
+}
+.payment-info strong {
+    color: var(--accent-color);
+}
+.copy-btn {
+    background: var(--surface-solid);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    margin-left: 10px;
+}
+.copy-btn:hover {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+.copy-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
     </style>
 </head>
 <body>
@@ -609,21 +653,49 @@
     </div>
 </div>
 
-<!-- Modal para Método de Pago 1 -->
+<!-- Modal para Método de Peru -->
 <div class="modal-overlay" id="payModal1">
     <div class="modal-content">
         <button class="modal-close" onclick="document.getElementById('payModal1').classList.remove('show')">&times;</button>
-        <h3>Opción de Pago 1</h3>
-        <p>Aquí puedes incluir los datos, número de cuenta o código QR para el primer método de pago.</p>
+        <h3>Billetera Digital en Perú</h3>
+        
+        <div class="payment-method">
+            <div class="payment-info">
+                <strong>Yape / Plin:</strong> <span id="txt-yape">935180887</span><br>
+                <small style="color: var(--text-muted);">Titular: Jehisson De La Cruz</small>
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('txt-yape', this)" title="Copiar número">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </button>
+        </div>
     </div>
 </div>
 
-<!-- Modal para Método de Pago 2 -->
+<!-- Modal para Método de Otro Pais -->
 <div class="modal-overlay" id="payModal2">
     <div class="modal-content">
         <button class="modal-close" onclick="document.getElementById('payModal2').classList.remove('show')">&times;</button>
-        <h3>Opción de Pago 2</h3>
-        <p>Aquí puedes incluir los detalles para el segundo método de pago.</p>
+        <h3>Billetera Digital (Dólares)</h3>
+        
+        <div class="payment-method">
+            <div class="payment-info">
+                <strong>BINANCE:</strong> <span id="txt-binance">935180887</span><br>
+                <small style="color: var(--text-muted);">Titular: Jehisson De La Cruz</small>
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('txt-binance', this)" title="Copiar ID">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </button>
+        </div>
+
+        <div class="payment-method">
+            <div class="payment-info">
+                <strong>PayPal:</strong> <span id="txt-paypal">jehisson43@gmail.com</span><br>
+                <small style="color: var(--text-muted);">Titular: Jehisson De La Cruz</small>
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('txt-paypal', this)" title="Copiar correo">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </button>
+        </div>
     </div>
 </div>
 
@@ -1840,6 +1912,29 @@ document.getElementById('btnMetodo2').addEventListener('click', () => {
         if (e.target === modal) modal.classList.remove('show');
     });
 });
+        // ================= FUNCIÓN PARA COPIAR AL PORTAPAPELES ================= //
+window.copyToClipboard = function(elementId, btnElement) {
+    const textToCopy = document.getElementById(elementId).innerText;
+    
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        // Guardamos el icono original
+        const originalIcon = btnElement.innerHTML;
+        
+        // Cambiamos al icono de Check (Éxito)
+        btnElement.innerHTML = `<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>`;
+        btnElement.style.color = "#10B981"; // Verde
+        btnElement.style.borderColor = "#10B981";
+
+        // Restauramos el botón después de 2 segundos
+        setTimeout(() => {
+            btnElement.innerHTML = originalIcon;
+            btnElement.style.color = "";
+            btnElement.style.borderColor = "";
+        }, 2000);
+    }).catch(err => {
+        console.error('Error al intentar copiar: ', err);
+    });
+};
     </script>
 </body>
 </html>
