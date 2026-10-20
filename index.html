@@ -851,6 +851,7 @@
         let previewPdfDoc = null;
         let previewCurrentPage = 1;
         let previewTotalPages = 1;
+        let previewCache = {}; // <-- NUEVA VARIABLE
         
         const projectionModal = document.getElementById('projectionModal');
         const closeProjectionModalBtn = document.getElementById('closeProjectionModalBtn');
@@ -862,11 +863,30 @@
         const previewImage = document.getElementById('projectionPreviewImage');
         const modalLoadingBar = document.getElementById('modalLoadingBar');
 
-        // Función para renderizar localmente la vista previa usando Doble Búfer y barra de carga
+        // AÑADIR ESTA VARIABLE (Si no la habías declarado arriba con las otras globales)
+        let previewCache = {};
+
+        // Función para renderizar con Caché y Pre-carga
         function renderPreviewPage(num) {
             if (!previewPdfDoc) return;
             projPageIndicator.innerText = `Pág. ${num} - ${previewTotalPages}`;
             
+            // 1. Si la página ya está en caché, la mostramos instantáneamente
+            if (previewCache[num]) {
+                const cachedCanvas = previewCache[num];
+                previewCanvas.width = cachedCanvas.width;
+                previewCanvas.height = cachedCanvas.height;
+                previewCanvas.getContext('2d').drawImage(cachedCanvas, 0, 0);
+                
+                modalLoadingBar.style.width = '100%';
+                setTimeout(() => { modalLoadingBar.style.width = '0%'; }, 150);
+                
+                // Pre-cargar la siguiente página por si avanza
+                preloadNextPage(num + 1);
+                return;
+            }
+
+            // 2. Si no está en caché, la procesamos por primera vez
             modalLoadingBar.style.width = '30%';
             previewPdfDoc.getPage(num).then(page => {
                 const viewport = page.getViewport({ scale: 1.5 });
@@ -881,6 +901,9 @@
                 ctx.fillRect(0, 0, offCanvas.width, offCanvas.height);
 
                 page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
+                    // Guardamos el lienzo procesado en la memoria caché
+                    previewCache[num] = offCanvas;
+                    
                     previewCanvas.width = viewport.width;
                     previewCanvas.height = viewport.height;
                     const visibleCtx = previewCanvas.getContext('2d');
@@ -888,8 +911,31 @@
                     
                     modalLoadingBar.style.width = '100%';
                     setTimeout(() => { modalLoadingBar.style.width = '0%'; }, 250);
+                    
+                    // Pre-cargar la siguiente página de forma silenciosa
+                    preloadNextPage(num + 1);
                 });
             });
+        }
+
+        // NUEVA FUNCIÓN: Procesa la página siguiente de fondo para que cargue rápido al hacer clic
+        function preloadNextPage(nextNum) {
+            if (!previewPdfDoc || nextNum > previewTotalPages || previewCache[nextNum]) return;
+            
+            previewPdfDoc.getPage(nextNum).then(page => {
+                const viewport = page.getViewport({ scale: 1.5 });
+                const offCanvas = document.createElement('canvas');
+                offCanvas.width = viewport.width;
+                offCanvas.height = viewport.height;
+                const ctx = offCanvas.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, offCanvas.width, offCanvas.height);
+
+                // Se renderiza pero no se dibuja en pantalla, va directo a la memoria
+                page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
+                    previewCache[nextNum] = offCanvas;
+                });
+            }).catch(() => {});
         }
 
         // CIERRE DEL MODAL DE PROYECCIÓN
@@ -1209,6 +1255,7 @@
             previewPdfDoc = null;
             previewCurrentPage = 1;
             previewTotalPages = 1;
+            previewCache = {}; // <-- AÑADIR PARA LIMPIAR LA MEMORIA
             projPageIndicator.innerText = '';
             modalLoadingBar.style.width = '10%';
             
