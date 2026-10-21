@@ -268,7 +268,7 @@
         .projection-preview-box {
             width: 100%;
             height: 60vh;
-            background: #0F172A;
+            background: #ffffff;
             border-radius: 10px;
             margin: 0 0 15px 0;
             display: flex;
@@ -439,13 +439,88 @@
             .recording-panel.expanded .recordings-list { opacity: 1; pointer-events: auto; transition: opacity 0.3s 0.2s; }
         }
 
-        .install-banner { position: fixed; top: 0; left: 0; width: 100%; background: var(--accent-color); color: #fff; display: flex; align-items: center; justify-content: space-between; padding: calc(env(safe-area-inset-top) + 12px) 20px 12px 20px; box-shadow: var(--shadow-md); transform: translateY(-100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 2000; }
+        .install-banner { position: fixed; top: 0; left: 0; width: 100%; background: var(--accent-color); color: var(--bg-main); display: flex; align-items: center; justify-content: space-between; padding: calc(env(safe-area-inset-top) + 12px) 20px 12px 20px; box-shadow: var(--shadow-md); transform: translateY(-100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); z-index: 2000; }
         .install-banner.show { transform: translateY(0); }
         .install-banner-info { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 14px;}
         .install-banner-actions { display: flex; align-items: center; gap: 10px; }
-        .btn-install { background: #fff; color: var(--accent-color); border: none; padding: 6px 14px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; }
-        .btn-close-banner { background: none; border: none; color: #fff; cursor: pointer; display: flex; }
+        .btn-install { background: var(--bg-main); color: var(--accent-color); border: none; padding: 6px 14px; border-radius: 8px; font-weight: 700; font-size: 13px; cursor: pointer; }
+        .btn-close-banner { background: none; border: none; color: var(--bg-main); cursor: pointer; display: flex; }
         .btn-close-banner svg { width: 24px; height: 24px; fill: currentColor; }
+
+        /* ================= PESTAÑAS PARA MODALES ================= */
+.modal-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 15px;
+    width: 100%;
+}
+.tab-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    padding: 10px 5px;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 15px;
+    transition: all 0.2s ease;
+}
+.tab-btn:hover { color: var(--text-main); }
+.tab-btn.active {
+    color: var(--accent-color);
+    border-bottom-color: var(--accent-color);
+}
+.tab-content {
+    display: none;
+    flex-direction: column;
+    width: 100%;
+}
+.tab-content.active { display: flex; }
+        /* ================= MÉTODOS DE PAGO Y BOTÓN COPIAR ================= */
+.payment-method {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--btn-hover-bg);
+    padding: 12px 15px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    border: 1px solid var(--border-color);
+}
+.payment-info {
+    text-align: left;
+    font-size: 14px;
+    color: var(--text-main);
+    line-height: 1.4;
+}
+.payment-info strong {
+    color: var(--accent-color);
+}
+.copy-btn {
+    background: var(--surface-solid);
+    border: 1px solid var(--border-color);
+    color: var(--text-muted);
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    margin-left: 10px;
+}
+.copy-btn:hover {
+    color: var(--accent-color);
+    border-color: var(--accent-color);
+}
+.copy-btn svg {
+    width: 18px;
+    height: 18px;
+    fill: currentColor;
+}
     </style>
 </head>
 <body>
@@ -461,7 +536,8 @@
         </div>
     </div>
     
-    <audio id="audioPlayer1" class="audio-engine" preload="auto" playsinline webkit-playsinline></audio>
+    <!-- Reemplaza tu etiqueta de audio actual por esta: -->
+    <audio id="audioPlayer1" class="audio-engine" preload="auto" playsinline webkit-playsinline style="position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none;" controls></audio>
 
     <header class="app-header">
         <div class="header-top">
@@ -545,9 +621,19 @@
     </div>
 
     <!-- Modales de Sistema -->
-    <div class="modal-overlay" id="helpModal">
-        <div class="modal-content">
-            <button class="modal-close" id="closeModalBtn">&times;</button>
+    <!-- Modal de Ayuda (Actualizado con Pestañas) -->
+<div class="modal-overlay" id="helpModal">
+    <div class="modal-content">
+        <button class="modal-close" id="closeModalBtn">&times;</button>
+        
+        <!-- Contenedor de Pestañas -->
+        <div class="modal-tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'soporte')">Soporte</button>
+            <button class="tab-btn" onclick="switchTab(event, 'donativo')">Donativo</button>
+        </div>
+
+        <!-- Contenido: Pestaña Soporte -->
+        <div id="tab-soporte" class="tab-content active">
             <h3>Soporte Técnico</h3>
             <p>¿Deseas compartir audios o sugerir mejoras para enriquecer nuestro reproductor?</p>
             <button id="btnWhatsappContact" class="primary-btn whatsapp-btn">
@@ -555,7 +641,64 @@
                 Contactar por WhatsApp
             </button>
         </div>
+
+        <!-- Contenido: Pestaña Donativo -->
+        <div id="tab-donativo" class="tab-content">
+            <h3>Apoya el Proyecto</h3>
+            <p style="margin-bottom: 15px;">Tu donativo nos ayuda a mantener y mejorar esta aplicación. Selecciona un método:</p>
+            <div style="display: flex; flex-direction: row; gap: 10px;">
+                <button id="btnMetodo1" class="primary-btn" style="background: #00B2A9; color:#000000; flex: 1;">Desde Perú</button>
+                <button id="btnMetodo2" class="primary-btn" style="background: #003087; flex: 1;">Otro País</button>
+            </div>
+        </div>
     </div>
+</div>
+
+<!-- Modal para Método de Peru -->
+<div class="modal-overlay" id="payModal1">
+    <div class="modal-content">
+        <button class="modal-close" onclick="document.getElementById('payModal1').classList.remove('show')">&times;</button>
+        <h3>Billetera Digital en Perú</h3>
+        
+        <div class="payment-method">
+            <div class="payment-info">
+                <strong>Yape / Plin:</strong> <span id="txt-yape">935180887</span><br>
+                <small style="color: var(--text-muted);">Titular: Jehisson De La Cruz</small>
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('txt-yape', this)" title="Copiar número">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal para Método de Otro Pais -->
+<div class="modal-overlay" id="payModal2">
+    <div class="modal-content">
+        <button class="modal-close" onclick="document.getElementById('payModal2').classList.remove('show')">&times;</button>
+        <h3>Billetera Digital (Dólares)</h3>
+        
+        <div class="payment-method">
+            <div class="payment-info">
+                <strong>BINANCE:</strong> <span id="txt-binance">935180887</span><br>
+                <small style="color: var(--text-muted);">Titular: Jehisson De La Cruz</small>
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('txt-binance', this)" title="Copiar ID">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </button>
+        </div>
+
+        <div class="payment-method">
+            <div class="payment-info">
+                <strong>PayPal:</strong> <span id="txt-paypal">jehisson43@gmail.com</span><br>
+                <small style="color: var(--text-muted);">Titular: Jehisson De La Cruz</small>
+            </div>
+            <button class="copy-btn" onclick="copyToClipboard('txt-paypal', this)" title="Copiar correo">
+                <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+            </button>
+        </div>
+    </div>
+</div>
 
     <div class="modal-overlay" id="clearModal">
         <div class="modal-content">
@@ -720,11 +863,30 @@
         const previewImage = document.getElementById('projectionPreviewImage');
         const modalLoadingBar = document.getElementById('modalLoadingBar');
 
-        // Función para renderizar localmente la vista previa usando Doble Búfer y barra de carga
+        // AÑADIR ESTA VARIABLE (Si no la habías declarado arriba con las otras globales)
+        let previewCache = {};
+
+        // Función para renderizar con Caché y Pre-carga
         function renderPreviewPage(num) {
             if (!previewPdfDoc) return;
             projPageIndicator.innerText = `Pág. ${num} - ${previewTotalPages}`;
             
+            // 1. Si la página ya está en caché, la mostramos instantáneamente
+            if (previewCache[num]) {
+                const cachedCanvas = previewCache[num];
+                previewCanvas.width = cachedCanvas.width;
+                previewCanvas.height = cachedCanvas.height;
+                previewCanvas.getContext('2d').drawImage(cachedCanvas, 0, 0);
+                
+                modalLoadingBar.style.width = '100%';
+                setTimeout(() => { modalLoadingBar.style.width = '0%'; }, 150);
+                
+                // Pre-cargar la siguiente página por si avanza
+                preloadNextPage(num + 1);
+                return;
+            }
+
+            // 2. Si no está en caché, la procesamos por primera vez
             modalLoadingBar.style.width = '30%';
             previewPdfDoc.getPage(num).then(page => {
                 const viewport = page.getViewport({ scale: 1.5 });
@@ -739,6 +901,9 @@
                 ctx.fillRect(0, 0, offCanvas.width, offCanvas.height);
 
                 page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
+                    // Guardamos el lienzo procesado en la memoria caché
+                    previewCache[num] = offCanvas;
+                    
                     previewCanvas.width = viewport.width;
                     previewCanvas.height = viewport.height;
                     const visibleCtx = previewCanvas.getContext('2d');
@@ -746,8 +911,31 @@
                     
                     modalLoadingBar.style.width = '100%';
                     setTimeout(() => { modalLoadingBar.style.width = '0%'; }, 250);
+                    
+                    // Pre-cargar la siguiente página de forma silenciosa
+                    preloadNextPage(num + 1);
                 });
             });
+        }
+
+        // NUEVA FUNCIÓN: Procesa la página siguiente de fondo para que cargue rápido al hacer clic
+        function preloadNextPage(nextNum) {
+            if (!previewPdfDoc || nextNum > previewTotalPages || previewCache[nextNum]) return;
+            
+            previewPdfDoc.getPage(nextNum).then(page => {
+                const viewport = page.getViewport({ scale: 1.5 });
+                const offCanvas = document.createElement('canvas');
+                offCanvas.width = viewport.width;
+                offCanvas.height = viewport.height;
+                const ctx = offCanvas.getContext('2d');
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, offCanvas.width, offCanvas.height);
+
+                // Se renderiza pero no se dibuja en pantalla, va directo a la memoria
+                page.render({ canvasContext: ctx, viewport: viewport }).promise.then(() => {
+                    previewCache[nextNum] = offCanvas;
+                });
+            }).catch(() => {});
         }
 
         // CIERRE DEL MODAL DE PROYECCIÓN
@@ -1067,6 +1255,7 @@
             previewPdfDoc = null;
             previewCurrentPage = 1;
             previewTotalPages = 1;
+            previewCache = {}; // <-- AÑADIR PARA LIMPIAR LA MEMORIA
             projPageIndicator.innerText = '';
             modalLoadingBar.style.width = '10%';
             
@@ -1373,7 +1562,7 @@
                 
                 const refButtonHtml = `<button class="action-list-btn stroke-icon" onclick="openRefModal(event, ${index})" title="Ver en otros Himnarios">${iconBookSvg}</button>`;
                 
-                const projectButtonHtml = `<button class="action-list-btn stroke-icon project-btn-desktop" onclick="openProjection(event, ${index})" title="Proyectar Partitura">${iconProjectSvg}</button>`;
+                const projectButtonHtml = song.partitura ? `<button class="action-list-btn stroke-icon project-btn-desktop" onclick="openProjection(event, ${index})" title="Proyectar Partitura">${iconProjectSvg}</button>` : '';
                 
                 const downloadButtonHtml = isDownloaded ? '' : `<button class="action-list-btn" onclick="downloadSongFile(event, ${index})" title="Descargar MP3">${iconDownloadSvg}</button>`;
 
@@ -1401,31 +1590,111 @@
         }
 
         window.selectSong = function(index) {
-            if (!songs[index]) return; songIndex = index; intentionalPause = false; backgroundPlaybackExpected = true;
-            const song = songs[songIndex]; activeAudio.src = formatDropboxStreamUrl(song.src);
-            const playPromise = activeAudio.play(); if (playPromise !== undefined) playPromise.catch(e => console.log(e));
-            setTimeout(() => { titleEl.innerText = song.title || 'Sin título'; artistEl.innerText = song.artist || ''; updateMediaSession(song); renderPlaylist(); updatePlayButton(true); setMediaPlaybackState('playing'); }, 10);
+            if (!songs[index]) return; 
+            songIndex = index; 
+            intentionalPause = false; 
+            backgroundPlaybackExpected = true;
+            const song = songs[songIndex]; 
+
+            // 1. Informar al sistema operativo (Lock Screen) inmediatamente
+            updateMediaSession(song);
+
+            activeAudio.src = formatDropboxStreamUrl(song.src);
+            const playPromise = activeAudio.play(); 
+            if (playPromise !== undefined) playPromise.catch(e => console.log(e));
+            
+            // 2. Actualización visual síncrona (Sin setTimeout)
+            titleEl.innerText = song.title || 'Sin título'; 
+            artistEl.innerText = song.artist || ''; 
+            renderPlaylist(); 
+            updatePlayButton(true); 
+            setMediaPlaybackState('playing');
         };
 
         function prevSong() {
-            const filtered = getFilteredIndices(); if (filtered.length === 0) return; const currentIdxInFiltered = filtered.indexOf(songIndex);
+            const filtered = getFilteredIndices(); 
+            if (filtered.length === 0) return; 
+            const currentIdxInFiltered = filtered.indexOf(songIndex);
             let prevIndex = currentIdxInFiltered === -1 ? filtered[0] : filtered[(currentIdxInFiltered - 1 + filtered.length) % filtered.length];
-            songIndex = prevIndex; intentionalPause = false; backgroundPlaybackExpected = true; const song = songs[songIndex];
-            activeAudio.src = formatDropboxStreamUrl(song.src); const playPromise = activeAudio.play(); if (playPromise !== undefined) playPromise.catch(e => console.log(e));
-            setTimeout(() => { titleEl.innerText = song.title || 'Sin título'; artistEl.innerText = song.artist || ''; updateMediaSession(song); renderPlaylist(); updatePlayButton(true); setMediaPlaybackState('playing'); }, 10);
+            songIndex = prevIndex; 
+            intentionalPause = false; 
+            backgroundPlaybackExpected = true; 
+            const song = songs[songIndex];
+
+            // 1. Informar al sistema operativo inmediatamente
+            updateMediaSession(song);
+
+            activeAudio.src = formatDropboxStreamUrl(song.src); 
+            const playPromise = activeAudio.play(); 
+            if (playPromise !== undefined) playPromise.catch(e => console.log(e));
+            
+            // 2. Actualización visual síncrona
+            titleEl.innerText = song.title || 'Sin título'; 
+            artistEl.innerText = song.artist || ''; 
+            renderPlaylist(); 
+            updatePlayButton(true); 
+            setMediaPlaybackState('playing');
         }
 
         function transitionToNext(manualClick = false) {
-            const filtered = getFilteredIndices(); if (filtered.length === 0) return;
-            songIndex = getUpcomingIndex(songIndex); const song = songs[songIndex]; activeAudio.src = formatDropboxStreamUrl(song.src);
-            if (isPlaying || manualClick) { isPlaying = true; intentionalPause = false; backgroundPlaybackExpected = true; const playPromise = activeAudio.play(); if (playPromise !== undefined) playPromise.catch(e => console.log(e)); }
-            setTimeout(() => { titleEl.innerText = song.title || 'Sin título'; artistEl.innerText = song.artist || ''; updateMediaSession(song); renderPlaylist(); if (isPlaying || manualClick) { updatePlayButton(true); setMediaPlaybackState('playing'); } }, 10);
+            const filtered = getFilteredIndices(); 
+            if (filtered.length === 0) return;
+            
+            songIndex = getUpcomingIndex(songIndex); 
+            const song = songs[songIndex]; 
+            
+            // 1. Informar al sistema operativo de la transición en 2do plano
+            updateMediaSession(song);
+
+            // Cambiar la fuente y forzar la carga inmediata
+            activeAudio.src = formatDropboxStreamUrl(song.src);
+            activeAudio.load(); 
+
+            if (isPlaying || manualClick) { 
+                isPlaying = true; 
+                intentionalPause = false; 
+                backgroundPlaybackExpected = true; 
+                
+                // Ejecución síncrona fundamental para no perder el control de audio
+                const playPromise = activeAudio.play(); 
+                if (playPromise !== undefined) {
+                    playPromise.then(() => {
+                        setMediaPlaybackState('playing');
+                    }).catch(e => {
+                        console.log("Audio background bloqueado, forzando reintento:", e);
+                        activeAudio.play().catch(()=>{});
+                    });
+                }
+            }
+            
+            // 2. Actualización de UI (Sin requestAnimationFrame que congela en 2do plano)
+            titleEl.innerText = song.title || 'Sin título'; 
+            artistEl.innerText = song.artist || ''; 
+            renderPlaylist(); 
+            if (isPlaying || manualClick) { 
+                updatePlayButton(true); 
+            } 
         }
 
         function setupAudioListeners(audioElement) {
             audioElement.addEventListener('ended', (e) => {
-                if (songs.length > 0) { if (document.getElementById('scoreModal').classList.contains('show') && songIndex === currentScoreIndex) { audioElement.currentTime = 0; audioElement.play().catch(e => console.log(e)); } else { transitionToNext(true); } }
-            });
+    if (songs.length > 0) { 
+        if (document.getElementById('scoreModal').classList.contains('show') && songIndex === currentScoreIndex) { 
+            audioElement.currentTime = 0; 
+            audioElement.play().catch(e => console.log(e)); 
+        } else { 
+            // Iniciar la siguiente pista inmediatamente para mantener el Wake Lock de Audio del SO activo
+            transitionToNext(true); 
+        } 
+    }
+});
+
+// Añade este listener adicional para reconectar el audio si el sistema lo pausa bruscamente
+audioElement.addEventListener('suspend', () => {
+    if (backgroundPlaybackExpected && !intentionalPause && audioElement.paused) {
+        audioElement.play().catch(() => {});
+    }
+});
             audioElement.addEventListener('timeupdate', (e) => {
                 const { currentTime, duration } = e.target; if (!Number.isFinite(duration) || duration <= 0) return;
                 const progressPercent = Math.min(100, Math.max(0, (currentTime / duration) * 100));
@@ -1688,6 +1957,62 @@
         btnInstallApp.addEventListener('click', async () => { if (deferredPrompt) { installBanner.classList.remove('show'); deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt = null; } });
         btnCloseBanner.addEventListener('click', () => { installBanner.classList.remove('show'); });
         window.addEventListener('appinstalled', () => { installBanner.classList.remove('show'); deferredPrompt = null; });
+
+        // ================= LOGICA PARA PESTAÑAS DEL MODAL DE AYUDA ================= //
+window.switchTab = function(event, tabId) {
+    // Quita la clase 'active' de todos los botones de pestaña
+    const modalContent = event.target.closest('.modal-content');
+    modalContent.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    
+    // Quita la clase 'active' de todos los contenidos
+    modalContent.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    
+    // Agrega 'active' a la pestaña clickeada y a su contenido respectivo
+    event.target.classList.add('active');
+    document.getElementById('tab-' + tabId).classList.add('active');
+};
+
+// ================= LOGICA PARA ABRIR LOS MODALES DE PAGO ================= //
+document.getElementById('btnMetodo1').addEventListener('click', () => {
+    document.getElementById('helpModal').classList.remove('show'); // Cierra modal principal (Opcional)
+    document.getElementById('payModal1').classList.add('show');
+});
+
+document.getElementById('btnMetodo2').addEventListener('click', () => {
+    document.getElementById('helpModal').classList.remove('show'); // Cierra modal principal (Opcional)
+    document.getElementById('payModal2').classList.add('show');
+});
+
+// Cierre al hacer clic fuera del contenido en los nuevos modales
+['payModal1', 'payModal2'].forEach(id => {
+    const modal = document.getElementById(id);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('show');
+    });
+});
+        // ================= FUNCIÓN PARA COPIAR AL PORTAPAPELES ================= //
+window.copyToClipboard = function(elementId, btnElement) {
+    const textToCopy = document.getElementById(elementId).innerText;
+    
+    navigator.clipboard.writeText(textToCopy).then(() => {
+        // Guardamos el icono original
+        const originalIcon = btnElement.innerHTML;
+        
+        // Cambiamos al icono de Check (Éxito)
+        btnElement.innerHTML = `<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>`;
+        btnElement.style.color = "#10B981"; // Verde
+        btnElement.style.borderColor = "#10B981";
+
+        // Restauramos el botón después de 2 segundos
+        setTimeout(() => {
+            btnElement.innerHTML = originalIcon;
+            btnElement.style.color = "";
+            btnElement.style.borderColor = "";
+        }, 2000);
+    }).catch(err => {
+        console.error('Error al intentar copiar: ', err);
+    });
+};
     </script>
 </body>
 </html>
