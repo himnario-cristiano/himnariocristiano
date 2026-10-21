@@ -524,6 +524,24 @@
     </style>
 </head>
 <body>
+
+<!-- ================= MODAL DE LOGIN ================= -->
+    <div class="modal-overlay show" id="loginModal" style="background: var(--bg-main); z-index: 9999; opacity: 1; pointer-events: auto;">
+        <div class="modal-content" style="box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+            <div class="brand" style="justify-content: center; margin-bottom: 20px;">
+                <img src="Himnario-Cristiano.png" alt="Logo" style="width: 70px; height: 70px; border-radius: 15px;">
+            </div>
+            <h3 style="margin-bottom: 20px;">Iniciar Sesión</h3>
+            
+            <input type="text" id="loginUser" placeholder="Usuario" style="width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--surface-solid); color: var(--text-main); font-size: 16px; outline: none;">
+            
+            <input type="password" id="loginPass" placeholder="Contraseña" style="width: 100%; padding: 14px; margin-bottom: 20px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--surface-solid); color: var(--text-main); font-size: 16px; outline: none;">
+            
+            <button id="btnLoginAction" class="primary-btn" style="margin-bottom: 12px;">Ingresar</button>
+            
+            <p id="loginMessage" style="font-size: 14px; margin-top: 15px; display: none; font-weight: 500;"></p>
+        </div>
+    </div>
     
     <div class="install-banner" id="installBanner">
         <div class="install-banner-info">
@@ -801,6 +819,7 @@
         </div>
     </div>
 
+    <script src="user.js"></script>
     <script src="songs.js"></script>
     
     <script>
@@ -2013,6 +2032,55 @@ window.copyToClipboard = function(elementId, btnElement) {
         console.error('Error al intentar copiar: ', err);
     });
 };
+
+        // ================= SISTEMA DE LOGIN CON FECHA DE CADUCIDAD =================
+        const loginModal = document.getElementById('loginModal');
+        const loginUser = document.getElementById('loginUser');
+        const loginPass = document.getElementById('loginPass');
+        const btnLoginAction = document.getElementById('btnLoginAction');
+        const loginMessage = document.getElementById('loginMessage');
+
+        // Obtiene la fecha actual en formato "YYYY-MM-DD"
+        const hoy = new Date().toISOString().split('T')[0];
+
+        // Verificar si ya hay una sesión activa y válida al abrir la app
+        const sesionGuardada = localStorage.getItem('sesionActiva');
+        if (sesionGuardada && usuariosDB[sesionGuardada]) {
+            if (hoy <= usuariosDB[sesionGuardada].expira) {
+                loginModal.style.display = 'none'; // Sesión válida y vigente
+            } else {
+                localStorage.removeItem('sesionActiva'); // Sesión expirada, forzar nuevo login
+            }
+        }
+
+        function mostrarMensaje(texto, color) {
+            loginMessage.innerText = texto;
+            loginMessage.style.color = color;
+            loginMessage.style.display = 'block';
+        }
+
+        btnLoginAction.addEventListener('click', () => {
+            const user = loginUser.value.trim();
+            const pass = loginPass.value.trim();
+
+            if (usuariosDB[user]) {
+                if (usuariosDB[user].pass === pass) {
+                    if (hoy <= usuariosDB[user].expira) {
+                        // Credenciales correctas y cuenta vigente
+                        localStorage.setItem('sesionActiva', user);
+                        loginModal.style.display = 'none'; 
+                    } else {
+                        // Fecha caducada
+                        mostrarMensaje(`Tu acceso expiró el ${usuariosDB[user].expira}.`, "var(--danger-color)");
+                    }
+                } else {
+                    mostrarMensaje("Contraseña incorrecta.", "var(--danger-color)");
+                }
+            } else {
+                mostrarMensaje("El usuario no existe.", "var(--danger-color)");
+            }
+        });
+        // ================= FIN SISTEMA DE LOGIN =================
     </script>
 </body>
 </html>
