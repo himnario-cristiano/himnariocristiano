@@ -1553,41 +1553,77 @@
         }
 
         function renderPlaylist() {
-            playlistEl.innerHTML = ""; const filteredIndices = getFilteredIndices();
-            filteredIndices.forEach((index) => {
-                const song = songs[index]; const item = document.createElement("div"); item.className = `playlist-item ${index === songIndex ? "active" : ""}`;
-                const isDownloaded = localStorage.getItem('downloaded_' + song.src) === 'true'; const isFav = localStorage.getItem('fav_' + song.src) === 'true';
+    playlistEl.innerHTML = ""; 
+    const filteredIndices = getFilteredIndices();
+    
+    filteredIndices.forEach((index) => {
+        const song = songs[index]; 
+        const item = document.createElement("div"); 
+        item.className = `playlist-item ${index === songIndex ? "active" : ""}`;
+        
+        const isDownloaded = localStorage.getItem('downloaded_' + song.src) === 'true'; 
+        const isFav = localStorage.getItem('fav_' + song.src) === 'true';
 
-                const favButtonHtml = `<button class="action-list-btn fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${index})" title="Favorito"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>`;
-                
-                const tieneReferencias = song.references && song.references.length > 0;
-                const tienePartitura = !!song.partitura;
-                const tieneTemas = song.temas && song.temas.length > 0;
-                
-                const refButtonHtml = (tieneReferencias || tienePartitura || tieneTemas)
-                    ? `<button class="action-list-btn stroke-icon" onclick="openRefModal(event, ${index})" title="Ver en otros Himnarios">${iconBookSvg}</button>`
-                    : '';
-                
-                const projectButtonHtml = song.partitura ? `<button class="action-list-btn stroke-icon project-btn-desktop" onclick="openProjection(event, ${index})" title="Proyectar Partitura">${iconProjectSvg}</button>` : '';
-                
-                const downloadButtonHtml = isDownloaded ? '' : `<button class="action-list-btn" onclick="downloadSongFile(event, ${index})" title="Descargar MP3">${iconDownloadSvg}</button>`;
+        const favButtonHtml = `<button class="action-list-btn fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${index})" title="Favorito"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>`;
+        
+        // --- INICIO DE LA ACTUALIZACIÓN ---
+        const tieneReferencias = song.references && song.references.length > 0;
+        const tienePartitura = !!song.partitura;
+        const tieneTemas = song.temas && song.temas.length > 0;
+        const tieneMasOpciones = tieneReferencias || tienePartitura || tieneTemas;
 
-                item.innerHTML = `
-                    <div class="song-info-list" onclick="selectSong(${index})">
-                        <span class="song-title-list">${song.title}</span>
-                        <span class="song-artist-list">${song.artist}</span>
-                    </div>
-                    <div class="song-actions-wrapper" id="actions-${index}">
-                        ${refButtonHtml} ${projectButtonHtml} ${downloadButtonHtml}
-                    </div>
-                    <div class="primary-actions">
-                        ${favButtonHtml}
-                        <button class="action-list-btn more-options-btn" onclick="toggleOptionsMenu(event, ${index})" title="Opciones">${iconDotsSvg}</button>
-                    </div>
-                `;
-                playlistEl.appendChild(item);
-            });
-        }
+        const refButtonHtml = tieneMasOpciones 
+            ? `<button class="action-list-btn stroke-icon" onclick="openRefModal(event, ${index})" title="Ver en otros Himnarios">${iconBookSvg}</button>`
+            : '';
+            
+        const projectButtonHtml = song.partitura 
+            ? `<button class="action-list-btn stroke-icon project-btn-desktop" onclick="openProjection(event, ${index})" title="Proyectar Partitura">${iconProjectSvg}</button>` 
+            : '';
+
+        // Botón de descarga estándar (se ve en PC y Celular cuando NO hay más opciones)
+        const standardDownloadBtn = isDownloaded 
+            ? '' : `<button class="action-list-btn" onclick="downloadSongFile(event, ${index})" title="Descargar MP3">${iconDownloadSvg}</button>`;
+            
+        // Botón de descarga exclusivo para ESCRITORIO (desaparece en el celular gracias a tu clase btn-hide-mobile)
+        const desktopOnlyDownloadBtn = isDownloaded 
+            ? '' : `<button class="action-list-btn btn-hide-mobile" onclick="downloadSongFile(event, ${index})" title="Descargar MP3">${iconDownloadSvg}</button>`;
+            
+        // Botón de descarga exclusivo para CELULAR (desaparece en PC gracias a tu clase more-options-btn)
+        const mobileOnlyDownloadBtn = isDownloaded 
+            ? '' : `<button class="action-list-btn more-options-btn" onclick="downloadSongFile(event, ${index})" title="Descargar MP3">${iconDownloadSvg}</button>`;
+
+        // Si hay opciones generamos los 3 puntos, si no, lo dejamos vacío
+        const dotsButtonHtml = tieneMasOpciones 
+            ? `<button class="action-list-btn more-options-btn" onclick="toggleOptionsMenu(event, ${index})" title="Opciones">${iconDotsSvg}</button>`
+            : '';
+
+        // En el menú flotante, ponemos el botón de descarga que SOLO se ve en el celular
+        const popupActionsHtml = tieneMasOpciones ? `${refButtonHtml} ${projectButtonHtml} ${mobileOnlyDownloadBtn}` : '';
+        
+        // En la barra principal armamos [Favorito] [Descargar]. 
+        // En PC siempre se verán ambos. 
+        // En Celular, si hay más opciones, el 'desktopOnlyDownloadBtn' se ocultará mágicamente para no duplicarse con el del menú.
+        const mainActionsHtml = tieneMasOpciones ? `${favButtonHtml} ${desktopOnlyDownloadBtn}` : `${favButtonHtml} ${standardDownloadBtn}`;
+
+        item.innerHTML = `
+            <div class="song-info-list" onclick="selectSong(${index})">
+                <span class="song-title-list">${song.title}</span>
+                <span class="song-artist-list">${song.artist}</span>
+            </div>
+            <div class="song-actions-wrapper" id="actions-${index}">
+                ${popupActionsHtml}
+            </div>
+            <div class="primary-actions">
+                ${mainActionsHtml}
+                ${dotsButtonHtml}
+            </div>
+        `;
+        // --- FIN DE LA ACTUALIZACIÓN ---
+        
+        // ESTA ES LA LÍNEA QUE FALTABA PARA QUE SE MUESTREN LOS ITEMS:
+        playlistEl.appendChild(item);
+    });
+}
 
         function getUpcomingIndex(currentIndex) {
             const filtered = getFilteredIndices(); if (filtered.length === 0) return currentIndex; if (playbackMode === 1) return currentIndex; 
