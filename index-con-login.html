@@ -1583,6 +1583,9 @@
         const isDownloaded = localStorage.getItem('downloaded_' + song.src) === 'true'; 
         const isFav = localStorage.getItem('fav_' + song.src) === 'true';
 
+        // 1. Verificamos si la canción permite descarga (si no existe la propiedad, asume true)
+        const canDownload = song.allowDownload !== false;
+
         const favButtonHtml = `<button class="action-list-btn fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav(event, ${index})" title="Favorito"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>`;
         
         // --- INICIO DE LA ACTUALIZACIÓN ---
@@ -1599,23 +1602,20 @@
             ? `<button class="action-list-btn stroke-icon project-btn-desktop" onclick="openProjection(event, ${index})" title="Proyectar Partitura">${iconProjectSvg}</button>` 
             : '';
 
-        // Botón de descarga estándar (se ve en PC y Celular cuando NO hay más opciones)
-        const standardDownloadBtn = isDownloaded 
+        // 2. Agregamos '!canDownload' a las condiciones para ocultar el botón si la canción lo restringe
+        const standardDownloadBtn = (isDownloaded || !canDownload) 
             ? '' : `<button class="action-list-btn" onclick="downloadSongFile(event, ${index})" title="Descargar MP3">${iconDownloadSvg}</button>`;
             
-        // Botón de descarga exclusivo para ESCRITORIO (desaparece en el celular gracias a tu clase btn-hide-mobile)
-        const desktopOnlyDownloadBtn = isDownloaded 
+        const desktopOnlyDownloadBtn = (isDownloaded || !canDownload) 
             ? '' : `<button class="action-list-btn btn-hide-mobile" onclick="downloadSongFile(event, ${index})" title="Descargar MP3">${iconDownloadSvg}</button>`;
             
-        // Botón de descarga exclusivo para CELULAR (desaparece en PC gracias a tu clase more-options-btn)
-        const mobileOnlyDownloadBtn = isDownloaded 
+        const mobileOnlyDownloadBtn = (isDownloaded || !canDownload) 
             ? '' : `<button class="action-list-btn more-options-btn" onclick="downloadSongFile(event, ${index})" title="Descargar MP3">${iconDownloadSvg}</button>`;
 
-        // Si hay opciones generamos los 3 puntos, si no, lo dejamos vacío
         const dotsButtonHtml = tieneMasOpciones 
             ? `<button class="action-list-btn more-options-btn" onclick="toggleOptionsMenu(event, ${index})" title="Opciones">${iconDotsSvg}</button>`
             : '';
-
+        
         // En el menú flotante, ponemos el botón de descarga que SOLO se ve en el celular
         const popupActionsHtml = tieneMasOpciones ? `${refButtonHtml} ${projectButtonHtml} ${mobileOnlyDownloadBtn}` : '';
         
