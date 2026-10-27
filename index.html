@@ -393,7 +393,7 @@
         .recording-actions button { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; border-radius: 4px; display: flex; align-items: center;}
         .recording-actions button:hover { background: var(--btn-hover-bg); color: var(--accent-color); }
 
-        /* Media Queries Móviles */
+        /* Media Queries Móviles*/
         @media (max-width: 767px) {
             .app-header { padding: calc(env(safe-area-inset-top) + 10px) 15px 15px 15px; }
             .playlist-wrapper { padding: 5px 5px 125px 5px; }
@@ -524,6 +524,24 @@
     </style>
 </head>
 <body>
+
+<!-- ================= MODAL DE LOGIN ================= -->
+    <!-- <div class="modal-overlay show" id="loginModal" style="background: var(--bg-main); z-index: 9999; opacity: 1; pointer-events: auto;">
+        <div class="modal-content" style="box-shadow: 0 10px 40px rgba(0,0,0,0.5);">
+            <div class="brand" style="justify-content: center; margin-bottom: 20px;">
+                <img src="Himnario-Cristiano.png" alt="Logo" style="width: 70px; height: 70px; border-radius: 15px;">
+            </div>
+            <h3 style="margin-bottom: 20px;">Iniciar Sesión</h3>
+            
+            <input type="text" id="loginUser" placeholder="Usuario" style="width: 100%; padding: 14px; margin-bottom: 12px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--surface-solid); color: var(--text-main); font-size: 16px; outline: none;">
+            
+            <input type="password" id="loginPass" placeholder="Contraseña" style="width: 100%; padding: 14px; margin-bottom: 20px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--surface-solid); color: var(--text-main); font-size: 16px; outline: none;">
+            
+            <button id="btnLoginAction" class="primary-btn" style="margin-bottom: 12px;">Ingresar</button>
+            
+            <p id="loginMessage" style="font-size: 14px; margin-top: 15px; display: none; font-weight: 500;"></p>
+        </div>
+    </div> -->
     
     <div class="install-banner" id="installBanner">
         <div class="install-banner-info">
@@ -537,8 +555,7 @@
     </div>
     
     <!-- Reemplaza tu etiqueta de audio actual por esta: -->
-    <audio id="audioPlayer1" class="audio-engine" preload="auto" playsinline webkit-playsinline style="position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none;" controls></audio>
-
+<audio id="audioPlayer1" class="audio-engine" preload="auto" playsinline webkit-playsinline crossorigin="anonymous" style="position: absolute; width: 0; height: 0; opacity: 0; pointer-events: none;" controls></audio>
     <header class="app-header">
         <div class="header-top">
             <div class="brand">
@@ -801,6 +818,7 @@
         </div>
     </div>
 
+    <script src="user.js"></script>
     <script src="songs.js"></script>
     
     <script>
@@ -1024,10 +1042,31 @@
         let isGlobalAudioUnlocked = false;
         let backgroundPlaybackExpected = false;
         let intentionalPause = true; 
-
+        let audioCtx; // <-- NUEVA VARIABLE GLOBAL
+        
         function initializeGlobalPermissions() {
             if (isGlobalAudioUnlocked) return;
             if ("Notification" in window && Notification.permission === "default") { Notification.requestPermission().catch(() => {}); }
+            
+            // --- TRUCO ANTI-AHORRO DE ENERGÍA Y SEGUNDO PLANO ---
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+                
+                // Creamos un oscilador inaudible (volumen 0) que corre de fondo
+                const gainNode = audioCtx.createGain();
+                gainNode.gain.value = 0; // Totalmente silenciado
+                gainNode.connect(audioCtx.destination);
+                
+                const oscillator = audioCtx.createOscillator();
+                oscillator.frequency.value = 1; // Frecuencia inaudible
+                oscillator.connect(gainNode);
+                oscillator.start();
+            } catch (e) {
+                console.log("Web Audio API no soportado", e);
+            }
+            // ----------------------------------------------------
+        
             isGlobalAudioUnlocked = true;
             document.removeEventListener('click', initializeGlobalPermissions);
             document.removeEventListener('touchstart', initializeGlobalPermissions);
@@ -1596,7 +1635,7 @@
         const dotsButtonHtml = tieneMasOpciones 
             ? `<button class="action-list-btn more-options-btn" onclick="toggleOptionsMenu(event, ${index})" title="Opciones">${iconDotsSvg}</button>`
             : '';
-
+        
         // En el menú flotante, ponemos el botón de descarga que SOLO se ve en el celular
         const popupActionsHtml = tieneMasOpciones ? `${refButtonHtml} ${projectButtonHtml} ${mobileOnlyDownloadBtn}` : '';
         
@@ -2055,6 +2094,78 @@ window.copyToClipboard = function(elementId, btnElement) {
         console.error('Error al intentar copiar: ', err);
     });
 };
+
+        // ================= SISTEMA DE LOGIN CON FECHA DE CADUCIDAD =================
+        const loginModal = document.getElementById('loginModal');
+        const loginUser = document.getElementById('loginUser');
+        const loginPass = document.getElementById('loginPass');
+        const btnLoginAction = document.getElementById('btnLoginAction');
+        const loginMessage = document.getElementById('loginMessage');
+
+        // Obtiene la fecha actual en formato "YYYY-MM-DD"
+        const hoy = new Date().toISOString().split('T')[0];
+
+        // Verificar si ya hay una sesión activa y válida al abrir la app
+        const sesionGuardada = localStorage.getItem('sesionActiva');
+        if (sesionGuardada && usuariosDB[sesionGuardada]) {
+            if (hoy <= usuariosDB[sesionGuardada].expira) {
+                loginModal.style.display = 'none'; // Sesión válida y vigente
+            } else {
+                localStorage.removeItem('sesionActiva'); // Sesión expirada, forzar nuevo login
+            }
+        }
+
+        function mostrarMensaje(texto, color) {
+            loginMessage.innerText = texto;
+            loginMessage.style.color = color;
+            loginMessage.style.display = 'block';
+        }
+
+        btnLoginAction.addEventListener('click', () => {
+            const user = loginUser.value.trim();
+            const pass = loginPass.value.trim();
+
+            if (usuariosDB[user]) {
+                if (usuariosDB[user].pass === pass) {
+                    if (hoy <= usuariosDB[user].expira) {
+                        // Credenciales correctas y cuenta vigente
+                        localStorage.setItem('sesionActiva', user);
+                        loginModal.style.display = 'none'; 
+                    } else {
+                        // Fecha caducada
+                        mostrarMensaje(`Tu acceso expiró el ${usuariosDB[user].expira}.`, "var(--danger-color)");
+                    }
+                } else {
+                    mostrarMensaje("Contraseña incorrecta.", "var(--danger-color)");
+                }
+            } else {
+                mostrarMensaje("El usuario no existe.", "var(--danger-color)");
+            }
+        });
+        // ================= FIN SISTEMA DE LOGIN =================
+        // --- FORZAR REPRODUCCIÓN AL BLOQUEAR PANTALLA O MINIMIZAR ---
+document.addEventListener("visibilitychange", () => {
+    // Si la app pasa a segundo plano o se apaga la pantalla
+    if (document.hidden) {
+        // Si debería estar sonando y se pausó por el ahorro de energía, lo forzamos a reproducir
+        if (backgroundPlaybackExpected && !intentionalPause && activeAudio.paused) {
+            activeAudio.play().catch(() => {});
+        }
+    }
+    
+    // Asegurarnos de que el contexto de audio silencioso despierte si el sistema lo durmió
+    if (audioCtx && audioCtx.state === 'suspended' && backgroundPlaybackExpected && !intentionalPause) {
+        audioCtx.resume();
+    }
+});
+
+// Intervalo de seguridad para reconectar el audio en caso de que el sistema operativo mate el proceso
+setInterval(() => {
+    if (backgroundPlaybackExpected && !intentionalPause) {
+        if (audioCtx && audioCtx.state === 'suspended') audioCtx.resume();
+        if (activeAudio.paused) activeAudio.play().catch(()=>{});
+    }
+}, 3000);
     </script>
 </body>
 </html>
