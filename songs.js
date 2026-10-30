@@ -2862,12 +2862,12 @@
                 references: [] // Array vacío si no hay referencias
             },
             {
-                title: "254 - Te Llamare",
-                artist: "SIN AUDIO",
+                title: "254 - Te Llamare (Una Vida Hermosa)",
+                artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
         		partitura: "https://www.dropbox.com/scl/fi/olh5ng8nykd5lw5ldo5o8/254.-Te-Llamare.pdf?rlkey=5ozq9soapnh1mz3qmce891tlr&st=n9g5bsbm&dl=0",
-                src: "https://www.dropbox.com/scl/fi/xcjk9kw19vvzptdq1fkug/254..mp3?rlkey=d6bk1yrglgwastjvoknf3m4n4&st=9jluyepe&dl=0",
+                src: "https://www.dropbox.com/scl/fi/kykhvt7hvcuylevi2jd1x/254-Una-Vida-Hermosa.mp3?rlkey=9c5yqcdi5tg2f2f2ziqu2k4g2&st=faju6q4z&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
             {
