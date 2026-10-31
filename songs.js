@@ -1654,12 +1654,12 @@
                 ] // {hymnal: "himnario ...", number: "00"} Array vacío si no hay referencias
             },
             {
-                title: "138 - Yo Quiero Ver",
-                artist: "SIN AUDIO",
+                title: "138 - Quiero Ver",
+                artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
         		partitura: "https://www.dropbox.com/scl/fi/4xg4vmycxltunasvh51tv/138-Yo-Quiero-Ver-letra.pdf?rlkey=terhtdv0osoeo3o1w8y3x5dyi&st=llqg578h&dl=0",
-                src: "https://www.dropbox.com/scl/fi/cnn1hgjtwre5zz3vmrlia/138..mp3?rlkey=am4as8zn0h9122w2w5173ovgh&st=vrjefnn4&dl=0",
+                src: "https://www.dropbox.com/scl/fi/3ql48ytu3vbifsxt2or72/138.-Quiero-Ver.mp3?rlkey=ol9le16vc6bme8jyrk75yuk0t&st=x8ly6vxf&dl=0",
                 references: [
 
 
