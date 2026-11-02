@@ -1354,7 +1354,18 @@
                 ] // {hymnal: "himnario ...", number: "00"} Array vacío si no hay referencias
             },
             {
-                title: "113 - Mi Señor Es Jesucristo",
+                title: "113 - Mi Señor Es Jesucristo - v.1",
+                artist: "Himnario Cristiano",
+                temas: [],
+				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
+        		partitura: "https://www.dropbox.com/scl/fi/tmadpp7ol09w7fv7pjlbp/113.-Jesucristo-Se-or-M-o.pdf?rlkey=yblnh79obocl2waduf0u8cf4h&st=0c7z9ni5&dl=0",
+                src: "https://www.dropbox.com/scl/fi/2hhzvcmrbm199sfqibduq/113.-Mi-Se-or-Es-Jesucristo-v.1.mp3?rlkey=jbv44rdlnoikfv4avhn21h4uq&st=gpxg3wsa&dl=0",
+                references: [
+
+                ] // {hymnal: "himnario ...", number: "00"} Array vacío si no hay referencias
+            },
+            {
+                title: "113 - Mi Señor Es Jesucristo - v.2",
                 artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
@@ -1362,6 +1373,16 @@
                 src: "https://www.dropbox.com/scl/fi/8gol8t5o1afdpikj5ms5j/113.-Mi-Se-or-Es-Jesucristo.mp3?rlkey=avylpv5byqybz55xbx8rl9bkx&st=lej80brq&dl=0",
                 references: [
 
+                ] // {hymnal: "himnario ...", number: "00"} Array vacío si no hay referencias
+            },
+            {
+                title: "113 - Mi Señor Es Jesucristo - v.3",
+                artist: "Himnario Cristiano",
+                temas: [],
+				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
+        		partitura: "https://www.dropbox.com/scl/fi/tmadpp7ol09w7fv7pjlbp/113.-Jesucristo-Se-or-M-o.pdf?rlkey=yblnh79obocl2waduf0u8cf4h&st=0c7z9ni5&dl=0",
+                src: "https://www.dropbox.com/scl/fi/q5lvcw5j72l6sjnp053au/05-Jesucristo-Se-or-M-o.mp3?rlkey=wxymfyg4zsohixts9jryqvwiq&st=1t2hyrld&dl=0",
+                references: [
 
                 ] // {hymnal: "himnario ...", number: "00"} Array vacío si no hay referencias
             },
