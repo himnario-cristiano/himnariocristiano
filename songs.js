@@ -3333,11 +3333,11 @@
             },
             {
                 title: "298 - Nos Veremos Al Final",
-                artist: "SIN AUDIO",
+                artist: "Himnario Cristiano",
                 temas: [],
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
         		partitura: "https://www.dropbox.com/scl/fi/60nq61e8yb6mjf1qj71g8/299.-Nos-Veremos-Al-Final.pdf?rlkey=t8drdhilayi43d89ffap2ui2b&st=l7kzofu3&dl=0",
-                src: "https://www.dropbox.com/scl/fi/rpxqpczs06ni5gi0ngfpw/298..mp3?rlkey=xh1s861pw6iw233tqvjids77p&st=t98lgacg&dl=0",
+                src: "https://www.dropbox.com/scl/fi/rpxqpczs06ni5gi0ngfpw/298.-Nos-Veremos-Al-Final.mp3?rlkey=xh1s861pw6iw233tqvjids77p&st=6jn4v9g9&dl=0",
                 references: [] // Array vacío si no hay referencias
             },
             {
