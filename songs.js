@@ -1162,6 +1162,17 @@
                 ] // {hymnal: "himnario ...", number: "00"} Array vacío si no hay referencias
             },
             {
+                title: "098 - JEHOVÁ ESTÁ EN SU SANTO TEMPLO",
+                artist: "Alternativa himnario Cristiano",
+                temas: [],
+				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
+        		partitura: "https://www.dropbox.com/scl/fi/ole8ju4jiags9450jten8/098-Jehov-Est-En-Su-Santo-Templo-Figuras.pdf?rlkey=5fj40pk3buwqc6pj79e930esq&st=3wlyufyn&dl=0",
+                src: "https://www.dropbox.com/scl/fi/0huw4g0cu3xnlwudipchi/98.-Jehova-esta-en-su-santo-templo.mp3?rlkey=4bagh4f66x307s5295ky4p4gt&st=y5oy30ss&dl=0",
+                references: [
+
+                ] // {hymnal: "himnario ...", number: "00"} Array vacío si no hay referencias
+            },
+            {
                 title: "098 - Oh Que Bueno Es Hablar Del Señor",
                 artist: "SIN AUDIO",
                 temas: [],
@@ -1169,7 +1180,6 @@
         		partitura: "https://www.dropbox.com/scl/fi/nv6vmozehrweyd2w8yv28/098.-Oh-Que-Bueno-Es-Hablar-Del-Se-or-letra.pdf?rlkey=nyknmkggbnzdcu76c5et5ywcn&st=kfvhtqo1&dl=0",
                 src: "https://www.dropbox.com/scl/fi/f5pjfcfh9erqexii5zxsh/098..mp3?rlkey=237h7w78tkzfyedx2yyii6mut&st=eqbnrwsl&dl=0",
                 references: [
-
 
                 ] // {hymnal: "himnario ...", number: "00"} Array vacío si no hay referencias
             },
@@ -2898,6 +2908,14 @@
 				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
         		partitura: "https://www.dropbox.com/scl/fi/f7d85bqn2jsuons2i8pvl/77-Dulce-Consuelo-Figuras.pdf?rlkey=y3go96blnqrcqb4q4tbkkjvn8&st=f72trb3r&dl=0",
                 src: "https://www.dropbox.com/scl/fi/m9e1kzv3tu3ymo2dybq7w/255.-En-Jesucristo.mp3?rlkey=u4lb9gkkj7m721mt7r5ghihyi&st=31hj0wwt&dl=0"
+            },
+            {
+                title: "255 - Voy Al Cielo, Soy Peregrino",
+                artist: "Actualizacion Himnario Cristiano",
+                temas: [],
+				// ¡NUEVO!: Añade aquí el enlace a tu imagen o tu PDF. 
+        		partitura: "https://www.dropbox.com/scl/fi/2apd0gg61416z93vvx0v7/255-Voy-Al-Cielo-Soy-Peregrino-Figuras.pdf?rlkey=mfnfk374l67m6l567iimkfplj&st=15esuzbe&dl=0",
+                src: "https://www.dropbox.com/scl/fi/4xs7u49h62so3pdm9wnyc/255-Voy-al-Cielo-Soy-Peregrino.mp3?rlkey=ru5t4i79j3n89ny7fwzzdnu6k&st=3tf3kbla&dl=0"
             },
             {
                 title: "256 - Dios Envió A Su Hijo Cristo",
