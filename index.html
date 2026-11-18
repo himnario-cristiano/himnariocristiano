@@ -686,6 +686,11 @@
                 <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
             </button>
         </div>
+
+        <!-- BOTÓN OPCIONAL (Si dejas href="" o href="#" se oculta automáticamente) -->
+        <a id="linkPayModal1" href="#" target="_blank" class="primary-btn optional-pay-link" style="margin-top: 10px; text-decoration: none;">
+            Abrir enlace de pago
+        </a>
     </div>
 </div>
 
@@ -714,6 +719,11 @@
                 <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
             </button>
         </div>
+
+        <!-- BOTÓN OPCIONAL (Si dejas href="" o href="#" se oculta automáticamente) -->
+        <a id="linkPayModal2" href="https://paypal.me/jehissondelacruz" target="_blank" class="primary-btn optional-pay-link" style="margin-top: 10px; text-decoration: none;">
+            Pagar vía PayPal
+        </a>
     </div>
 </div>
 
@@ -2166,6 +2176,20 @@ setInterval(() => {
         if (activeAudio.paused) activeAudio.play().catch(()=>{});
     }
 }, 3000);
+        // ================= CONTROL DE BOTONES DE ENLACE OPCIONALES =================
+function updateOptionalPayLinks() {
+    document.querySelectorAll('.optional-pay-link').forEach(btn => {
+        const url = btn.getAttribute('href') ? btn.getAttribute('href').trim() : '';
+        if (url && url !== '#' && url !== '') {
+            btn.style.display = 'inline-flex';
+        } else {
+            btn.style.display = 'none';
+        }
+    });
+}
+
+// Ejecutar la verificación al iniciar la app
+updateOptionalPayLinks();
     </script>
 </body>
 </html>
